@@ -59,7 +59,7 @@ export default function SignIn() {
           <img src="/images/Rectangle 2.png" alt="img" />
           </div>
         </div>
-        <Link to="/" className='text-secondary500 capitalize font-semibold flex justify-center'>sign up instead</Link>
+        <Link to="/signup" className='text-secondary500 capitalize font-semibold flex justify-center'>sign up instead</Link>
         </div>
       </article>
     </main>
