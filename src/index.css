@@ -2,80 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-.loader {
-        position: relative;
-        width: 100px;
-        height: 100px;
-    }
 
-    .loader .image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        /* border-radius: 50%; */
-        background-image: url('/images/shool-pluglogo.png'); /* Replace with your image URL */
-        background-size: cover;
-    }
 
-    .loader .line {
-        position: absolute;
-        width: calc(100% - 8px); /* Adjust line thickness as needed */
-        height: calc(100% - 8px); /* Adjust line thickness as needed */
-        top: 4px; /* Adjust line position */
-        left: 4px; /* Adjust line position */
-        clip-path: circle(50% at 50% 50%);
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%);
-        animation: rotate 2s linear infinite;
-    }
-
-    @keyframes rotate {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
+.custom-header button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 
 
 
 
-
-
-
-/* .loader {
-  position: relative;
+.custom-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
+  padding: 10px;
+  background-color: white;
+  color: #fff;
+  border-bottom: 1px solid #dee2e6;
 }
 
-.loader img {
-  width: 100px; 
+.monthSelect {
+  margin: 0 5px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding: 3px;
+  font-size: 16px;
+  /* background-color: #007bff; */
+  color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 2rem;
+  border: none;
+}
+.react-datepicker__month--dropdown{
+  background-color: white;
+}
+.react-datepicker__header{
+background-color: white;
+}
+.react-datepicker{
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+box-shadow: 0 2px 8px rgba(0, 0,0, 0.2);
+}
+
+
+.react-datepicker__day-names{
+ 
+ 
+  background-color: rgba(255, 255, 255, 0.87);
+}
+.react-datepicker__month--selected{
+  background-color:#007bff ;
+}
+.react-datepicker__day--selected{
+  background-color:#007bff ;
+}
+.react-datepicker__day--names{
+  background-color:#007bff ;
+}
+.react-datepicker__year--selected{
+  background-color:#007bff ;
+  color: black;
+}
+
+
+
+.spinnerContainer {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
 
-.loadLine {
-  position: absolute;
-  width: 120px; 
-  height: 120px; 
-  border: 2px solid transparent;
-  border-top-color: #ff0000; 
+.spinner {
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
-  animation: spin 1s infinite linear;
+  background: conic-gradient(#0000 10%, var(--color-light--2));
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: rotate 1.5s infinite linear;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+@keyframes rotate {
+  to {
+    transform: rotate(1turn);
   }
-  100% {
-    transform: rotate(360deg);
-  }
-} */
+}
 
 
 *{

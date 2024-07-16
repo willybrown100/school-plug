@@ -212,14 +212,10 @@ function StudentInfo({register}) {
         className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
         {...register("course")}
       />
-      <DatePicker
-        placeholderText="Year of admission"
-        className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-      />
-      <DatePicker
-        placeholderText="Year of graduation"
-        className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-      />
+    
+      <CustomDatePicker/>
+      <CustomDatePicker/>
+    
       <input
         id="studentId"
         placeholder="image of student id"
