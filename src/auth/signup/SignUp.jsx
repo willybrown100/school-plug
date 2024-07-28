@@ -1,64 +1,90 @@
 
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import Logo from "../../components/Logo";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { IoIosEye } from "react-icons/io";
-import { HiOutlineEyeSlash } from "react-icons/hi2";
+import { HiChevronDown, HiChevronUp, HiOutlineCalendar, HiOutlineEyeSlash } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import CustomDatePicker from "./DatePicker";
 import Button from "../../ui/Button";
+import signUp from "../../services/contactApi";
+import { useMutation } from "@tanstack/react-query";
+
+
 
 export default function SignUp() {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register,formState:{errors},setError ,reset} = useForm();
   const [showsignUp,setShowSignup]=useState(true)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
   const ToggleOpen2 = () => setOpen2(!open2);
+
+const {mutate,isPending} = useMutation({
+  mutationFn: signUp,
+  onSuccess:()=>{
+    console.log("first signup sucessful")
+    // reset()
+    setShowSignup(false)
+
+  }
+});
   const onSubmit = function (data) {
-    console.log(data);
+    const user = { ...data, agree_to_terms: data.agree_to_terms ==="on"};
+    mutate(user);
+    console.log(user);
   };
   return (
     <main className="signupBg grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
         <div className="flex justify-center">
           <img src="/images/shool-pluglogo.png" alt="img" />
-     
         </div>
 
-        {showsignUp&&<h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
-          Nice to have you, Sign up
-        </h3>}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-4 rounded-md p-3 md:w-[500px]"
-        >
+        {showsignUp && (
+          <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
+            Nice to have you, Sign up
+          </h3>
+        )}
+        <div className=" rounded-md   md:w-[500px]">
           {showsignUp ? (
-            <>
+            <form
+              className="flex flex-col p-3 gap-y-4"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <input
-                type="text"
+                type="name"
                 id="text"
                 placeholder="full name (as used in your student iD)"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("text")}
+                {...register("full_name")}
               />
               <input
                 type="email"
                 id="email"
                 placeholder="email"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("email")}
+                {...register("email", {
+                  required: true,
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                })}
               />
               <input
-                type="number"
-                id="number"
+                type="text"
+                id="phone_number"
                 placeholder="phone number"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("number")}
+                {...register("phone_number", {
+                  required: "this field is required",
+                  pattern:{
+                    value:/^\d{11}$/
+                  }
+                })}
               />
+              {errors.phone_number && <p className="text-red-500 capitalize ">not a valid phone number </p>}
               <PasswordField
                 open={open}
                 ToggleOpen={ToggleOpen}
@@ -72,7 +98,11 @@ export default function SignUp() {
                 placeholder="confirm password"
               />
               <div className="flex items-center gap-1 capitalize">
-                <input type="radio" id="terms" {...register("terms")} />
+                <input
+                  type="radio"
+                  id="terms"
+                  {...register("agree_to_terms")}
+                />
                 <div>
                   agree to our <Link>terms</Link> and <Link>policies</Link>{" "}
                 </div>
@@ -85,16 +115,19 @@ export default function SignUp() {
                     <img src="/images/google-icon.png" alt="img" />
                   </span>
                 </button>
-                <button onClick={()=>setShowSignup(false)} className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
+                <button
+            
+                  className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize"
+                >
                   {" "}
-                  sign up
+                  {isPending ? "signing up.." : "sign up"}
                 </button>
               </div>
-            </>
+            </form>
           ) : (
             <StudentInfo register={register} />
           )}
-        </form>
+        </div>
         <div>
           <div className="flex gap-x-6">
             <div className="h-6 mt-2">
@@ -117,7 +150,7 @@ export default function SignUp() {
   );
 }
 
-const PasswordField = ({
+export const PasswordField = ({
   label,
   placeholder,
   register,
@@ -154,7 +187,7 @@ const PasswordField = ({
     </div>
   </div>
 );
-const ConfirmPasswordField = ({
+export const ConfirmPasswordField = ({
   label,
   placeholder,
   register,
@@ -171,7 +204,7 @@ const ConfirmPasswordField = ({
         id="confirmPassword"
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
-        {...register("confirmPassword")}
+        {...register("confirm_password")}
         autoComplete="current-password"
       />
       <span className="absolute right-3 top-2 cursor-pointer">
@@ -194,35 +227,53 @@ const ConfirmPasswordField = ({
 
 function StudentInfo({register}) {
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex w-full flex-col gap-y-4">
       <h3 className="font-fontHeading font-semibold text-center">
         student info
       </h3>
-      <input
-        type="text"
-        placeholder="university of study"
-        className="w-full md:p-2 border p-3 border-stone-700 rounded-md"
-        {...register("university")}
-        id="university"
-      />
-      <input
-        type="text"
-        placeholder="course"
-        id="course"
-        className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-        {...register("course")}
-      />
-    
-      <CustomDatePicker/>
-      <CustomDatePicker/>
-    
-      <input
-        id="studentId"
-        placeholder="image of student id"
-        className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-        {...register("studentId")}
-      />
-      <Button className="mt-16 md:mt-2">create an account</Button>
+      <form className="flex flex-col p-3 gap-y-4">
+        <input
+          type="text"
+          placeholder="university of study"
+          className="w-full md:p-2 border p-3 border-stone-700 rounded-md"
+          {...register("university_of_study")}
+          id="university"
+        />
+        <input
+          type="text"
+          placeholder="course"
+          id="course"
+          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          {...register("course")}
+        />
+
+        <input
+          type="text"
+          placeholder="department"
+          id="department"
+          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          {...register("department")}
+        />
+        <input
+          type="text"
+          placeholder="level"
+          id="level"
+          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          {...register("level")}
+        />
+        <div className="grid grid-cols-1 relative">
+          <CustomDatePicker placeholder={`year of admission`} />
+          <HiOutlineCalendar className="absolute top-2 left-2 text-lg text-stone-600" />
+          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
+        </div>
+        <div className="grid grid-cols-1 relative">
+          <CustomDatePicker placeholder="year of graduation" />
+          <HiOutlineCalendar className="absolute top-2 left-2 text-lg text-stone-600" />
+          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
+        </div>
+
+        <Button className="mt-16 md:mt-2">create an account</Button>
+      </form>
     </div>
   );
 }

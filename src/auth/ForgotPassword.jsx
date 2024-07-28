@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
+import { PasswordField } from './signup/SignUp';
 
 
 
@@ -8,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const ForgetPassword = () => {
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("test@example.com");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -86,7 +87,7 @@ const ForgetPassword = () => {
               or phone number used in registration
             </p>
           </div>
-          <p className="capitalize font-fontHeading tracking-wide md:hidden">
+          <p className="capitalize  tracking-wide md:hidden">
             following our <Link> Terms </Link> and Condition{" "}
             <Link> policy </Link>
             enter the email or phone number used in registration
@@ -149,30 +150,31 @@ const ForgetPassword = () => {
             <Logo />
           </div>
           <div>
-          <h2 className="text-2xl mb-4 text-center">create a new Password</h2>
-          <p className='text-center mr-auto ml-auto'>
-            Create a strong password that will be easy to recall. Tips; write
-            down and save password in notepad
-          </p>
+            <h2 className="text-2xl mb-4 text-center">create a new Password</h2>
+            <p className="text-center mr-auto ml-auto">
+              Create a strong password that will be easy to recall. Tips; write
+              down and save password in notepad
+            </p>
           </div>
-          <form>
+          <form className='w-full'>
             <input
               type="password"
-              placeholder="New Password"
-              className="w-full px-4 py-2 border rounded mb-4"
+              placeholder="create Password"
+              className="w-full px-4 placeholder:capitalize bg-transparent py-2 border rounded mb-4"
               required
             />
             <input
               type="password"
               placeholder="Confirm Password"
-              className="w-full px-4 py-2 border rounded mb-4"
+              className="w-full px-4 py-2  placeholder:capitalize bg-transparent border rounded mb-4"
               required
             />
+            {/* <PasswordField/> */}
             <button
               type="submit"
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              className="mt-4 bg-secondary500 w-full capitlize text-white px-4 py-2 rounded"
             >
-              Submit
+             create password
             </button>
           </form>
         </div>
