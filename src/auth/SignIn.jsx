@@ -11,7 +11,7 @@ export default function SignIn() {
         const handleToggle = () => setToggle(!toggle);
   
   return (
-    <main className="signBg grid place-items-center ">
+    <main className="signBg min-h-[100vh] grid place-items-center ">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-6 rounded-[1.2rem] flex flex-col gap-y-6">
 <div className='flex justify-center'>
   <img src='/images/shool-pluglogo.png' alt='img'/>
@@ -22,7 +22,7 @@ export default function SignIn() {
           <input
             type="email"
             placeholder="enter email or phone number"
-            className="border p-3 md:p-2 rounded-md w-full"
+            className="border p-3 md:p-2 rounded-md bg-transparent w-full"
           />
           <PasswordField
             open={open}
@@ -43,7 +43,7 @@ export default function SignIn() {
                 <img src="/images/google-icon.png" alt="img" />
               </span>
             </button>
-            <button className="bg-secondary500  text-white capitalize">
+            <button className="bg-secondary500 p-2 rounded-md font-semibold  text-white capitalize">
               {" "}
               continue to signin
             </button>
@@ -59,7 +59,7 @@ export default function SignIn() {
           <img src="/images/Rectangle 2.png" alt="img" />
           </div>
         </div>
-        <Link to="/signup" className='text-secondary500 capitalize font-semibold flex justify-center'>sign up instead</Link>
+        <Link to="/signup" className='text-secondary500 capitalize  font-semibold flex justify-center'>sign up instead</Link>
         </div>
       </article>
     </main>
@@ -79,7 +79,7 @@ const PasswordField = ({
     <div className="relative">
       <input
         type={!open ? "password" : "text"}
-        className="w-full md:p-2 border p-3 rounded-md"
+        className="w-full md:p-2 border bg-white p-3 rounded-md"
         placeholder={placeholder}
         {...register}
         autoComplete="current-password"

@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
-import { PasswordField } from './signup/SignUp';
+
+import { useForm } from 'react-hook-form';
+import { HiOutlineEyeSlash } from 'react-icons/hi2';
+import { IoIosEye } from 'react-icons/io';
 
 
 
 
 
 const ForgetPassword = () => {
+   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("test@example.com");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+const ToggleOpen = () => setOpen(!open);
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -23,17 +27,19 @@ const ForgetPassword = () => {
 
     // Mock server response
     const isEmailValid = email === "test@example.com";
-
     if (isEmailValid) {
       setStep(2);
     } else {
       setError("Invalid email address");
     }
-
     setLoading(false);
   };
+
+
+
+  const {register}=useForm()
   return (
-    <article className="flex overflow-hidden w-[95vw] m-auto forgotbg justify-center items-center">
+    <article className="flex overflow-x-hidden w-full min-h-[100vh] m-auto forgotbg justify-center items-center">
       {step === 1 && (
         <div className="md:w-[700px] flex flex-col  gap-y-9  p-6  md:bg-white rounded-lg md:shadow-md slide-in">
           <div className="flex justify-center">
@@ -145,7 +151,7 @@ const ForgetPassword = () => {
         </article>
       )}
       {step === 3 && (
-        <div className="w-96 p-6 md:bg-white rounded-lg md:shadow-md slide-in">
+        <div className="md:w-[600px] p-6 md:px-12 md:bg-white rounded-[2rem] md:shadow-md slide-in">
           <div className="flex justify-center">
             <Logo />
           </div>
@@ -156,26 +162,38 @@ const ForgetPassword = () => {
               down and save password in notepad
             </p>
           </div>
-          <form className='w-full'>
-            <input
+          <form>
+            {/* <input
               type="password"
               placeholder="create Password"
               className="w-full px-4 placeholder:capitalize bg-transparent py-2 border rounded mb-4"
               required
-            />
+            /> */}
+              <PasswordField
+                register={register}
+                open={open}
+                ToggleOpen={ToggleOpen}
+                placeholder="create password"
+              />
             <input
               type="password"
               placeholder="Confirm Password"
               className="w-full px-4 py-2  placeholder:capitalize bg-transparent border rounded mb-4"
               required
             />
-            {/* <PasswordField/> */}
-            <button
-              type="submit"
-              className="mt-4 bg-secondary500 w-full capitlize text-white px-4 py-2 rounded"
-            >
-             create password
-            </button>
+            <div className="flex mt-4 gap-x-4 items-center">
+              <button
+                type="submit"
+                className="  bg-secondary500 w-full capitlize text-white px-4 py-2 rounded"
+              >
+                create password
+              </button>
+              <img
+                src="/images/indicator3.png"
+                alt="img"
+                className="h-[2.5rem]"
+              />
+            </div>
           </form>
         </div>
       )}
@@ -185,9 +203,43 @@ const ForgetPassword = () => {
 
 export default ForgetPassword;
 
-function Email(){
-    return <div>
-        <Logo/>
-        <h3 className='capitalize'>enter email or Phone</h3>
+
+
+
+export const PasswordField = ({
+  label,
+  placeholder,
+  register,
+  error,
+  errorMessage,
+  open,
+  ToggleOpen,
+}) => (
+  <div className="Input-Data ">
+    {/* <label className="text-[12px]">{label}</label> */}
+    <div className="relative">
+      <input
+        type={!open ? "password" : "text"}
+        id="password"
+        className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
+        placeholder={placeholder}
+        {...register("password")}
+        autoComplete="current-password"
+      />
+      <span className="absolute right-3 top-2 cursor-pointer">
+        {open ? (
+          <IoIosEye
+            className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
+            onClick={ToggleOpen}
+          />
+        ) : (
+          <HiOutlineEyeSlash
+            className="cursor-pointer w-[2rem] text-stone-500 h-[2rem] pb-[.8rem]"
+            onClick={ToggleOpen}
+          />
+        )}
+      </span>
+      {error && <span className="text-white">{errorMessage}</span>}
     </div>
-}
+  </div>
+);
