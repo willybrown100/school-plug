@@ -62,12 +62,13 @@
 
 
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {components} from "react-select"
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiChevronDown } from "react-icons/hi2";
+import { DateContext } from "../../DateContext";
 
 // Example options for react-select
 const monthOptions = [
@@ -128,8 +129,9 @@ const CustomHeader = ({ date, changeMonth, changeYear }) => {
   );
 };
 
-const CustomDatePicker = ({placeholder ,icon}) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+const CustomDatePicker = ({placeholder }) => {
+  // const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate, setSelectedDate } = useContext(DateContext);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -138,9 +140,10 @@ const CustomDatePicker = ({placeholder ,icon}) => {
   return (
     <>
       <DatePicker
-        selected={selectedDate}
+        selected={selectedDate || null}
         placeholderText={placeholder}
         onChange={handleDateChange}
+       
         // {icon}
         className=" w-full border flex-1 placeholder:capitalize placeholder:pl-6 relative border-stone-700 p-[7px]  rounded-md"
         renderCustomHeader={({
@@ -158,12 +161,52 @@ const CustomDatePicker = ({placeholder ,icon}) => {
             changeYear={changeYear}
           />
         )}
-        />
+      />
     </>
   );
 };
 
 export default CustomDatePicker;
+
+
+export const CustomDatePicker2 = ({placeholder }) => {
+  // const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate2, setSelectedDate2 } = useContext(DateContext);
+
+  const handleDateChange = (date) => {
+    setSelectedDate2(date);
+  };
+
+  return (
+    <>
+      <DatePicker
+        selected={selectedDate2 || null}
+        placeholderText={placeholder}
+        onChange={handleDateChange}
+       
+        // {icon}
+        className=" w-full border flex-1 placeholder:capitalize placeholder:pl-6 relative border-stone-700 p-[7px]  rounded-md"
+        renderCustomHeader={({
+          date,
+          changeMonth,
+          changeYear,
+          decreaseMonth,
+          increaseMonth,
+          prevMonthButtonDisabled,
+          nextMonthButtonDisabled,
+        }) => (
+          <CustomHeader
+            date={date}
+            changeMonth={changeMonth}
+            changeYear={changeYear}
+          />
+        )}
+      />
+    </>
+  );
+};
+
+
 
 
 

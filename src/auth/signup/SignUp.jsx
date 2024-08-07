@@ -1,17 +1,21 @@
 
-import React, {  useState } from "react";
+import React, {  useContext, useState } from "react";
 import Logo from "../../components/Logo";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { IoIosEye } from "react-icons/io";
 import { HiChevronDown, HiChevronUp, HiOutlineCalendar, HiOutlineEyeSlash } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
-import CustomDatePicker from "./DatePicker";
+import CustomDatePicker, { CustomDatePicker2 } from "./DatePicker";
 import Button from "../../ui/Button";
-import signUp from "../../services/contactApi";
+import signUp, { EducationalSignUp } from "../../services/contactApi";
 import { useMutation } from "@tanstack/react-query";
+import MiniLoader from "../../ui/MiniLoader";
+import { DateContext } from "../../DateContext";
+import dateFormat from "../../utils/dateFormat";
+import { format, parseISO } from "date-fns";
 
 
 
@@ -38,16 +42,18 @@ const {mutate,isPending} = useMutation({
     console.log(user);
   };
   return (
-    <main className="signupBg grid place-items-center p-4">
+    <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
-        <div className="flex justify-center">
-          <img src="/images/shool-pluglogo.png" alt="img" />
-        </div>
-
         {showsignUp && (
-          <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
-            Nice to have you, Sign up
-          </h3>
+          <div className="flex flex-col gap-2" >
+            <div className="flex justify-center">
+              <img src="/images/shool-pluglogo.png" alt="img" />
+            </div>
+
+            <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
+              Nice to have you, Sign up
+            </h3>
+          </div>
         )}
         <div className=" rounded-md   md:w-[500px]">
           {showsignUp ? (
@@ -79,12 +85,16 @@ const {mutate,isPending} = useMutation({
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
                 {...register("phone_number", {
                   required: "this field is required",
-                  pattern:{
-                    value:/^\d{11}$/
-                  }
+                  pattern: {
+                    value: /^\d{11}$/,
+                  },
                 })}
               />
-              {errors.phone_number && <p className="text-red-500 capitalize ">not a valid phone number </p>}
+              {errors.phone_number && (
+                <p className="text-red-500 capitalize ">
+                  not a valid phone number{" "}
+                </p>
+              )}
               <PasswordField
                 open={open}
                 ToggleOpen={ToggleOpen}
@@ -115,17 +125,14 @@ const {mutate,isPending} = useMutation({
                     <img src="/images/google-icon.png" alt="img" />
                   </span>
                 </button>
-                <button
-            
-                  className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize"
-                >
+                <button className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
                   {" "}
-                  {isPending ? "signing up.." : "sign up"}
+                  {isPending ? "signingUp..." : "sign up"}
                 </button>
               </div>
             </form>
           ) : (
-            <StudentInfo register={register} />
+            <StudentInfo register={register} handleSubmit={handleSubmit} />
           )}
         </div>
         <div>
@@ -225,41 +232,80 @@ export const ConfirmPasswordField = ({
   </div>
 );
 
-function StudentInfo({register}) {
+function StudentInfo() {
+  const { selectedDate, selectedDate2} = useContext(DateContext);
+  const [university_Of_Study,setUniversityOfStudy]=useState("")
+  const [course,setCourse]=useState("")
+  const [department,setDepartment]=useState("")
+  const [level,setLevel]=useState("")
+// const year_of_admission=format(parseISO(selectedDate),"yyyy-mm-dd")
+  const { mutate:education, isPending } = useMutation({
+    mutationFn: EducationalSignUp,
+    onSuccess:()=>{
+console.log("second signup")
+    }
+  });
+
+
+  const handleSubmit = function(e){
+    e.preventDefault()
+    const stundentInfo = {
+      university_Of_Study,
+      department,
+      level,
+      course,
+      year_of_admission:dateFormat(selectedDate),
+      year_of_graduation:dateFormat(selectedDate2),
+    };
+console.log(
+
+  stundentInfo
+
+);
+education(stundentInfo);
+  }
   return (
     <div className="flex w-full flex-col gap-y-4">
-      <h3 className="font-fontHeading font-semibold text-center">
-        student info
-      </h3>
-      <form className="flex flex-col p-3 gap-y-4">
+      <div className="flex flex-col items-center gap-2">
+        <img src="/images/shool-pluglogo.png" alt="img" />
+        <h3 className="font-fontHeading font-semibold text-center">
+          student info
+        </h3>
+      </div>
+      <form className="flex flex-col p-3 gap-y-4" onSubmit={handleSubmit}>
         <input
           type="text"
+          value={university_Of_Study}
           placeholder="university of study"
           className="w-full md:p-2 border p-3 border-stone-700 rounded-md"
-          {...register("university_of_study")}
+          onChange={(e) => setUniversityOfStudy(e.target.value)}
           id="university"
         />
         <input
           type="text"
+          value={course}
           placeholder="course"
           id="course"
           className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-          {...register("course")}
+          // {...register("course")}
+          onChange={(e) => setCourse(e.target.value)}
         />
 
         <input
           type="text"
+          value={department}
           placeholder="department"
           id="department"
           className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-          {...register("department")}
+          onChange={(e) => setDepartment(e.target.value)}
         />
         <input
           type="text"
           placeholder="level"
           id="level"
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
           className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
-          {...register("level")}
         />
         <div className="grid grid-cols-1 relative">
           <CustomDatePicker placeholder={`year of admission`} />
@@ -267,12 +313,14 @@ function StudentInfo({register}) {
           <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
         </div>
         <div className="grid grid-cols-1 relative">
-          <CustomDatePicker placeholder="year of graduation" />
+          <CustomDatePicker2 placeholder="year of graduation" />
           <HiOutlineCalendar className="absolute top-2 left-2 text-lg text-stone-600" />
           <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
         </div>
 
-        <Button className="mt-16 md:mt-2">create an account</Button>
+        <Button className="mt-16 md:mt-2">
+          {isPending ? "creating account..." : "create an account"}
+        </Button>
       </form>
     </div>
   );

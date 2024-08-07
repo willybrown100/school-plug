@@ -10,8 +10,8 @@ export default {
         secondary700: "#2161c3",
       },
       fontFamily: {
-        fontHeading: "Inter,sans-serif",
-        fontbody: "",
+        heading: "Inter,sans-serif",
+        fontbody: "Lora,sans-serif,",
       },
       screens: {
         // Define custom max-width breakpoints
