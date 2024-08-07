@@ -9,7 +9,7 @@ export default function LandingPage() {
         <Link to="/"></Link>
         <Link to="/signup"> signup</Link>
         <Link to="/signin">signin</Link>
-        <Link to="/forgotpasword">forgotpassword</Link>
+        <Link to="/forgotpassword">forgotpassword</Link>
         <Link to="/profilePic">userdummyImage</Link>
 
         <Link to="/applayout">internal page</Link>
