@@ -13,6 +13,7 @@ import UserProfile from "./auth/UserProfile";
 import AppLayout from "./components/AppLayout";
 import HomePage from "./features/HomePage";
 import { DateProvider } from "./DateContext";
+import LandingPage from "./pages/LandingPage";
 ;
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -28,7 +29,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Logo />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="loader" element={<Loader />} />
