@@ -14,6 +14,9 @@ import AppLayout from "./components/AppLayout";
 import HomePage from "./features/HomePage";
 import { DateProvider } from "./DateContext";
 import LandingPage from "./pages/LandingPage";
+import Materials from "./features/Materials";
+import Trends from "./features/Trends";
+import Events from "./features/Events";
 ;
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -35,13 +38,13 @@ export default function App() {
             <Route path="loader" element={<Loader />} />
             <Route path="forgotPassword" element={<ForgotPassword />} />
             <Route path="profilepic" element={<UserProfile />} />
-            <Route path="applayout" element={<AppLayout />}>
-              <Route index element={<Navigate to="home" />} />
-              <Route path="home" index element={<HomePage  />} />
-              <Route path="events" index element={<HomePage  />} />
-              <Route path="material" index element={<HomePage  />} />
-              <Route path="trends" index element={<HomePage  />} />
-              <Route path="bills" index element={<HomePage  />} />
+            <Route path="home" element={<AppLayout />}>
+              <Route index element={<Navigate to="feed" />} />
+              <Route path="feed" index element={<HomePage />} />
+              <Route path="events" element={<Events />} />
+              <Route path="material" element={<Materials />} />
+              <Route path="trends" element={<Trends />} />
+              <Route path="bills" element={<HomePage />} />
             </Route>
           </Routes>
         </BrowserRouter>

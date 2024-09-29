@@ -1,12 +1,38 @@
-import React from 'react'
+import  { useEffect, useRef } from 'react';
+import React, {  useState } from 'react'
 import NavLinks from './NavLinks';
 import { useLocation } from 'react-router-dom';
+import { GoPlus } from 'react-icons/go';
+import Overlay from './Overlay';
 
 export default function Footer() {
+  
+ const [isVisible, setIsVisible] = useState(false);
+ let lastScrollTop = 0;
+
+ useEffect(() => {
+   const handleScroll = () => {
+     const scrollTop = window.scrollY;
+console.log(scrollTop,lastScrollTop);
+     if (scrollTop < lastScrollTop) {
+       // Scrolling up
+       setIsVisible(true);
+     } else {
+       // Scrolling down
+       setIsVisible(false);
+     }
+
+     lastScrollTop = scrollTop;
+   };
+
+   window.addEventListener("scroll", handleScroll);
+   return () => window.removeEventListener("scroll", handleScroll);
+ }, []);
+
     const { pathname } = useLocation();
 
     const pathn = pathname.split("/").at(2);
-    console.log(pathn);
+   
     const links = [
       {
         name: "home",
@@ -24,7 +50,7 @@ export default function Footer() {
               stroke-width="1.2"
               stroke-miterlimit="10"
               stroke-linejoin="round"
-              className={`${pathn === "home" ? "home" : "black"}`}
+              className={`${pathn === "feed" ? "home" : "black"}`}
             />
             <path
               d="M6.71416 1.87998L2.09416 5.57998C1.57416 5.99331 1.24083 6.86665 1.35416 7.51998L2.24083 12.8266C2.40083 13.7733 3.30749 14.54 4.26749 14.54H11.7342C12.6875 14.54 13.6008 13.7666 13.7608 12.8266L14.6475 7.51998C14.7542 6.86665 14.4208 5.99331 13.9075 5.57998L9.28749 1.88665C8.57416 1.31331 7.42083 1.31331 6.71416 1.87998Z"
@@ -32,11 +58,11 @@ export default function Footer() {
               stroke-width="1.2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              className={`${pathn === "home" ? "home" : "black"}`}
+              className={`${pathn === "feed" ? "home" : "black"}`}
             />
           </svg>
         ),
-        path: "home",
+        path: "feed",
       },
       {
         name: "events",
@@ -272,10 +298,10 @@ export default function Footer() {
             <path
               d="M8 13H16"
               stroke="#565656"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke-miterlimit="10"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className={`${pathn === "bills" ? "pz" : "black"}`}
             />
           </svg>
@@ -283,13 +309,68 @@ export default function Footer() {
         path: "bills",
       },
     ];
+    const [isOpen,setOpen]=useState(false)
+    const handleClick =function(){
+      setOpen((isOpen)=>!isOpen)
+    }
   return (
-    <article className="bg-white md:hidden p-2  w-full">
-      <ul className='flex justify-between items-center gap-x-2'>
-      {links.map((item) => (
-        <NavLinks item={item} key={item.name}/>
-      ))}
-      </ul>
-    </article>
+    <div className=" ">
+      {/* Bottom navigation */}
+      <div
+        className={`p-2 fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
+          isVisible ? "translate-y-0" : "translate-y-full"
+        } bg-white shadow-md md:hidden `}
+      >
+        <ul className="flex justify-between items-center gap-x-2">
+          {links.map((item) => (
+            <NavLinks item={item} key={item.name} />
+          ))}
+        </ul>
+
+        {/* Post button with the highest z-index */}
+        {isOpen ? (
+          <p></p>
+        ) : (
+          <button
+            onClick={handleClick}
+            className={`bg-secondary600 ${
+              isVisible ? "scale-1" : "scale-0"
+            } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
+          >
+            <GoPlus className={`text-3xl text-white`} />
+          </button>
+        )}
+      </div>
+      {/* Overlay should cover the entire screen */}
+      {isOpen && (
+        <div className="relative">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
+            style={{ height: "100vh", width: "100vw" }}
+          >
+            <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
+              <div className="flex items-center gap-x-2">
+                <span className="text-white font-heading capitalize">
+                  events
+                </span>
+                <button className=" p-[0.65rem] rounded-full bg-[#dce7f9]">
+                  <img src="\images\calendar.svg" alt="img" />
+                </button>
+              </div>
+              <div className="flex items-center gap-x-2">
+                <span className="text-white font-heading capitalize">post</span>
+                <button className=" bg-secondary600 p-3  transition-all duration-300  rounded-full ">
+                  <GoPlus className={`text-3xl text-white`} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
+
+
+
+

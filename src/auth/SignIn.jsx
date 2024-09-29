@@ -30,7 +30,7 @@ export default function SignIn() {
             placeholder="enter your password"
           />
           <Link
-            to="forgotpassword"
+            to="/forgotpassword"
             className="text-stone-400 capitalize text-right "
           >
             forgot password
@@ -44,7 +44,7 @@ export default function SignIn() {
               </span>
             </button>
             <button className="bg-secondary500 p-2 rounded-md font-semibold  text-white capitalize">
-              {" "}
+            
               continue to signin
             </button>
           </div>

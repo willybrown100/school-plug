@@ -280,6 +280,7 @@ education(stundentInfo);
           className="w-full md:p-2 border p-3 border-stone-700 rounded-md"
           onChange={(e) => setUniversityOfStudy(e.target.value)}
           id="university"
+          required
         />
         <input
           type="text"
@@ -289,6 +290,7 @@ education(stundentInfo);
           className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
           // {...register("course")}
           onChange={(e) => setCourse(e.target.value)}
+          required
         />
 
         <input
@@ -303,6 +305,7 @@ education(stundentInfo);
           type="text"
           placeholder="level"
           id="level"
+          required
           value={level}
           onChange={(e) => setLevel(e.target.value)}
           className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
