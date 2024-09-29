@@ -12,7 +12,7 @@ export default function LandingPage() {
         <Link to="/forgotpassword">forgotpassword</Link>
         <Link to="/profilePic">userdummyImage</Link>
 
-        <Link to="/applayout">internal page</Link>
+        <Link to="/home">internal page</Link>
         </div>
     </div>
   )

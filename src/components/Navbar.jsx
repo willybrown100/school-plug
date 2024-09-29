@@ -2,6 +2,7 @@ import React from "react";
 import { HiHome, HiMagnifyingGlass } from "react-icons/hi2";
 import { NavLink, useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
+import { useEffect,useState } from "react";
 
 
 export default function Navbar() {
@@ -26,7 +27,7 @@ export default function Navbar() {
             stroke-width="1.2"
             stroke-miterlimit="10"
             stroke-linejoin="round"
-            className={`${pathn === "home" ? "home" : "black"}`}
+            className={`${pathn === "feed" ? "home" : "black"}`}
           />
           <path
             d="M6.71416 1.87998L2.09416 5.57998C1.57416 5.99331 1.24083 6.86665 1.35416 7.51998L2.24083 12.8266C2.40083 13.7733 3.30749 14.54 4.26749 14.54H11.7342C12.6875 14.54 13.6008 13.7666 13.7608 12.8266L14.6475 7.51998C14.7542 6.86665 14.4208 5.99331 13.9075 5.57998L9.28749 1.88665C8.57416 1.31331 7.42083 1.31331 6.71416 1.87998Z"
@@ -34,11 +35,11 @@ export default function Navbar() {
             stroke-width="1.2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            className={`${pathn === "home" ? "home" : "black"}`}
+            className={`${pathn === "feed" ? "home" : "black"}`}
           />
         </svg>
       ),
-      path: "home",
+      path: "feed",
     },
     {
       name: "events",
@@ -237,7 +238,7 @@ export default function Navbar() {
       path: "trends",
     },
     {
-      name: "pay bills",
+      name: <span className="lg:hidden">pay bills</span>,
       icon: (
         <svg
           width="24"
@@ -245,6 +246,7 @@ export default function Navbar() {
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          className="lg:hidden"
         >
           <rect width="24" height="24" fill="white" />
           <path
@@ -278,7 +280,7 @@ export default function Navbar() {
             stroke-miterlimit="10"
             stroke-linecap="round"
             stroke-linejoin="round"
-            className={`${pathn === "bills" ? "pz" : "black"}`}
+            className={`${pathn === "bills" ? "pz" : "black"} `}
           />
         </svg>
       ),
@@ -286,10 +288,15 @@ export default function Navbar() {
     },
   ];
      const className = "max-w-[1170px]   w-[90vw]  m-auto";
+
+       
+
   return (
-    <nav className="bg-white p-2  w-full ">
+    <nav
+      className={`bg-white p-2 w-full `}
+    >
       <article
-        className={`${className}  max-xl:flex max-xl:flex-col max-xl:gap-y-2 `}
+        className={`${className}  max-lg:flex max-xl:flex-col max-lg:gap-y-2 `}
       >
         <div className="flex justify-between gap-x-6  items-center">
           <img
@@ -300,9 +307,9 @@ export default function Navbar() {
           <img
             src="\images\smLogo.png"
             alt="img"
-            className="hidden xl:hidden md:block"
+            className="hidden lg:hidden md:block"
           />
-          <form className=" hidden md:block xl:hidden px-16 w-full  relative">
+          <form className=" hidden md:block lg:hidden px-16 w-full  relative">
             <input
               type="text"
               placeholder="Search"
@@ -312,7 +319,7 @@ export default function Navbar() {
               <HiMagnifyingGlass className="text-xl absolute top-3 left-16" />
             </button>
           </form>
-          <div className=" hidden md:flex xl:hidden gap-2 items-center">
+          <div className=" hidden md:flex lg:hidden gap-2 items-center">
             <img
               src="\images\notification-bing.png"
               alt="img"
@@ -329,7 +336,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        <ul className="hidden md:flex items-center xl:hidden justify-between">
+        <ul className="hidden md:flex items-center lg:hidden justify-between">
           {links.map((item) => (
             <NavLinks item={item} />
           ))}
@@ -357,7 +364,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex justify-between items-center">
-          <ul className="hidden xl:flex items-center gap-x-6 ">
+          <ul className="hidden lg:flex items-center gap-x-6 ">
             {links.map((item) => (
               <NavLinks item={item} />
             ))}
@@ -366,10 +373,10 @@ export default function Navbar() {
           <img
             src="\images\smLogo.png"
             alt="img"
-            className="hidden  xl:block"
+            className="hidden  lg:block"
           />
           <div className="flex items-center gap-x-5">
-            <form className=" hidden xl:block w-full relative">
+            <form className=" hidden lg:block w-full relative">
               <input
                 type="text"
                 placeholder="Search"
@@ -377,7 +384,7 @@ export default function Navbar() {
               />
               <HiMagnifyingGlass className="text-xl absolute top-3 left-1" />
             </form>
-            <div className="xl:flex gap-2 hidden items-center">
+            <div className="lg:flex gap-2 hidden items-center">
               <img
                 src="\images\notification-bing.png"
                 alt="img"
@@ -396,7 +403,15 @@ export default function Navbar() {
   );
 }
 
-// import React from "react";
+
+
+
+
+
+
+
+// export default Navbar;
+
 // import { useLocation } from "react-router-dom";
 
 // const svgArray = [

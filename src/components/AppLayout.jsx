@@ -5,9 +5,11 @@ import Footer from './Footer'
 
 export default function AppLayout() {
   return (
-    <div className=' bg-stone-100 '>
+    <div className='  '>
         <Navbar/>
+        <main className='bg-stone-100 '>
         <Outlet/>
+        </main>
         <Footer/>
     </div>
   )

@@ -15,13 +15,13 @@ export default function NavLinks({item}) {
     <li className="">
       <NavLink to={path} className="flex items-center flex-col gap-y-2">
         <span className="">{icon}</span>
-        <span
+        <div
           className={`text-black capitalize font-heading font-semibold ${
             pathn === path ? "text-secondary600" : ""
           }`}
         >
           {name}
-        </span>
+        </div>
       </NavLink>{" "}
     </li>
   );

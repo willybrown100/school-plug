@@ -143,7 +143,7 @@ const CustomDatePicker = ({placeholder }) => {
         selected={selectedDate || null}
         placeholderText={placeholder}
         onChange={handleDateChange}
-       
+        required
         // {icon}
         className=" w-full border flex-1 placeholder:capitalize placeholder:pl-6 relative border-stone-700 p-[7px]  rounded-md"
         renderCustomHeader={({
