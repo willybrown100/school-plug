@@ -69,6 +69,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiChevronDown } from "react-icons/hi2";
 import { DateContext } from "../../DateContext";
+import { formatDate } from "../../utils/dateFormat";
 
 // Example options for react-select
 const monthOptions = [
@@ -135,17 +136,18 @@ const CustomDatePicker = ({placeholder }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    console.log(date)
   };
 
   return (
     <>
       <DatePicker
-        selected={selectedDate || null}
+        value={formatDate(selectedDate) || null}
         placeholderText={placeholder}
         onChange={handleDateChange}
         required
         // {icon}
-        className=" w-full border flex-1 placeholder:capitalize placeholder:pl-6 relative border-stone-700 p-[7px]  rounded-md"
+        className=" w-full outline-none bg-transparent  placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
         renderCustomHeader={({
           date,
           changeMonth,
@@ -175,17 +177,17 @@ export const CustomDatePicker2 = ({placeholder }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate2(date);
+    console.log(date)
   };
 
   return (
     <>
       <DatePicker
-        selected={selectedDate2 || null}
+        value={formatDate(selectedDate2) || null}
         placeholderText={placeholder}
         onChange={handleDateChange}
-       
         // {icon}
-        className=" w-full border flex-1 placeholder:capitalize placeholder:pl-6 relative border-stone-700 p-[7px]  rounded-md"
+        className=" w-full bg-transparent outline-none placeholder:capitalize placeholder:pl-6 relative p-[7px]  "
         renderCustomHeader={({
           date,
           changeMonth,

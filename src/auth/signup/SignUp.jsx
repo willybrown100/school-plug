@@ -4,7 +4,7 @@ import Logo from "../../components/Logo";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { IoIosEye } from "react-icons/io";
 import { HiChevronDown, HiChevronUp, HiOutlineCalendar, HiOutlineEyeSlash } from "react-icons/hi2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
@@ -14,30 +14,46 @@ import signUp, { EducationalSignUp } from "../../services/contactApi";
 import { useMutation } from "@tanstack/react-query";
 import MiniLoader from "../../ui/MiniLoader";
 import { DateContext } from "../../DateContext";
-import dateFormat from "../../utils/dateFormat";
+import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
 import { format, parseISO } from "date-fns";
+import useUser from "../../hooks/useUser";
 
 
 
 export default function SignUp() {
-  const { handleSubmit, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(true)
+  const { authUserData, userId } = useUser();
+  console.log(authUserData, userId);
+  const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
+  const [showsignUp,setShowSignup]=useState(false)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
   const ToggleOpen2 = () => setOpen2(!open2);
 
+  const password = watch("password");
+
 const {mutate,isPending} = useMutation({
   mutationFn: signUp,
   onSuccess:()=>{
-    console.log("first signup sucessful")
-    // reset()
+
     setShowSignup(false)
+    
+  },
+  onError:()=>{
+    setShowSignup(true)
 
   }
 });
+
+    const validateConfirmPassword = (value) => {
+      if (value !== password) {
+        return "Passwords do not match";
+      }
+      return true; // Validation passed
+    };
+
   const onSubmit = function (data) {
-    const user = { ...data, agree_to_terms: data.agree_to_terms ==="on"};
+    const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
     mutate(user);
     console.log(user);
   };
@@ -45,10 +61,11 @@ const {mutate,isPending} = useMutation({
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
         {showsignUp && (
-          <div className="flex flex-col gap-2" >
-            <div className="flex justify-center">
+
+          <div className="flex flex-col gap-2">
+            <Link to="/" className="flex justify-center">
               <img src="/images/shool-pluglogo.png" alt="img" />
-            </div>
+            </Link>
 
             <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
               Nice to have you, Sign up
@@ -66,7 +83,7 @@ const {mutate,isPending} = useMutation({
                 id="text"
                 placeholder="full name (as used in your student iD)"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("full_name")}
+                {...register("fullName")}
               />
               <input
                 type="email"
@@ -83,7 +100,7 @@ const {mutate,isPending} = useMutation({
                 id="phone_number"
                 placeholder="phone number"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("phone_number", {
+                {...register("phoneNumber", {
                   required: "this field is required",
                   pattern: {
                     value: /^\d{11}$/,
@@ -102,17 +119,14 @@ const {mutate,isPending} = useMutation({
                 register={register}
               />
               <ConfirmPasswordField
+                validateConfirmPassword={validateConfirmPassword}
                 register={register}
                 open2={open2}
                 ToggleOpen2={ToggleOpen2}
                 placeholder="confirm password"
               />
               <div className="flex items-center gap-1 capitalize">
-                <input
-                  type="radio"
-                  id="terms"
-                  {...register("agree_to_terms")}
-                />
+                <input type="radio" id="terms" {...register("agreedToTerms")} />
                 <div>
                   agree to our <Link>terms</Link> and <Link>policies</Link>{" "}
                 </div>
@@ -132,7 +146,11 @@ const {mutate,isPending} = useMutation({
               </div>
             </form>
           ) : (
-            <StudentInfo register={register} handleSubmit={handleSubmit} />
+            <StudentInfo
+              register={register}
+              handleSubmit={handleSubmit}
+              userId={userId}
+            />
           )}
         </div>
         <div>
@@ -177,7 +195,7 @@ export const PasswordField = ({
         {...register("password")}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-4 cursor-pointer">
         {open ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
@@ -202,6 +220,7 @@ export const ConfirmPasswordField = ({
   errorMessage,
   open2,
   ToggleOpen2,
+  validateConfirmPassword,
 }) => (
   <div className="Input-Data ">
     <label className="text-[12px]">{label}</label>
@@ -211,10 +230,13 @@ export const ConfirmPasswordField = ({
         id="confirmPassword"
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
-        {...register("confirm_password")}
+        {...register("confirmPassword", {
+          required: "Please confirm your password",
+          validate: validateConfirmPassword, // Custom validation function
+        })}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-4 cursor-pointer">
         {open2 ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
@@ -232,42 +254,42 @@ export const ConfirmPasswordField = ({
   </div>
 );
 
-function StudentInfo() {
-  const { selectedDate, selectedDate2} = useContext(DateContext);
-  const [university_Of_Study,setUniversityOfStudy]=useState("")
-  const [course,setCourse]=useState("")
-  const [department,setDepartment]=useState("")
-  const [level,setLevel]=useState("")
-// const year_of_admission=format(parseISO(selectedDate),"yyyy-mm-dd")
-  const { mutate:education, isPending } = useMutation({
+  
+function StudentInfo({ userId }) {
+  const navigate = useNavigate()
+  const { selectedDate, selectedDate2 } = useContext(DateContext);
+  const [university, setUniversity] = useState("");
+  const [course, setCourse] = useState("");
+  const [department, setDepartment] = useState("");
+  const [level, setLevel] = useState("");
+  // const year_of_admission=format(parseISO(selectedDate),"yyyy-mm-dd")
+  const { mutate: education, isPending } = useMutation({
     mutationFn: EducationalSignUp,
-    onSuccess:()=>{
-console.log("second signup")
-    }
+    onSuccess: () => {
+navigate("/profilepic");
+    },
   });
 
-
-  const handleSubmit = function(e){
-    e.preventDefault()
+  const handleSubmit = function (e) {
+    e.preventDefault();
     const stundentInfo = {
-      university_Of_Study,
+      userId,
+      university,
       department,
       level,
       course,
-      year_of_admission:dateFormat(selectedDate),
-      year_of_graduation:dateFormat(selectedDate2),
+      yearOfAdmission: convertDateToDDMMYYYY(selectedDate),
+      yearOfGraduation: convertDateToDDMMYYYY(selectedDate2),
     };
-console.log(
-
-  stundentInfo
-
-);
-education(stundentInfo);
-  }
+    console.log(stundentInfo);
+    education(stundentInfo);
+  };
   return (
     <div className="flex w-full flex-col gap-y-4">
       <div className="flex flex-col items-center gap-2">
+        <Link to="/">
         <img src="/images/shool-pluglogo.png" alt="img" />
+        </Link>
         <h3 className="font-fontHeading font-semibold text-center">
           student info
         </h3>
@@ -275,10 +297,10 @@ education(stundentInfo);
       <form className="flex flex-col p-3 gap-y-4" onSubmit={handleSubmit}>
         <input
           type="text"
-          value={university_Of_Study}
+          value={university}
           placeholder="university of study"
-          className="w-full md:p-2 border p-3 border-stone-700 rounded-md"
-          onChange={(e) => setUniversityOfStudy(e.target.value)}
+          className="w-full md:p-2 border p-2 border-stone-700 rounded-md"
+          onChange={(e) => setUniversity(e.target.value)}
           id="university"
           required
         />
@@ -287,7 +309,7 @@ education(stundentInfo);
           value={course}
           placeholder="course"
           id="course"
-          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
           // {...register("course")}
           onChange={(e) => setCourse(e.target.value)}
           required
@@ -298,7 +320,7 @@ education(stundentInfo);
           value={department}
           placeholder="department"
           id="department"
-          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
           onChange={(e) => setDepartment(e.target.value)}
         />
         <input
@@ -308,16 +330,21 @@ education(stundentInfo);
           required
           value={level}
           onChange={(e) => setLevel(e.target.value)}
-          className="w-full  md:p-2 border border-stone-700 p-3 rounded-md"
+          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
         />
-        <div className="grid grid-cols-1 relative">
-          <CustomDatePicker placeholder={`year of admission`} />
-          <HiOutlineCalendar className="absolute top-2 left-2 text-lg text-stone-600" />
+        <div className="grid grid-cols-1 relative  rounded-md border-stone-700 w-full border">
+          <div className="flex items-center gap-x-1">
+            <HiOutlineCalendar className="ml-2 text-lg text-stone-600" />
+            <CustomDatePicker placeholder={`year of admission`} />
+          </div>
           <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
         </div>
-        <div className="grid grid-cols-1 relative">
-          <CustomDatePicker2 placeholder="year of graduation" />
-          <HiOutlineCalendar className="absolute top-2 left-2 text-lg text-stone-600" />
+
+        <div className="grid grid-cols-1 relative  rounded-md border-stone-700 border">
+          <div className="flex items-center gap-x-1">
+            <HiOutlineCalendar className=" text-lg text-stone-600 ml-2" />
+            <CustomDatePicker2 placeholder="year of graduation" />
+          </div>
           <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
         </div>
 
@@ -328,3 +355,49 @@ education(stundentInfo);
     </div>
   );
 }
+
+
+
+const SignupForm = () => {
+    const { register, handleSubmit, watch, setError, formState: { errors } } = useForm();
+
+    const password = watch("password"); // Watch password field
+
+    const onSubmit = (data) => {
+        console.log(data);
+        // Perform signup logic
+    };
+
+    const validateConfirmPassword = (value) => {
+        if (value !== password) {
+            return "Passwords do not match";
+        }
+        return true; // Validation passed
+    };
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+                <label>Password</label>
+                <input
+                    type="password"
+                    {...register("password", { required: "Password is required" })}
+                />
+                {errors.password && <span>{errors.password.message}</span>}
+            </div>
+            <div>
+                <label>Confirm Password</label>
+                <input
+                    type="password"
+                    {...register("confirmPassword", {
+                        required: "Please confirm your password",
+                        validate: validateConfirmPassword, // Custom validation function
+                    })}
+                />
+                {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    );
+};
+

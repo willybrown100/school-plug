@@ -1,7 +1,7 @@
 import  { useEffect, useRef } from 'react';
 import React, {  useState } from 'react'
 import NavLinks from './NavLinks';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
 import Overlay from './Overlay';
 
@@ -359,9 +359,12 @@ console.log(scrollTop,lastScrollTop);
               </div>
               <div className="flex items-center gap-x-2">
                 <span className="text-white font-heading capitalize">post</span>
-                <button className=" bg-secondary600 p-3  transition-all duration-300  rounded-full ">
+                <Link
+                  to="/post"
+                  className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
+                >
                   <GoPlus className={`text-3xl text-white`} />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
