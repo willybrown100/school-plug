@@ -24,7 +24,6 @@ const PayBills = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Navigate to PaymentForm and pass selectedFee object (name, image, and amount)
         navigate('/home/payment-form', { state: { selectedFee } });
     };
 
