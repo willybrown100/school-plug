@@ -17,7 +17,10 @@ import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
+// import PayBills from "./features/PayBills";
+import PaymentForm from "./components/PaymentForm";
 import PayBills from "./features/PayBills";
+// import PaymentForm from "./components/PaymentForm";
 ;
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -46,6 +49,7 @@ export default function App() {
               <Route path="material" element={<Materials />} />
               <Route path="trends" element={<Trends />} />
               <Route path="bills" element={<PayBills />} />
+              <Route path="payment-form" element={<PaymentForm />} />
             </Route>
           </Routes>
         </BrowserRouter>

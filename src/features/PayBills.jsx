@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
 import { HiArrowLeft } from "react-icons/hi";
-import img1 from '../assets/bill.svg'
-import img2 from '../assets/teacher.svg'
-import img3 from '../assets/book.svg'
-import { Link } from 'react-router-dom'
+import img1 from '../assets/bill.svg';
+import img2 from '../assets/teacher.svg';
+import img3 from '../assets/book.svg';
+import { Link, useNavigate } from 'react-router-dom';
+
 const PayBills = () => {
     const [selectedFee, setSelectedFee] = useState(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const navigate = useNavigate();
+
+    const fees = {
+        'SUG fee': { name: 'SUG fee', image: img1, amount: 'N1000' },
+        'Departmental fee': { name: 'Departmental fee', image: img2, amount: 'N1000' },
+        'Faculty fee': { name: 'Faculty fee', image: img3, amount: 'N1000' },
+    };
 
     const handleFeeChange = (event) => {
-        const feeId = event.target.id;
-        setSelectedFee(feeId);
+        const feeId = event.target.value;
+        setSelectedFee(fees[feeId]);
         setIsButtonDisabled(false);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Handle form submission logic here
-        console.log(`Selected fee: ${selectedFee}`);
-        // You can make an API call or perform any other action here
+        // Navigate to PaymentForm and pass selectedFee object (name, image, and amount)
+        navigate('/home/payment-form', { state: { selectedFee } });
     };
 
     return (
@@ -29,58 +36,31 @@ const PayBills = () => {
                 </Link>
                 Pay bills
             </h3>
-            <section className='mb-[7rem]'>
+            <section className='mb-[3rem]'>
                 <p className='text-[#0E2750] text-[14px]'>
                     Select a bill you want to pay then proceed to making payment
                 </p>
-                <div
-                    className={`flex items-center justify-between border p-4 mb-4 rounded-lg ${selectedFee === 'fee1' ? 'outline outline-1 outline-blue-500' : ''}`}
-                >
-                    <div className="flex items-center">
-                        <img className='inline mr-4' src={img1} alt="SUG Fee Image" />
-                        <label htmlFor="fee2">SUG fee</label>
+                {Object.keys(fees).map((feeKey, index) => (
+                    <div
+                        key={index}
+                        className={`flex items-center justify-between border px-3 mb-4 rounded-lg ${selectedFee?.name === fees[feeKey].name ? 'outline outline-1 outline-blue-500' : ''}`}
+                    >
+                        <div className="flex items-center">
+                            <img className='inline mr-4 ' src={fees[feeKey].image} alt={`${fees[feeKey].name} Image`} />
+                            <div className='flex flex-col mt-3'>
+                                <label htmlFor={`fee${index}`}>{fees[feeKey].name}</label>
+                                <p className='font-bold'>{fees[feeKey].amount}</p>
+                            </div>
+                        </div>
+                        <input
+                            type="radio"
+                            id={`fee${index}`}
+                            name="fee"
+                            value={feeKey}
+                            onChange={handleFeeChange}
+                        />
                     </div>
-                    <input
-                        type="radio"
-                        id="fee1"
-                        name="fee"
-                        value="fee1"
-                        onChange={handleFeeChange}
-                        className=""
-                    />
-                </div>
-                <div
-                    className={`flex items-center justify-between border p-4 mb-4 rounded-lg ${selectedFee === 'fee2' ? 'outline outline-1 outline-blue-500' : ''}`}
-                >
-                    <div className="flex items-center">
-                        <img className='inline mr-4' src={img2} alt="Departmental Fee Image" />
-                        <label htmlFor="fee2">Departmental fee</label>
-                    </div>
-                    <input
-                        type="radio"
-                        id="fee2"
-                        name="fee"
-                        value="fee2"
-                        onChange={handleFeeChange}
-                        className=""
-                    />
-                </div>
-                <div
-                    className={`flex items-center justify-between border p-4 mb-4 rounded-lg ${selectedFee === 'fee3' ? 'outline outline-1 outline-blue-500' : ''}`}
-                >
-                    <div className="flex items-center">
-                        <img className='inline mr-4' src={img3} alt="Departmental Fee Image" />
-                        <label htmlFor="fee3">Faculty fee</label>
-                    </div>
-                    <input
-                        type="radio"
-                        id="fee3"
-                        name="fee"
-                        value="fee3"
-                        onChange={handleFeeChange}
-                        className=""
-                    />
-                </div>
+                ))}
             </section>
             <button
                 onClick={handleSubmit}
