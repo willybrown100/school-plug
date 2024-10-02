@@ -18,12 +18,12 @@ import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
 
+import PaymentForm from "./components/PaymentForm";
+
+
 import CreatePost from "./features/CreatePost";
 
-// import PayBills from "./features/PayBills";
-import PaymentForm from "./components/PaymentForm";
 import PayBills from "./features/PayBills";
-// import PaymentForm from "./components/PaymentForm";
 
 ;
 // import { DateProvider } from "./DateContext";
