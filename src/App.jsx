@@ -17,10 +17,14 @@ import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
-// import PayBills from "./features/PayBills";
+
 import PaymentForm from "./components/PaymentForm";
+
+
+import CreatePost from "./features/CreatePost";
+
 import PayBills from "./features/PayBills";
-// import PaymentForm from "./components/PaymentForm";
+
 ;
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -39,6 +43,7 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
+             <Route path="post" element={<CreatePost />} />
             <Route path="loader" element={<Loader />} />
             <Route path="forgotPassword" element={<ForgotPassword />} />
             <Route path="profilepic" element={<UserProfile />} />

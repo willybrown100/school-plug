@@ -1,4 +1,6 @@
 import React, { createContext, useState } from 'react'
+import { formatDate } from './utils/dateFormat';
+
 
 
 const DateContext = createContext();
@@ -6,9 +8,7 @@ const DateContext = createContext();
      const [selectedDate, setSelectedDate] = useState(new Date());
      const [selectedDate2, setSelectedDate2] = useState(new Date());
    
-    // const handleDateChange = function (date) {
-    //   setStartDate(`${date}/${year}`);
-    // };
+
    return (
      <DateContext.Provider
        value={{
