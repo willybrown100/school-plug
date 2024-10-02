@@ -194,17 +194,24 @@ h1 {
     background-color: #f9f9f9;
   }
 }
-@media screen and (max-width:634px) {
-  
-  .profile{
-    background: #f9f9f9;
-  
+
+
+@media screen and (min-width:767px) {
+
+  .profileContainer{
+    min-height: 100dvh;
+    background:
+    url(/images/sign-bg.png) center/cover no-repeat scroll;
   }
 }
 
  .pz{
   stroke: #2161c3;
 
+}
+.previewImg{
+   scrollbar-width: none;
+  -ms-overflow-style: none;
 } 
  .home{
   stroke: white;
@@ -224,9 +231,9 @@ fill: #2161c3;
 
 
 .forget,.signup,
-.signBg,.forgotbg,.profile{
+.signBg,.forgotbg{
  
-    height: 100dvh;
+    min-height: 100dvh;
     background:
       url(/images/sign-bg.png) center/cover no-repeat scroll;
   
@@ -283,7 +290,22 @@ animation: rotate 2s linear infinite;
 
   }
 }
-.overlay{
-  background: linear-gradient( rgba(1, 6, 12,0.4), rgba(44, 62, 80, 0.4));
-  z-index: -0;
+input{
+  font-size: 16px;
+}
+.scroll{
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Customizing the dots */
+.slick-dots li button:before {
+  font-size: 10px; /* Adjust the size of the dots */
+  color: #2161c3; /* Change the dot color */
+  opacity: 0.5; /* Set opacity for inactive dots */
+}
+
+.slick-dots li.slick-active button:before {
+  color: #2161c3; /* Set color for the active dot */
+  opacity: 1; /* Make the active dot fully opaque */
 }
