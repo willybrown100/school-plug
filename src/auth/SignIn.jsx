@@ -1,33 +1,57 @@
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react'
 import { HiOutlineEyeSlash } from 'react-icons/hi2';
 import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { signIn } from '../services/contactApi';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 export default function SignIn() {
-      const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate()
+       const { handleSubmit, register,formState:{errors},setError ,reset} = useForm();
+
       const [open, setOpen] = useState(false);
 
       const ToggleOpen = () => setOpen(!open);
-        const handleToggle = () => setToggle(!toggle);
-  
+    
+  const {mutate,isPending}=useMutation({
+    mutationFn:signIn,
+    onSuccess:()=>{
+navigate("/home")
+    },
+    onError:(error)=>{
+      console.log(error)
+    }
+  })
+  const onSubmit = function(data){
+mutate(data)
+console.log(data)
+  }
   return (
     <main className="signBg min-h-[100vh] grid place-items-center ">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-6 rounded-[1.2rem] flex flex-col gap-y-6">
-<div className='flex justify-center'>
-  <img src='/images/shool-pluglogo.png' alt='img'/>
-</div>
+        <div className="flex justify-center">
+          <img src="/images/shool-pluglogo.png" alt="img" />
+        </div>
 
-        <h3 className='capitalize text-center font-semibold'>sign in to continue</h3>
-        <form className="flex flex-col  rounded-md p-3 md:w-[500px]">
+        <h3 className="capitalize text-center font-semibold">
+          sign in to continue
+        </h3>
+        <form
+          className="flex flex-col  rounded-md p-3 md:w-[500px]"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <input
             type="email"
             placeholder="enter email or phone number"
             className="border p-3 md:p-2 rounded-md bg-transparent w-full"
+            {...register("email", { required: "this field is required" })}
           />
           <PasswordField
             open={open}
             ToggleOpen={ToggleOpen}
             placeholder="enter your password"
+            register={register}
           />
           <Link
             to="/forgotpassword"
@@ -44,22 +68,26 @@ export default function SignIn() {
               </span>
             </button>
             <button className="bg-secondary500 p-2 rounded-md font-semibold  text-white capitalize">
-            
-              continue to signin
+              {isPending ? "signingUp.." : "  continue to signin"}
             </button>
           </div>
         </form>
         <div>
-        <div className="flex gap-x-6">
-          <div className='h-6 mt-2'>
-          <img src="/images/Rectangle 1.png" alt="img" />
+          <div className="flex gap-x-6">
+            <div className="h-6 mt-2">
+              <img src="/images/Rectangle 1.png" alt="img" />
+            </div>
+            <h5 className="mb-0 font-semibold">or</h5>
+            <div className="h-6 mt-2">
+              <img src="/images/Rectangle 2.png" alt="img" />
+            </div>
           </div>
-          <h5 className='mb-0 font-semibold'>or</h5>
-          <div className='h-6 mt-2'>
-          <img src="/images/Rectangle 2.png" alt="img" />
-          </div>
-        </div>
-        <Link to="/signup" className='text-secondary500 capitalize  font-semibold flex justify-center'>sign up instead</Link>
+          <Link
+            to="/signup"
+            className="text-secondary500 capitalize  font-semibold flex justify-center"
+          >
+            sign up instead
+          </Link>
         </div>
       </article>
     </main>
@@ -81,10 +109,10 @@ const PasswordField = ({
         type={!open ? "password" : "text"}
         className="w-full md:p-2 border bg-white p-3 rounded-md"
         placeholder={placeholder}
-        {...register}
+        {...register("password")}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-4 cursor-pointer">
         {open ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
