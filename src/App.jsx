@@ -17,7 +17,11 @@ import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
+
 import CreatePost from "./features/CreatePost";
+
+import PayBills from "./features/PayBills";
+
 ;
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -46,7 +50,7 @@ export default function App() {
               <Route path="events" element={<Events />} />
               <Route path="material" element={<Materials />} />
               <Route path="trends" element={<Trends />} />
-              <Route path="bills" element={<HomePage />} />
+              <Route path="bills" element={<PayBills />} />
             </Route>
           </Routes>
         </BrowserRouter>
