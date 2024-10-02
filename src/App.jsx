@@ -19,10 +19,8 @@ import Trends from "./features/Trends";
 import Events from "./features/Events";
 
 import PaymentForm from "./components/PaymentForm";
-
-
 import CreatePost from "./features/CreatePost";
-
+import CardForm from "./components/CardForm";
 import PayBills from "./features/PayBills";
 
 ;
@@ -55,6 +53,7 @@ export default function App() {
               <Route path="trends" element={<Trends />} />
               <Route path="bills" element={<PayBills />} />
               <Route path="payment-form" element={<PaymentForm />} />
+              <Route path="card-form" element={<CardForm />} />
             </Route>
           </Routes>
         </BrowserRouter>
