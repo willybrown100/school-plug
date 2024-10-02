@@ -18,6 +18,9 @@ import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
 
+import PaymentForm from "./components/PaymentForm";
+
+
 import CreatePost from "./features/CreatePost";
 
 import PayBills from "./features/PayBills";
@@ -51,6 +54,7 @@ export default function App() {
               <Route path="material" element={<Materials />} />
               <Route path="trends" element={<Trends />} />
               <Route path="bills" element={<PayBills />} />
+              <Route path="payment-form" element={<PaymentForm />} />
             </Route>
           </Routes>
         </BrowserRouter>
