@@ -17,9 +17,7 @@ import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
-
 import CreatePost from "./features/CreatePost";
-
 import PayBills from "./features/PayBills";
 
 ;

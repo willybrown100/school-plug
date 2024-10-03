@@ -27,10 +27,16 @@ export default async function signUp(data){
      console.log(error)
     }
 }
-export  async function getAuthUser(){
+export  async function getAuthUser(token){
+  console.log(token)
     try {
    const response = await fetch(
-     "https://student-plug-server.onrender.com/api/auth/getuser1"
+     "https://student-plug-server.onrender.com/api/auth/getuser",
+     {
+       headers: {
+         Authorization: `Bearer ${token}`,
+       },
+     }
    );
 
    const result = await response.json();
@@ -38,8 +44,8 @@ export  async function getAuthUser(){
    console.log(result)
         return result
     } catch (error) {
+      console.log(error);
       throw error; 
-        console.log(error);
     }
 }
 export  async function EducationalSignUp(data){
@@ -165,4 +171,53 @@ export const handleUpload = async ({ profilePhoto, userId,token }) => {
     throw error
   }
 };
+
+export const handleUpload2 = async ({ profilePhoto, token, userId }) => {
+   if (!profilePhoto || !userId) return;
+
+   const defaultImagePath = "/images/blackman2.png";
+   console.log(defaultImagePath)
+  const formData = new FormData();
+
+  const imageToUpload = profilePhoto || defaultImagePath;
+
+  if (typeof imageToUpload === "string") {
+    
+    const response = await fetch(imageToUpload);
+    const blob = await response.blob();
+    formData.append("profilePhoto", blob, "defaultImage.png"); 
+  } else {
+    formData.append("profilePhoto", profilePhoto); 
+  }
+
+  formData.append("token", token);
+  formData.append("userId", userId);
+
+
+  try {
+    const response = await fetch(
+      "https://student-plug-server.onrender.com/api/auth/upload-profile",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+        body: formData, 
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+
+};
+
+
 
