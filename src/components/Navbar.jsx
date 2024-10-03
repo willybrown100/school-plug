@@ -3,6 +3,7 @@ import { HiHome, HiMagnifyingGlass } from "react-icons/hi2";
 import { NavLink, useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
 import { useEffect,useState } from "react";
+import ProfileMobileView from "./ProfileMobileView";
 
 
 export default function Navbar() {
@@ -342,12 +343,9 @@ export default function Navbar() {
           ))}
         </ul>
 
+
         <div className="md:hidden flex items-center gap-x-1 justify-between">
-          <img
-            src="\images\black-man-with-happy-expression 1.png"
-            alt="img"
-            className="w-[3.5rem]  h-[3.5rem] rounded-full mb-0"
-          />
+        <ProfileMobileView/>
 
           <div className="flex gap-x-2 mt-2 items-center">
             <img

@@ -18,12 +18,14 @@ import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
 
+
+
 import PaymentForm from "./components/PaymentForm";
 import CreatePost from "./features/CreatePost";
 import CardForm from "./components/CardForm";
 import PayBills from "./features/PayBills";
 
-;
+
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
   defaultOptions: {
