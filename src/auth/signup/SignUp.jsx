@@ -24,7 +24,7 @@ export default function SignUp() {
   const { authUserData, userId } = useUser();
   console.log(authUserData, userId);
   const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(false)
+  const [showsignUp,setShowSignup]=useState(true)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
