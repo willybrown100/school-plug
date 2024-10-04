@@ -1,6 +1,6 @@
 import React from "react";
 import { HiHome, HiMagnifyingGlass } from "react-icons/hi2";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
 import { useEffect,useState } from "react";
 import ProfileMobileView from "./ProfileMobileView";
@@ -293,18 +293,18 @@ export default function Navbar() {
        
 
   return (
-    <nav
-      className={`bg-white p-2 w-full `}
-    >
+    <nav className={`bg-white p-2 w-full `}>
       <article
         className={`${className}  max-lg:flex max-xl:flex-col max-lg:gap-y-2 `}
       >
         <div className="flex justify-between gap-x-6  items-center">
-          <img
-            src="\images\dashboaderLogo.png"
-            alt="img"
-            className="md:hidden"
-          />
+          <Link to="/">
+            <img
+              src="\images\dashboaderLogo.png"
+              alt="img"
+              className="md:hidden"
+            />
+          </Link>
           <img
             src="\images\smLogo.png"
             alt="img"
@@ -332,9 +332,6 @@ export default function Navbar() {
               className="border border-secondary400 rounded-full p-2"
             />
           </div>
-          <button>
-            <HiMagnifyingGlass className="text-2xl md:hidden" />
-          </button>
         </div>
 
         <ul className="hidden md:flex items-center lg:hidden justify-between">
@@ -343,22 +340,29 @@ export default function Navbar() {
           ))}
         </ul>
 
+        <div className="md:hidden flex items-center gap-x-2 justify-between">
+          <ProfileMobileView />
 
-        <div className="md:hidden flex items-center gap-x-1 justify-between">
-        <ProfileMobileView/>
-
-          <div className="flex gap-x-2 mt-2 items-center">
-            <img
-              src="\images\notification-bing.png"
-              alt="img"
-              className=" rounded-full p-2 border border-secondary400"
-            />
-            <img
+          <div className="flex  mt-2 items-center">
+            <form className="max-w-full">
+              <div className="border rounded-[0.6rem] flex  relative p-1 border-secondary400">
+                  <HiMagnifyingGlass className="text-2xl md:hidden  mr-1  text-secondary400" />
+                <input type="text" className="w-full border-none outline-none" />
+              
+             
+              </div>
+            </form>
+          </div>
+          <img
+            src="\images\notification-bing.png"
+            alt="img"
+            className=" rounded-full p-2 border border-secondary400"
+          />
+          {/* <img
               src="\images\messenger.png"
               alt="img"
               className="border border-secondary400 rounded-full p-2"
-            />
-          </div>
+            /> */}
         </div>
 
         <div className="flex justify-between items-center">

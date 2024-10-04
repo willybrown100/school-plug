@@ -89,10 +89,13 @@ const disable = imagePreview.length===3
               <HiXMark />
             </button>
             <button
-              disabled={disable}
-              className={`${
-                disable ? "bg-secondary400" : " bg-secondary600 "
-              } mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
+              disabled={!textContent}
+              
+              className={` ${
+                !textContent ? "bg-secondary400" : "bg-secondary600 "
+              }
+                 
+ mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
             >
               post
             </button>
@@ -147,12 +150,15 @@ const disable = imagePreview.length===3
           </div>
         </div>
 
-        <div className="absolute right-2  bottom-2 ">
+        <button
+          onClick={handleButtonClick}
+          disabled={disable}
+          className="absolute right-2  bottom-2 "
+        >
           <img
-            onClick={handleButtonClick}
             src="\images\camera.svg"
             alt="camera"
-            className="bg-stone-100 p-3 border-2 border-stone-200 rounded-xl cursor-pointer"
+            className="bg-stone-100 p-3 border-2 border-stone-200 rounded-xl "
           />
           <input
             type="file"
@@ -161,7 +167,7 @@ const disable = imagePreview.length===3
             ref={imageRef}
             onChange={handleImageChange}
           />
-        </div>
+        </button>
       </form>
     </div>
   );
