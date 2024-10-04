@@ -2,20 +2,26 @@ import React from 'react'
 import useGetUser from '../hooks/useGetUser'
 import Button from '../ui/Button';
 import {  getYearFromISODate } from '../utils/dateFormat';
+import SmallLoader from './SmallLoader';
 
 export default function UserDetails() {
 const {data,isLoading}=useGetUser()
 const {studentInfo,user}=data
+const img = user?.profilePhoto
 console.log(data)
   return (
     <div className="hidden md:block ">
       <div className=" p-6 bg-white rounded-lg ">
         <div className="flex gap-x-6 items-center pb-9 border-b-2">
-          <img
-            src="\images\black-man-with-happy-expression 1.png"
-            alt="userImg"
-            className="rounded-full"
-          />
+          {isLoading?<SmallLoader/>:<img
+            src={
+              img
+                ? img
+                : "/images/profile-circle.svg"
+            }
+            alt={user?.name}
+            className="rounded-full h-[8rem] w-[8rem] object-cover"
+          />}
           <h4 className="font-heading mb-0 font-semibold capitalize">
             {user?.name}
           </h4>

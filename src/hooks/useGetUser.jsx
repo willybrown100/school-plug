@@ -5,7 +5,7 @@ import useUser from './useUser';
 
 export default function useGetUser() {
    const { authUserData} = useUser();
-   const token = authUserData.token
+   const token = authUserData?.token
    const { data=[], isLoading } = useQuery({
      queryFn: () => getAuthUser(token),
      queryKey: ["user"],

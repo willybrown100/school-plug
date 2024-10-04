@@ -3,6 +3,7 @@ import UserDetails from '../components/UserDetails'
 import { GoPlus } from 'react-icons/go';
 import Bills from '../components/Bills';
 import DefaultSchool from '../components/DefaultSchool';
+import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
 
 export default function HomePage() {
        const className = "md:max-w-[1170px]   md:w-[90vw]  m-auto";
@@ -15,6 +16,7 @@ export default function HomePage() {
         <UserDetails />
         <div className=" ">
           <DefaultSchool />
+          <DesktopCreatingPostButton/>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cum minima
           nesciunt in, odit labore unde eius quidem, doloribus libero recusandae
           necessitatibus ut consectetur? Iure eius fuga quia facilis voluptas,

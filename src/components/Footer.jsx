@@ -315,6 +315,9 @@ console.log(scrollTop,lastScrollTop);
     const handleClick =function(){
       setOpen((isOpen)=>!isOpen)
     }
+    const handleClose = function(){
+      setOpen(false)
+    }
   return (
     <div className=" ">
       {/* Bottom navigation */}
@@ -333,21 +336,19 @@ console.log(scrollTop,lastScrollTop);
         {isOpen ? (
           <p></p>
         ) : (
-         
-              <button
-                onClick={handleClick}
-                className={`bg-secondary600 ${
-                  isVisible ? "scale-1" : "scale-0"
-                } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
-              >
-                <GoPlus className={`text-3xl text-white`} />
-              </button>
-         
+          <button
+            onClick={handleClick}
+            className={`bg-secondary600 ${
+              isVisible ? "scale-1" : "scale-0"
+            } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
+          >
+            <GoPlus className={`text-3xl text-white`} />
+          </button>
         )}
       </div>
       {/* Overlay should cover the entire screen */}
       {isOpen && (
-        <div className="relative">
+        <div className="relative" onClick={handleClose}>
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
             style={{ height: "100vh", width: "100vw" }}
