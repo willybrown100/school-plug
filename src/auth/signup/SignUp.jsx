@@ -10,13 +10,14 @@ import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import CustomDatePicker, { CustomDatePicker2 } from "./DatePicker";
 import Button from "../../ui/Button";
-import signUp, { EducationalSignUp } from "../../services/contactApi";
+import signUp, { EducationalSignUp, signInWithGoogle } from "../../services/contactApi";
 import { useMutation } from "@tanstack/react-query";
 import MiniLoader from "../../ui/MiniLoader";
 import { DateContext } from "../../DateContext";
 import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
 import { format, parseISO } from "date-fns";
 import useUser from "../../hooks/useUser";
+import toast from "react-hot-toast";
 
 
 
@@ -24,7 +25,7 @@ export default function SignUp() {
   const { authUserData, userId } = useUser();
   console.log(authUserData, userId);
   const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(true)
+  const [showsignUp,setShowSignup]=useState(false)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
@@ -39,9 +40,9 @@ const {mutate,isPending} = useMutation({
     setShowSignup(false)
     
   },
-  onError:()=>{
+  onError:(error)=>{
     setShowSignup(true)
-
+  toast.error(error.message);
   }
 });
 
@@ -61,7 +62,6 @@ const {mutate,isPending} = useMutation({
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
         {showsignUp && (
-
           <div className="flex flex-col gap-2">
             <Link to="/" className="flex justify-center">
               <img src="/images/shool-pluglogo.png" alt="img" />
@@ -78,41 +78,58 @@ const {mutate,isPending} = useMutation({
               className="flex flex-col p-3 gap-y-4"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <input
-                type="name"
-                id="text"
-                placeholder="full name (as used in your student iD)"
-                className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("fullName")}
-              />
+              <div>
+                <input
+                  type="name"
+                  id="text"
+                  placeholder="full name (as used in your student iD)"
+                  className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
+                  required
+                  {...register("fullName")}
+                  disabled={isPending}
+                />
+                {errors?.fullName?.message && (
+                  <p className="text-red-500 text-sm capitalize">
+                    {errors.fullName.message}
+                  </p>
+                )}
+              </div>
               <input
                 type="email"
                 id="email"
+                disabled={isPending}
                 placeholder="email"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
                 {...register("email", {
                   required: true,
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 })}
+                required
               />
-              <input
-                type="text"
-                id="phone_number"
-                placeholder="phone number"
-                className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
-                {...register("phoneNumber", {
-                  required: "this field is required",
-                  pattern: {
-                    value: /^\d{11}$/,
-                  },
-                })}
-              />
-              {errors.phone_number && (
-                <p className="text-red-500 capitalize ">
-                  not a valid phone number{" "}
-                </p>
-              )}
+              <div>
+                <input
+                  type="text"
+                  disabled={isPending}
+                  id="phone_number"
+                  placeholder="phone number"
+                  required
+                  className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
+                  {...register("phoneNumber", {
+                    required: "this field is required",
+                    pattern: {
+                      value: /^\d{11}$/,
+                    },
+                  })}
+                />
+                {errors.phoneNumber && (
+                  <p className="text-red-500 capitalize ">
+                    not a valid phone number{" "}
+                  </p>
+                )}
+              </div>
               <PasswordField
+                errors
+                isPending={isPending}
                 open={open}
                 ToggleOpen={ToggleOpen}
                 placeholder="create password"
@@ -121,18 +138,27 @@ const {mutate,isPending} = useMutation({
               <ConfirmPasswordField
                 validateConfirmPassword={validateConfirmPassword}
                 register={register}
+                isPending={isPending}
                 open2={open2}
                 ToggleOpen2={ToggleOpen2}
                 placeholder="confirm password"
               />
               <div className="flex items-center gap-1 capitalize">
-                <input type="radio" id="terms" {...register("agreedToTerms")} />
+                <input
+                  type="radio"
+                  id="terms"
+                  {...register("agreedToTerms")}
+                  required
+                />
                 <div>
                   agree to our <Link>terms</Link> and <Link>policies</Link>{" "}
                 </div>
               </div>
               <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
-                <button className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent">
+                <button
+                  onClick={signInWithGoogle}
+                  className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent"
+                >
                   {" "}
                   <span>sign in with</span>
                   <span>
@@ -177,9 +203,10 @@ const {mutate,isPending} = useMutation({
 
 export const PasswordField = ({
   label,
+  isPending,
   placeholder,
   register,
-  error,
+  errors,
   errorMessage,
   open,
   ToggleOpen,
@@ -190,6 +217,7 @@ export const PasswordField = ({
       <input
         type={!open ? "password" : "text"}
         id="password"
+        disabled={isPending}
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
         {...register("password")}
@@ -208,11 +236,12 @@ export const PasswordField = ({
           />
         )}
       </span>
-      {error && <span className="text-white">{errorMessage}</span>}
+    
     </div>
   </div>
 );
 export const ConfirmPasswordField = ({
+  isPending,
   label,
   placeholder,
   register,
@@ -226,6 +255,7 @@ export const ConfirmPasswordField = ({
     <label className="text-[12px]">{label}</label>
     <div className="relative">
       <input
+        disabled={isPending}
         type={!open2 ? "password" : "text"}
         id="confirmPassword"
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
