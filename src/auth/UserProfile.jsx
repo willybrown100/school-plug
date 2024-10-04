@@ -3,7 +3,7 @@ import Button from '../ui/Button'
 import { useNavigate } from 'react-router-dom'
 import useUser from '../hooks/useUser'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { handleUpload, uploadUserImage } from '../services/contactApi'
+import { handleUpload, handleUpload2, uploadUserImage } from '../services/contactApi'
 
 export default function UserProfile() {
   const {authUserData}=useUser()
@@ -63,10 +63,12 @@ function UserImage(){
   const { authUserData,userId } = useUser();
   const token = authUserData.token;
   const [imageFile, setImageFile] = useState(null);
- console.log(imageFile)
   const imageRef = useRef()
+
+const defaultImagePath = "/images/blackman2.png";
+
   const { mutate, isPending } = useMutation({
-    mutationFn: handleUpload,
+    mutationFn: handleUpload2,
     onSuccess: () => {
 navigate("/home")
     },
@@ -75,16 +77,12 @@ navigate("/home")
 
 
  const handleImageChange = (event) => {
-   const file = event.target.files[0]; // Get the selected file
+   const file = event.target.files[0];
    if (file) {
-     setImageFile(file); // Set the selected file to state
-
-     // Use the selected file directly here
+     setImageFile(file); 
      mutate({ profilePhoto: file, token, userId });
    }
  };
-
-
 
   const handleClick = function(e){
     if(imageRef.current){
@@ -93,90 +91,110 @@ navigate("/home")
     }
   }
 
-
-
- 
-  return (
-    <div>
-   
-        <div className="">
-          <img
-            src="\images\blackman2.png"
-            alt="userprofile"
-            className="mx-auto mb-11 w-[10rem] w rounded-full"
-          />
-          <div className="flex flex-col gap-y-3 md:grid md:grid-cols-2 md:gap-x-2">
-            <Button>use image</Button>
-            <button
-              onClick={handleClick}
-              className="bg-white capitalize font-heading  p-2 rounded-md border border-secondary500"
-            >
-              {isPending ? "wait.." : " change image"}
-            </button>
-            <input
-              type="file"
-              accept="image"
-              className="hidden"
-              ref={imageRef}
-              onChange={handleImageChange}
-            />
-          </div>
-        </div>
-    
-    </div>
-  );
+   const handleUseImage = () => {
+     // When "Use Image" is clicked, use the default image for upload
+     mutate({ profilePhoto: defaultImagePath, token, userId });
+   };
+ return (
+   <div>
+     <div className="">
+       <img
+         src={defaultImagePath}
+         alt="userprofile"
+         className="mx-auto mb-11 w-[10rem] w rounded-full"
+       />
+       <div className="flex flex-col gap-y-3 md:grid md:grid-cols-2 md:gap-x-2">
+         <Button onClick={handleUseImage}>use image</Button>
+         <button
+           onClick={handleClick}
+           className="bg-white capitalize font-heading  p-2 rounded-md border border-secondary500"
+         >
+           {isPending ? "wait.." : " change image"}
+         </button>
+         <input
+           type="file"
+           accept="image"
+           className="hidden"
+           ref={imageRef}
+           onChange={handleImageChange}
+         />
+       </div>
+     </div>
+   </div>
+ );
 }
 
 
 
 
+ // Adjust this import based on your setup
 
-const ImageUpload = () => {
-  const [imageFile, setImageFile] = useState(null);
-  const [userId, setUserId] = useState('your-user-id'); // Replace with your actual user ID
-  const token = 'your-auth-token'; // Replace with your actual token
+// const YourComponent = () => {
+//   const navigate = useNavigate();
+//   const { authUserData, userId } = useUser();
+//   const token = authUserData.token;
+//   const [imageFile, setImageFile] = useState(null);
+//   // Make sure the path is correct
+//   const imageRef = useRef();
+//   const { mutate, isPending } = useMutation({
+//     mutationFn: handleUpload2,
+//     onSuccess: () => {
+//       navigate("/home");
+//     },
+//   });
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageFile(file);
-    }
-  };
+  
 
-  const handleUpload = async () => {
-    if (!imageFile || !userId) return; // Ensure both image and userId are present
+//   const handleImageChange = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       setImageFile(file);
+//       mutate({ profilePhoto: file, token, userId });
+//     }
+//   };
 
-    const formData = new FormData();
-    formData.append('image', imageFile); // Append the image file
-    formData.append('userId', userId); // Append the user ID
+//   const handleClick = function (e) {
+//     if (imageRef.current) {
+//       imageRef.current.click();
+//       e.preventDefault();
+//     }
+//   };
 
-    try {
-      const response = await fetch('https://your-api-url.com/api/upload', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
-          // Do not set Content-Type, it will be set automatically
-        },
-        body: formData, // Send FormData
-      });
+//   const handleUseImage = () => {
+//     // When "Use Image" is clicked, use the default image for upload
+//     mutate({ profilePhoto: defaultImagePath, token, userId });
+//   };
 
-      if (!response.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const data = await response.json();
-      console.log('Upload successful:', data);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-
-  return (
-    <div>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleUpload}>Upload Image</button>
-    </div>
-  );
-};
-
-// export default ImageUpload;
+//   return (
+//     <div>
+//       <div className="">
+//         <img
+//           src={defaultImagePath} // Use the path for the default image
+//           alt="userprofile"
+//           className="mx-auto mb-11 w-[10rem] rounded-full"
+//         />
+//         <div className="flex flex-col gap-y-3 md:grid md:grid-cols-2 md:gap-x-2">
+//           <button
+//             onClick={handleUseImage} // Handle the use of default image
+//             className="bg-white capitalize font-heading p-2 rounded-md border border-secondary500"
+//           >
+//             Use Image
+//           </button>
+//           <button
+//             onClick={handleClick}
+//             className="bg-white capitalize font-heading p-2 rounded-md border border-secondary500"
+//           >
+//             {isPending ? "wait.." : "Change Image"}
+//           </button>
+//           <input
+//             type="file"
+//             accept="image/*" // Use image/* for all image types
+//             className="hidden"
+//             ref={imageRef}
+//             onChange={handleImageChange}
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };

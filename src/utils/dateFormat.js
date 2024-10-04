@@ -28,3 +28,18 @@ export const convertDateToDDMMYYYY = (dateString) => {
 const inputDate = 'Thu Jul 11 2024 00:00:00 GMT+0100 (West Africa Standard Time)';
 const formattedDate = convertDateToDDMMYYYY(inputDate);
 console.log(formattedDate); // Output: "11/07/2024"
+
+
+
+
+export const getYearFromISODate = (dateString) => {
+  const date = new Date(dateString); // Convert the ISO string to a Date object
+  return date.getFullYear(); // Extract the year
+};
+
+
+
+
+
+
+
