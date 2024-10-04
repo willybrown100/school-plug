@@ -1,3 +1,6 @@
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../services/firebase-config";
+
 export default async function signUp(data){
     try {
    const response = await fetch(
@@ -220,4 +223,14 @@ export const handleUpload2 = async ({ profilePhoto, token, userId }) => {
 };
 
 
-
+export const signInWithGoogle = async () => {
+   try {
+     const result = await signInWithPopup(auth, provider);
+     const user = result.user;
+     console.log("User signed in:", user);
+     // Here you can send the user details to your backend or save them in Firebase
+   } catch (error) {
+     console.error("Error signing in:", error.message);
+     throw error;
+   }
+ };

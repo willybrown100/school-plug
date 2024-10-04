@@ -1,75 +1,18 @@
 
-// import React, { useContext, useState } from "react";
-// // import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-// import { HiChevronDown, HiChevronUp } from "react-icons/hi2";
-// import Select from "react-select"
-// // import { DateContext, DateProvider } from "../../DateContext";
-// import DatePicker from "react-datepicker";
-
-
-
-
-
-// const CustomHeader = ({ date, changeYear, changeMonth }) => {
-//   const years = Array.from({ length: 100 }, (_, i) => i + 1920);
-//   const months = Array.from({ length: 12 }, (_, i) =>
-//     new Date(0, i).toLocaleString("default", { month: "long" })
-//   );
-
-// const options = Array.from(years,item=>({value:item,label:item}))
-
-
-//   return (
-//     <div className="custom-header">
-//       <Select
-//         value={date.getFullYear()}
-//         // styles={}
-//         options={options}
-//         className="text-black"
-//         onChange={({ target: { value } }) => changeYear(value)}
-//       />
-
-//       <select
-//         value={date.getMonth()}
-//         onChange={({ target: { value } }) => changeMonth(value)}
-//       >
-//         {months.map((month, index) => (
-//           <option key={index} value={index}>
-//             {month}
-//           </option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// };
-
-// const CustomDatePicker = () => {
-//   const [startDate, setStartDate] = useState(new Date());
-
-//   return (
-//     <DatePicker
-//       selected={startDate}
-//       onChange={(date) => setStartDate(date)}
-//       renderCustomHeader={(props) => <CustomHeader {...props} />}
-//       className="custom-date-picker"
-//     />
-//   );
-// };
-
-// export default CustomDatePicker;
 
 
 
 
 import React, { useContext, useState } from "react";
-import {components} from "react-select"
+
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiChevronDown } from "react-icons/hi2";
+import { components } from "react-select";
 import { DateContext } from "../../DateContext";
 import { formatDate } from "../../utils/dateFormat";
+
 
 // Example options for react-select
 const monthOptions = [
@@ -147,7 +90,7 @@ const CustomDatePicker = ({placeholder }) => {
         onChange={handleDateChange}
         required
         // {icon}
-        className=" w-full outline-none bg-transparent  placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
+        className=" w-full outline-none bg-transparent overflow-scroll placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
         renderCustomHeader={({
           date,
           changeMonth,
@@ -209,7 +152,9 @@ export const CustomDatePicker2 = ({placeholder }) => {
 };
 
 
-
+const CustomMenuList = (props) => {
+  return <components.MenuList {...props} className="custom-date-picker-menu" />;
+};
 
 
 const DropdownIndicator = (props) => {
@@ -248,11 +193,13 @@ const customStyles = {
   }),
   menuList: (provided, state) => ({
     ...provided,
+
     padding: 0,
     border: state.isSelected ? "red" : "none",
     border: "none",
     maxHeight: "190px",
-    overflow: "hidden",
+    overflow: "auto",
+    className: `${provided.className} custom-date-picker-menu`,
   }),
   option: (provided, state) => ({
     ...provided,
