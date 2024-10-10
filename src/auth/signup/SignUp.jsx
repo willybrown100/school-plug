@@ -18,6 +18,7 @@ import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
 import { format, parseISO } from "date-fns";
 import useUser from "../../hooks/useUser";
 import toast from "react-hot-toast";
+import Loader from "../../components/Loader";
 
 
 
@@ -26,7 +27,7 @@ export default function SignUp() {
   const { authUserData, userId } = useUser();
   console.log(authUserData, userId);
   const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(true)
+  const [showsignUp,setShowSignup]=useState(false)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
@@ -394,6 +395,7 @@ navigate("/profilepic");
         <Button className="mt-16 md:mt-2">
           {isPending ? "creating account..." : "create an account"}
         </Button>
+        {isPending&&<Loader/>}
       </form>
     </div>
   );

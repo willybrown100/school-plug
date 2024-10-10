@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Loader from '../components/Loader'
 
 export default function LandingPage() {
   return (
@@ -14,6 +15,7 @@ export default function LandingPage() {
 
         <Link to="/home/homePage">internal page</Link>
         </div>
+        
     </div>
   )
 }
