@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import Button from '../ui/Button';
+import { ModalContext } from './Modals';
 
 export default function BillModal() {
+  const modalRef = useRef()
+  const { close } = useContext(ModalContext);
   const [searchParams,setSearchParams]=useSearchParams("")
   
   const [active,setActive]=useState(null)
@@ -55,13 +58,31 @@ export default function BillModal() {
        ),
      },
    ];
-  return (
-    <div className="fixed inset-0 backdrop-blur-sm grid place-items-center">
-      <div className="  bg-white p-[3rem] rounded-md">
-        <h4 className='font-semibold font-heading capitalize'>switch bill type</h4>
-        <p className='text-sm'>Select a bill you want to pay then proceed to making payment.</p>
 
-        <ul className='flex flex-col gap-y-3'>
+ 
+     const handleClose = function (e) {
+      console.log(e,modalRef.current) 
+       if (modalRef.current && !modalRef.current.contains(e.target)) {
+         close();
+       }
+     };
+     
+ 
+
+  return (
+    <div
+      className="fixed inset-0 backdrop-blur-sm grid place-items-center"
+      onClick={handleClose}
+    >
+      <div ref={modalRef} className="  bg-white p-[3rem] rounded-md">
+        <h4 className="font-semibold font-heading capitalize">
+          switch bill type
+        </h4>
+        <p className="text-sm">
+          Select a bill you want to pay then proceed to making payment.
+        </p>
+
+        <ul className="flex flex-col gap-y-3">
           {payment.map((item, i) => (
             <li
               key={i}
@@ -81,7 +102,9 @@ export default function BillModal() {
               <div onClick={() => handleClick(i)}>{item.Element}</div>
             </li>
           ))}
-        <Button className="w-full text-center font-semibold font-heading">continue</Button>
+          <Button className="w-full text-center font-semibold font-heading">
+            continue
+          </Button>
         </ul>
       </div>
     </div>
