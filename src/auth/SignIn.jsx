@@ -1,12 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react'
 import { HiOutlineEyeSlash } from 'react-icons/hi2';
 import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
-import { signIn } from '../services/contactApi';
+import { signIn, userSignInWithGoogle } from '../services/contactApi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 export default function SignIn() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate()
        const { handleSubmit, register,formState:{errors},setError ,reset} = useForm();
 
@@ -17,12 +19,26 @@ export default function SignIn() {
   const {mutate,isPending}=useMutation({
     mutationFn:signIn,
     onSuccess:()=>{
-navigate("/home")
+navigate("/home/homePage")
+ queryClient.invalidateQueries("user");
     },
     onError:(error)=>{
       console.log(error)
+      toast.error(error.message)
     }
   })
+
+  const { mutate: goodleSignin, isPending: isLoading } = useMutation({
+    mutationFn: userSignInWithGoogle,
+    onSuccess: () => {
+      navigate("/home/homePage");
+      queryClient.invalidateQueries("user");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message);
+    },
+  });
   const onSubmit = function(data){
 mutate(data)
 console.log(data)
@@ -60,7 +76,10 @@ console.log(data)
             forgot password
           </Link>
           <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
-            <button className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent">
+            <button
+              onClick={goodleSignin} disabled={isLoading}
+              className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent"
+            >
               {" "}
               <span>sign in with</span>
               <span>

@@ -11,7 +11,7 @@ import DatePicker from "react-datepicker";
 import CustomDatePicker, { CustomDatePicker2 } from "./DatePicker";
 import Button from "../../ui/Button";
 import signUp, { EducationalSignUp, signInWithGoogle } from "../../services/contactApi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "../../ui/MiniLoader";
 import { DateContext } from "../../DateContext";
 import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
@@ -22,10 +22,11 @@ import toast from "react-hot-toast";
 
 
 export default function SignUp() {
+  const queryClient=useQueryClient()
   const { authUserData, userId } = useUser();
   console.log(authUserData, userId);
   const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(false)
+  const [showsignUp,setShowSignup]=useState(true)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
@@ -36,9 +37,7 @@ export default function SignUp() {
 const {mutate,isPending} = useMutation({
   mutationFn: signUp,
   onSuccess:()=>{
-
-    setShowSignup(false)
-    
+    setShowSignup(false) 
   },
   onError:(error)=>{
     setShowSignup(true)
@@ -46,6 +45,17 @@ const {mutate,isPending} = useMutation({
   }
 });
 
+const { mutate: googleSignUp, isPending: loading } = useMutation({
+  mutationFn: signInWithGoogle,
+  onSuccess: () => {
+    setShowSignup(false);
+     queryClient.invalidateQueries("user");
+  },
+  onError: (error) => {
+    setShowSignup(true);
+    toast.error(error.message);
+  },
+});
     const validateConfirmPassword = (value) => {
       if (value !== password) {
         return "Passwords do not match";
@@ -53,11 +63,13 @@ const {mutate,isPending} = useMutation({
       return true; // Validation passed
     };
 
-  const onSubmit = function (data) {
+  const onSubmit = function (data, e) {
+    e.preventDefault()
     const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
     mutate(user);
     console.log(user);
   };
+  
   return (
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
@@ -156,11 +168,12 @@ const {mutate,isPending} = useMutation({
               </div>
               <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
                 <button
-                  onClick={signInWithGoogle}
+                  disabled={loading}
+                  onClick={googleSignUp}
                   className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent"
                 >
                   {" "}
-                  <span>sign in with</span>
+                  <span>sign up with</span>
                   <span>
                     <img src="/images/google-icon.png" alt="img" />
                   </span>

@@ -37,6 +37,10 @@ export const getYearFromISODate = (dateString) => {
   return date.getFullYear(); // Extract the year
 };
 
+export const optionSplit = function (option) {
+  const splitString = option.replace(/([a-z])([A-Z])/g, "$1 $2");
+  return splitString; // Outputs: "faculty Fee
+};
 
 
 

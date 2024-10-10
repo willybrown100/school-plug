@@ -24,15 +24,16 @@ export default function DesktopCreatingPostButton() {
               placeholder="Share a post for Admin to approve"
               className="w-full border p-2 my-0 border-stone-500 rounded-md focus:outline-none"
             /> */}
-            <OpenModal/>
+            <OpenModal />
             <div className=" self-start flex gap-x-3">
-              <button className="flex gap-x-2 items-center">
+              <button className="flex gap-x-2 items-center  bg-transparent">
                 <img src="\images\image.svg" alt="icon" />
-                <p className='mb-0 font-heading capitalize'>photos/videos</p>
+                <p className="mb-0 font-heading capitalize">photos/videos</p>
               </button>
-              <button className="flex gap-x-2 items-center">
+              <input type="file" className="hidden" accept="image" />
+              <button className="flex gap-x-2 items-center bg-transparent">
                 <img src="\images\calendar2.svg" alt="icon" />
-                <p className='mb-0 font-heading capitalize'>events</p>
+                <p className="mb-0 font-heading capitalize">events</p>
               </button>
             </div>
           </div>

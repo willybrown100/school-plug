@@ -25,6 +25,8 @@ import CreatePost from "./features/CreatePost";
 import CardForm from "./components/CardForm";
 import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
+import BillInformation from "./components/BillInformation";
+import UsersFeed from "./components/UsersFeed";
 
 
 // import { DateProvider } from "./DateContext";
@@ -49,8 +51,12 @@ export default function App() {
             <Route path="forgotPassword" element={<ForgotPassword />} />
             <Route path="profilepic" element={<UserProfile />} />
             <Route path="home" element={<AppLayout />}>
-              <Route index element={<Navigate to="feed" />} />
-              <Route path="feed" index element={<HomePage />} />
+              <Route  element={<Navigate to="home/homePage" />} />
+              <Route path="homePage"  element={<HomePage />} >
+              <Route  index element={<Navigate to="feed" />} />
+              <Route  path="feed" element={<UsersFeed/>}/>
+              <Route path="billz"  element={<BillInformation/>}/>
+              </Route>
               <Route path="events" element={<Events />} />
               <Route path="material" element={<Materials />} />
               <Route path="trends" element={<Trends />} />

@@ -6,7 +6,7 @@ import SmallLoader from './SmallLoader';
 export default function ProfileMobileView() {
  const {data,isLoading}=useGetUser()
  const img =data?.user?.profilePhoto;
-console.log(img);
+
   return (
     <div>
       {isLoading ? (
@@ -14,12 +14,9 @@ console.log(img);
       ) : (
         <>
           <img
-            src={
-              img
-                ? img
-                : "/images/profile-circle.svg"
-            }
+            src={img ? img : "/images/profile-circle.svg"}
             alt="img"
+            loading="lazy"
             className="w-[3.5rem] object-cover  h-[3.5rem] rounded-full mb-0"
           />
         </>
