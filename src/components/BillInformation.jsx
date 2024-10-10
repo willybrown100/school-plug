@@ -15,10 +15,12 @@ export default function BillInformation() {
   const option = searchParams.get("option");
   console.log(option);
 
-
+const handleSubmit = (e)=>{
+e.preventDefault()
+}
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
   return (
-    <form className={`${className} min-h-screen flex justify-between  gap-x-6`}>
+    <form onSubmit={handleSubmit} className={`${className} min-h-screen flex justify-between  gap-x-6`}>
       <div className="bg-white rounded-md p-4 self-start w-[300px] shadow-lg">
         <h4 className="border-b capitalize font-semibold p-4">bill type</h4>
         <div className="flex gap-x-2 border border-stone-400 p-2 rounded-md">

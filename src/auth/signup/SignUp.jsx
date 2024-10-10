@@ -18,6 +18,7 @@ import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
 import { format, parseISO } from "date-fns";
 import useUser from "../../hooks/useUser";
 import toast from "react-hot-toast";
+import Loader from "../../components/Loader";
 
 
 
@@ -394,6 +395,7 @@ navigate("/profilepic");
         <Button className="mt-16 md:mt-2">
           {isPending ? "creating account..." : "create an account"}
         </Button>
+        {isPending&&<Loader/>}
       </form>
     </div>
   );
