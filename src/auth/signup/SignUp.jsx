@@ -27,7 +27,7 @@ export default function SignUp() {
   const { authUserData, userId } = useUser();
   console.log(authUserData, userId);
   const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(true)
+  const [showsignUp,setShowSignup]=useState(false)
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const ToggleOpen = () => setOpen(!open);
@@ -303,10 +303,9 @@ function StudentInfo({ userId }) {
   const navigate = useNavigate()
   const { selectedDate, selectedDate2 } = useContext(DateContext);
   const [university, setUniversity] = useState("");
-  const [course, setCourse] = useState("");
+  const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
-  // const year_of_admission=format(parseISO(selectedDate),"yyyy-mm-dd")
   const { mutate: education, isPending } = useMutation({
     mutationFn: EducationalSignUp,
     onSuccess: () => {
@@ -321,7 +320,7 @@ navigate("/profilepic");
       university,
       department,
       level,
-      course,
+      faculty,
       yearOfAdmission: convertDateToDDMMYYYY(selectedDate),
       yearOfGraduation: convertDateToDDMMYYYY(selectedDate2),
     };
@@ -332,7 +331,7 @@ navigate("/profilepic");
     <div className="flex w-full flex-col gap-y-4">
       <div className="flex flex-col items-center gap-2">
         <Link to="/">
-        <img src="/images/shool-pluglogo.png" alt="img" />
+          <img src="/images/shool-pluglogo.png" alt="img" />
         </Link>
         <h3 className="font-fontHeading font-semibold text-center">
           student info
@@ -343,19 +342,18 @@ navigate("/profilepic");
           type="text"
           value={university}
           placeholder="university of study"
-          className="w-full md:p-2 border p-2 border-stone-700 rounded-md"
+          className="w-full md:p-2 border placeholder:capitalize p-2 border-stone-700 rounded-md"
           onChange={(e) => setUniversity(e.target.value)}
           id="university"
           required
         />
         <input
           type="text"
-          value={course}
-          placeholder="course"
+          value={faculty}
+          placeholder="faculty"
           id="course"
-          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
-          // {...register("course")}
-          onChange={(e) => setCourse(e.target.value)}
+          className="w-full  md:p-2 placeholder:capitalize border border-stone-700 p-2 rounded-md"
+          onChange={(e) => setFaculty(e.target.value)}
           required
         />
 
@@ -364,7 +362,7 @@ navigate("/profilepic");
           value={department}
           placeholder="department"
           id="department"
-          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
+          className="w-full placeholder:capitalize md:p-2 border border-stone-700 p-2 rounded-md"
           onChange={(e) => setDepartment(e.target.value)}
         />
         <input
@@ -374,7 +372,7 @@ navigate("/profilepic");
           required
           value={level}
           onChange={(e) => setLevel(e.target.value)}
-          className="w-full  md:p-2 border border-stone-700 p-2 rounded-md"
+          className="w-full placeholder:capitalize md:p-2 border border-stone-700 p-2 rounded-md"
         />
         <div className="grid grid-cols-1 relative  rounded-md border-stone-700 w-full border">
           <div className="flex items-center gap-x-1">
@@ -395,7 +393,7 @@ navigate("/profilepic");
         <Button className="mt-16 md:mt-2">
           {isPending ? "creating account..." : "create an account"}
         </Button>
-        {isPending&&<Loader/>}
+        {isPending && <Loader />}
       </form>
     </div>
   );

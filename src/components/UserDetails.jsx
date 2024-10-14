@@ -20,7 +20,7 @@ console.log(data)
                 : "/images/profile-circle.svg"
             }
             alt={user?.name}
-            className="rounded-full h-[8rem] w-[8rem] object-cover"
+            className="rounded-full h-[5rem] w-[5rem] object-cover"
           />}
           <h4 className="font-heading mb-0 font-semibold capitalize">
             {user?.name}
