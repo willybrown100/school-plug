@@ -358,14 +358,20 @@ console.log(scrollTop,lastScrollTop);
         {isOpen ? (
           <p></p>
         ) : (
+          <>
+          {
+          pathname==="/home/homePage/feed"&&
           <button
-            onClick={handleClick}
-            className={`bg-secondary600 ${
-              isVisible ? "scale-1" : "scale-0"
-            } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
+          onClick={handleClick}
+          className={`bg-secondary600 ${
+            isVisible ? "scale-1" : "scale-0"
+          } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
           >
-            <GoPlus className={`text-3xl text-white`} />
-          </button>
+          <GoPlus className={`text-3xl text-white`} />
+          </button> 
+           }
+           </>
+        
         )}
       </div>
       {/* Overlay should cover the entire screen */}

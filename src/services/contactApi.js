@@ -109,6 +109,98 @@ export  async function signIn(data){
       throw error;
     }
 }
+export  async function forgetPassword(data){
+  console.log(data)
+    try {
+   const response = await fetch(
+     "https://student-plug.onrender.com/api/auth/forgot-password",
+     {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data),
+     }
+   );
+   
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+   const result = await response.json();
+    if (result) {
+      localStorage.setItem("userDetails", JSON.stringify(result));
+    }
+   console.log(result)
+        return result
+    } catch (error) {
+      console.log(error)  
+      throw error;
+    }
+}
+export  async function verifyPasswordCode(data){
+  console.log(data)
+    try {
+   const response = await fetch(
+     "https://student-plug.onrender.com/api/auth/verify-password",
+     {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data),
+     }
+   );
+   
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+   const result = await response.json();
+    if (result) {
+      localStorage.setItem("userId", JSON.stringify(result.userId));
+    }
+   console.log(result)
+        return result
+    } catch (error) {
+      console.log(error)  
+      throw error;
+    }
+}
+
+export  async function newPassword(data){
+  console.log(data)
+    try {
+   const response = await fetch(
+     "https://student-plug.onrender.com/api/auth/reset-password",
+     {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data),
+     }
+   );
+   
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+   const result = await response.json();
+  
+   console.log(result)
+        return result
+    } catch (error) {
+      console.log(error)  
+      throw error;
+    }
+}
 
 
 export  async function uploadUserImage({ userId, token ,profilePhoto}) {
