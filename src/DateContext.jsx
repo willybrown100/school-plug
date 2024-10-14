@@ -5,8 +5,8 @@ import { formatDate } from './utils/dateFormat';
 
 const DateContext = createContext();
  function DateProvider({ children }) {
-     const [selectedDate, setSelectedDate] = useState(new Date());
-     const [selectedDate2, setSelectedDate2] = useState(new Date());
+     const [selectedDate, setSelectedDate] = useState(null);
+     const [selectedDate2, setSelectedDate2] = useState(null);
    
 
    return (

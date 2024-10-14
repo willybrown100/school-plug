@@ -85,7 +85,7 @@ const CustomDatePicker = ({placeholder }) => {
   return (
     <>
       <DatePicker
-        value={formatDate(selectedDate) || null}
+        value={selectedDate ? formatDate(selectedDate) : null}
         placeholderText={placeholder}
         onChange={handleDateChange}
         required
@@ -126,7 +126,7 @@ export const CustomDatePicker2 = ({placeholder }) => {
   return (
     <>
       <DatePicker
-        value={formatDate(selectedDate2) || null}
+        value={selectedDate2 ? formatDate(selectedDate2) : null}
         placeholderText={placeholder}
         onChange={handleDateChange}
         // {icon}

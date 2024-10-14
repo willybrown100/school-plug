@@ -15,7 +15,7 @@ export default {
       },
       screens: {
         // Define custom max-width breakpoints
-        "max-sm": { max: "639px" }, // Up to 639px
+        "max-sm": { max: "766px" }, // Up to 639px
         "max-md": { max: "767px" }, // Up to 767px
         "max-lg": { max: "1023px" }, // Up to 1023px
         "max-xl": { max: "1279px" }, // Up to 1279px

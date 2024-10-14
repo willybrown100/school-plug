@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { HiHome, HiMagnifyingGlass } from "react-icons/hi2";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
@@ -310,9 +310,17 @@ export default function Navbar() {
     },
   ];
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
-
+  const navbarRef = useRef(null); // Step 1: Create a reference
+  const [navbarHeight, setNavbarHeight] = useState(0);
+console.log(navbarHeight);
+  useEffect(() => {
+    // Step 2: Access the height using offsetHeight once the component is mounted
+    if (navbarRef.current) {
+      setNavbarHeight(navbarRef.current.offsetHeight);
+    }
+  }, []);
   return (
-    <nav className={`bg-white p-2 w-full `}>
+    <nav className={`bg-white p-2 w-full `} ref={navbarRef}>
       <article
         className={`${className}  max-lg:flex max-xl:flex-col max-lg:gap-y-2 `}
       >
