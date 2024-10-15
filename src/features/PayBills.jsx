@@ -28,7 +28,7 @@ const PayBills = () => {
     };
 
     return (
-        <div className='font-Inter container mx-auto p-3 '>
+        <div className='font-Inter container mx-auto p-3 md:w-1/2 h-[90vh] pb-[5rem]'>
             <h3 className='mb-[3rem] mt-[0.6rem] '>
                 <Link to='/'>
                     <HiArrowLeft className='inline mr-2 text-black' />

@@ -6,17 +6,17 @@ import DefaultSchool from '../components/DefaultSchool';
 import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
 
 export default function HomePage() {
-       const className = "md:max-w-[1170px]   md:w-[90vw]  m-auto";
+  const className = "md:max-w-[1170px]   md:w-[90vw]  m-auto";
 
   return (
     <div className="min-h-screen  ">
       <div
-    className={`${className} md:grid lg:grid-cols-[16rem,1fr,auto] md:grid-cols-[16rem,1fr] gap-x-3 `}
+        className={`${className} md:grid lg:grid-cols-[16rem,1fr,auto] md:grid-cols-[16rem,1fr] gap-x-3 `}
       >
         <UserDetails />
         <div className=" ">
           <DefaultSchool />
-          <DesktopCreatingPostButton/>
+          <DesktopCreatingPostButton />
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cum minima
           nesciunt in, odit labore unde eius quidem, doloribus libero recusandae
           necessitatibus ut consectetur? Iure eius fuga quia facilis voluptas,
@@ -63,30 +63,30 @@ export default function HomePage() {
 
 
 const FloatingButton = () => {
-   const buttonRef = useRef(null);
-   const [isVisible, setIsVisible] = useState(false);
-   let lastScrollTop = 0;
+  const buttonRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  let lastScrollTop = 0;
 
-   useEffect(() => {
-     const handleScroll = () => {
-       const scrollTop = window.scrollY;
-       console.log(scrollTop, lastScrollTop);
-       if (scrollTop < lastScrollTop) {
-         // Scrolling up
-         setIsVisible(true);
-       } else {
-         // Scrolling down
-         setIsVisible(false);
-       }
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      console.log(scrollTop, lastScrollTop);
+      if (scrollTop < lastScrollTop) {
+        // Scrolling up
+        setIsVisible(true);
+      } else {
+        // Scrolling down
+        setIsVisible(false);
+      }
 
-       lastScrollTop = scrollTop;
-     };
+      lastScrollTop = scrollTop;
+    };
 
-     window.addEventListener("scroll", handleScroll);
-     return () => window.removeEventListener("scroll", handleScroll);
-   }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
- 
+
 
   const positionButton = () => {
     if (buttonRef.current) {
@@ -112,16 +112,16 @@ const FloatingButton = () => {
   return (
     <div>
 
-    <button
-      ref={buttonRef}
-      className={`${isVisible?"scale-[1]":"scale-0"} transition-all duration-300 absolute top-[80%] transform -translate-y-1/2 bg-blue-500 text-white py-2 px-4 rounded`}
+      <button
+        ref={buttonRef}
+        className={`${isVisible ? "scale-[1]" : "scale-0"} transition-all duration-300 absolute top-[80%] transform -translate-y-1/2 bg-blue-500 text-white py-2 px-4 rounded`}
       >
-      <GoPlus className={` text-3xl text-white `} />
-    </button>
-      </div>
+        <GoPlus className={` text-3xl text-white `} />
+      </button>
+    </div>
   );
 };
-  //  isVisible ? "translate-y-0" : "translate-y-full"
+//  isVisible ? "translate-y-0" : "translate-y-full"
 
 
 
