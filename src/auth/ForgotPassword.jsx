@@ -1,43 +1,98 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
 import { HiOutlineEyeSlash } from 'react-icons/hi2';
 import { IoIosEye } from 'react-icons/io';
+import { useMutation } from '@tanstack/react-query';
+import { forgetPassword, newPassword, verifyPasswordCode } from '../services/contactApi';
+import toast from 'react-hot-toast';
 
 
 
 
 
 const ForgetPassword = () => {
-   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("test@example.com");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-const ToggleOpen = () => setOpen(!open);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordCode, setPasswordCode] = useState("");
+  const initialStep = searchParams.get("step") || 1;
+  const [step, setStep] = useState(Number(initialStep));
+
+  // const userId = localStorage.getItem("userId");
+  let userId = localStorage.getItem("userId");
+
+  // Check if it contains extra quotes and clean it up
+  userId = userId.replace(/["]+/g, ""); 
+
+  console.log(step, password,confirmPassword); 
+
+  const userEmail = email && localStorage.getItem("email");
+
+  console.log(userEmail, userId);
+  const ToggleOpen = () => setOpen(!open);
+  const { mutate, isPending } = useMutation({
+    mutationFn: forgetPassword,
+    onSuccess: () => {
+               searchParams.set("step", 2);  
+               setSearchParams(searchParams); 
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate: passCode, isPending: loading } = useMutation({
+    mutationFn: verifyPasswordCode,
+    onSuccess: () => {
+         searchParams.set("step", 3); 
+         setSearchParams(searchParams);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate: newPass, isPending: isLoading } = useMutation({
+    mutationFn: newPassword,
+    onSuccess: () => {
+      toast.success("password succesfully reset");
+      navigate("/signin")
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    // Mock server request
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Mock server response
-    const isEmailValid = email === "test@example.com";
-    if (isEmailValid) {
-      setStep(2);
-    } else {
-      setError("Invalid email address");
-    }
-    setLoading(false);
+    mutate({ email });
+    localStorage.setItem("email", email);
+  };
+  const handleCodeSubmit = async (e) => {
+    e.preventDefault();
+    passCode({ code: passwordCode });
+  };
+  const handleNewPassword = async (e) => {
+    e.preventDefault();
+    newPass({ userId ,password,confirmPassword});
+  };
+  const handleResend = async (e) => {
+    e.preventDefault();
+    mutate({ email,resend:true });
   };
 
+   useEffect(() => {
+     // When the component mounts, check if the step is in the URL
+     // If so, set the step state accordingly
+     const currentStep = searchParams.get("step");
+     if (currentStep) {
+       setStep(Number(currentStep)); // Ensure step is set to the correct value on reload
+     }
+   }, [searchParams]);
 
-
-  const {register}=useForm()
   return (
     <article className="flex overflow-x-hidden w-full min-h-[100vh] m-auto forgotbg justify-center items-center">
       {step === 1 && (
@@ -61,7 +116,7 @@ const ToggleOpen = () => setOpen(!open);
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            {error && <p className="text-red-500 mb-4">{error}</p>}
+
             <div className="flex mt-36 md:mt-0 md:flex-row gap-y-2 flex-col items-center gap-x-3">
               <button
                 type="submit"
@@ -78,9 +133,9 @@ const ToggleOpen = () => setOpen(!open);
               <button
                 type="submit"
                 className=" bg-blue-500 md:hidden w-full capitalize font-semibold text-white px-4 py-2 rounded"
-                disabled={loading}
+                disabled={isPending}
               >
-                {loading ? "Submitting..." : "continue"}
+                {isPending ? "Submitting..." : "continue"}
               </button>
             </div>
           </form>
@@ -110,30 +165,41 @@ const ToggleOpen = () => setOpen(!open);
               verify email or phone no.
             </h2>
             <p className="mb-4 text-center text-stone-600 font-semibold mx-auto">
-              A 4-digit code is sent to nwankworr@gmail.com. <br /> Enter code
-              to verify its you.
+              A 4-digit code is sent to {userEmail} <br /> Enter code to verify
+              its you.
             </p>
           </div>
-          <form className="md:flex flex-col w-full mt-4 md:mt-0 grid max-sm:grid-rows-[1fr,auto] max-sm:h-[22rem] gap-y-3 m-auto md:w-[500px]">
+          <form
+            onSubmit={handleCodeSubmit}
+            className="md:flex flex-col w-full mt-4 md:mt-0 grid max-sm:grid-rows-[1fr,auto] max-sm:h-[22rem] gap-y-3 m-auto md:w-[500px]"
+          >
             <div className="mb-4">
               <input
                 type="text"
                 placeholder="enter code"
+                value={passwordCode}
+                onChange={(e) => setPasswordCode(e.target.value)}
                 className="w-full px-4 md:py-2 py-3 bg-transparent placeholder:text-stone-500 capitalize  border-stone-500 border rounded "
               />
               <div className="flex items-center justify-end gap-x-2">
                 <span className="text-stone-500">Didn’t receive code.</span>
-                <button className="text-secondary500 bg-transparent ">
+                <button
+                  onClick={handleResend}
+                  disabled={isPending}
+                  className={` bg-transparent ${
+                    isPending ? "text-stone-500" : "text-secondary500"
+                  }`}
+                >
                   Resend
                 </button>
               </div>
             </div>
             <div className="flex flex-col gap-y-4 md:flex-row gap-x-3 items-center">
               <button
+                disabled={loading}
                 className=" bg-blue-500 hidden md:block w-full capitalize font-semibold text-white px-4 py-2 rounded"
-                onClick={() => setStep(3)}
               >
-                verify now
+                {loading ? "wait..." : "verify now"}
               </button>
               <img
                 src="/images/indicator2.png"
@@ -141,10 +207,10 @@ const ToggleOpen = () => setOpen(!open);
                 className="h-[2.2rem]"
               />
               <button
+                disabled={loading}
                 className=" bg-blue-500 w-full md:hidden capitalize font-semibold text-white px-4 py-2 rounded"
-                onClick={() => setStep(3)}
               >
-                verify now
+                {loading ? "wait..." : "verify now"}
               </button>
             </div>
           </form>
@@ -162,21 +228,24 @@ const ToggleOpen = () => setOpen(!open);
               down and save password in notepad
             </p>
           </div>
-          <form>
+          <form onSubmit={handleNewPassword} className="flex flex-col gap-y-6">
             {/* <input
               type="password"
               placeholder="create Password"
               className="w-full px-4 placeholder:capitalize bg-transparent py-2 border rounded mb-4"
               required
             /> */}
-              <PasswordField
-                register={register}
-                open={open}
-                ToggleOpen={ToggleOpen}
-                placeholder="create password"
-              />
+            <PasswordField
+              password={password}
+              setPassword={setPassword}
+              open={open}
+              ToggleOpen={ToggleOpen}
+              placeholder="create password"
+            />
             <input
               type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
               className="w-full px-4 py-2  placeholder:capitalize bg-transparent border rounded mb-4"
               required
@@ -184,9 +253,10 @@ const ToggleOpen = () => setOpen(!open);
             <div className="flex mt-4 gap-x-4 items-center">
               <button
                 type="submit"
+                disabled={isLoading}
                 className="  bg-secondary500 w-full capitlize text-white px-4 py-2 rounded"
               >
-                create password
+                {isLoading ? "please wait..." : "create password"}
               </button>
               <img
                 src="/images/indicator3.png"
@@ -209,11 +279,13 @@ export default ForgetPassword;
 export const PasswordField = ({
   label,
   placeholder,
-  register,
+  
   error,
   errorMessage,
   open,
   ToggleOpen,
+password,
+setPassword
 }) => (
   <div className="Input-Data ">
     {/* <label className="text-[12px]">{label}</label> */}
@@ -223,7 +295,8 @@ export const PasswordField = ({
         id="password"
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
-        {...register("password")}
+        value={password}
+        onChange={(e)=>setPassword(e.target.value)}
         autoComplete="current-password"
       />
       <span className="absolute right-3 top-2 cursor-pointer">

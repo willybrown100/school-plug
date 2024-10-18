@@ -14,8 +14,9 @@ export default function CreatePost() {
   const inputRef = useRef(null);
   const [textContent, setTextContent] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
+  const [selectedImage, setselectedImage] = useState([]);
 const disable = imagePreview.length===3
-
+console.log(selectedImage);
   // Slider settings
   const settings = {
     dots: true,
@@ -45,6 +46,8 @@ const disable = imagePreview.length===3
   const handleImageChange = (event) => {
     const file = event.target.files[0]; 
     if (file) {
+        setselectedImage((prevImg)=>[...prevImg,file])
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview((prevImages) => [...prevImages, reader.result]); 

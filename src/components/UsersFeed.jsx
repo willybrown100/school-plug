@@ -1,12 +1,11 @@
 import React from 'react'
-import UserDetails from '../components/UserDetails';
-import Bills from '../components/Bills';
-import DefaultSchool from '../components/DefaultSchool';
-import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
+import DesktopCreatingPostButton from './DesktopCreatingPostButton';
+import DefaultSchool from './DefaultSchool';
+import Bills from './Bills';
+import UserDetails from './UserDetails';
 
-export default function Trends() {
-   const className = "md:max-w-[1250px]   md:w-[90vw]  m-auto";
-
+export default function UsersFeed() {
+ const className = "md:max-w-[1250px]   md:w-[90vw]  m-auto";
 
  return (
    <div className="min-h-screen  ">
@@ -15,39 +14,8 @@ export default function Trends() {
      >
        <UserDetails />
        <div className=" ">
-         
-           {/* <div className={``}> */}
-            
-             <div className=" p-4 bg-white flex flex-col gap-y-3">
-               <div className="flex gap-x-3 items-center">
-                 <img
-                   src="\images\yabatech.png"
-                   alt="person"
-                   className="rounded-full"
-                 />
-                 <div>
-                   <h4 className="uppercase mb-1">yaba tech</h4>
-                   <h4 className="capitalize text-sm mb-0 text-stone-500 ">
-                     lagos nigeria
-                   </h4>
-                 </div>
-               </div>
-
-               <div>
-                 <h4 className="font-heading text-secondary600 font-semibold ">
-                   #TrendinginYabaTech
-                 </h4>
-                 <p className="font-heading">
-                   This section contains all the important and trending school
-                   gist within the campus. You can use the hashtag above to
-                   create a trending post.
-                 </p>
-               </div>
-             {/* </div> */}
-           
-         </div>
-        <p>
-
+         <DefaultSchool />
+         <DesktopCreatingPostButton />
          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cum minima
          nesciunt in, odit labore unde eius quidem, doloribus libero recusandae
          necessitatibus ut consectetur? Iure eius fuga quia facilis voluptas,
@@ -81,15 +49,9 @@ export default function Trends() {
          saepe? Dolorem labore unde in repudiandae molestias accusantium eos
          ullam, excepturi soluta. Modi quas repudiandae optio aut facere cumque
          consequatur dolor quisquam ipsam quod?
-        </p>
        </div>
-
-
-
        <Bills />
      </div>
    </div>
  );
 }
-
-  

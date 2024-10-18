@@ -6,12 +6,24 @@ export default function dateFormat(date) {
 
 }
 export const formatDate = (date) => {
+  if (!date) {
+    return ""; // Return an empty string or a placeholder if the date is null
+  }
+
   const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed) and pad
   const year = date.getFullYear(); // Get full year
 
   return `${day}/${month}/${year}`; // Format as dd/mm/yyyy
 };
+
+// export const formatDate = (date) => {
+//   const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
+//   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed) and pad
+//   const year = date.getFullYear(); // Get full year
+
+//   return `${day}/${month}/${year}`; // Format as dd/mm/yyyy
+// };
 
 
 export const convertDateToDDMMYYYY = (dateString) => {
@@ -37,6 +49,10 @@ export const getYearFromISODate = (dateString) => {
   return date.getFullYear(); // Extract the year
 };
 
+export const optionSplit = function (option) {
+  const splitString = option.replace(/([a-z])([A-Z])/g, "$1 $2");
+  return splitString; // Outputs: "faculty Fee
+};
 
 
 

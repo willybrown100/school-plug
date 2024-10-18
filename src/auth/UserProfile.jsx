@@ -70,7 +70,7 @@ const defaultImagePath = "/images/blackman2.png";
   const { mutate, isPending } = useMutation({
     mutationFn: handleUpload2,
     onSuccess: () => {
-navigate("/home")
+navigate("/home/homePage")
     },
   });
  

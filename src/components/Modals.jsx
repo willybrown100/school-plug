@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 
-const ModalContext = createContext();
+export const ModalContext = createContext();
 export default function Modals({ children }) {
   const [openName, setOpenName] = useState("");
   const close = function () {
@@ -40,7 +40,14 @@ function Window({ children, name }) {
   }, [close]);
 
   if (name !== openName) return null;
-  return <div ref={ref}>{children}</div>;
+  return (
+    <div ref={ref} className="">
+   
+
+      {children}
+    </div>
+  );
 }
+
 Modals.Open = Open;
 Modals.Window = Window;
