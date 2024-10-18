@@ -3,49 +3,49 @@ import useGetUser from '../hooks/useGetUser';
 import { ModalContext } from './Modals';
 
 export default function PostModal() {
-  const  {close}=useContext(ModalContext)
+  const { close } = useContext(ModalContext)
   const imageRef = useRef(null)
-  const [textContent,setTextContent]=useState("")
+  const [textContent, setTextContent] = useState("")
   const [selectedImage, setselectedImage] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
-     const { data, isLoading } = useGetUser();
-     const {user,studentInfo}=data
-     const img = data?.user?.profilePhoto;
-     console.log(imagePreview, selectedImage);
-     const disable =
-       imagePreview.length === 3 || selectedImage.length === 3; 
-     const handleClick =function(e){
-   
-      if (imageRef.current){
-imageRef.current.click();
-      } 
-     }
+  const { data } = useGetUser();
+  const { user, studentInfo } = data
+  const img = data?.user?.profilePhoto;
+  console.log(imagePreview, selectedImage);
+  const disable =
+    imagePreview.length === 3 || selectedImage.length === 3;
+  const handleClick = function (e) {
+
+    if (imageRef.current) {
+      imageRef.current.click();
+    }
+  }
 
   const handleImageChange = (event) => {
-   const file = Array.from(event.target.files);
+    const file = Array.from(event.target.files);
     if (file.length) {
       setselectedImage((prevImg) => [...prevImg, file]);
 
-       file.forEach((file) => {
-         const reader = new FileReader();
-         reader.onloadend = () => {
-           setImagePreview((prevImages) => [...prevImages, reader.result]); // Update preview state
-         };
-         reader.readAsDataURL(file); // Read the file content
-       });
+      file.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview((prevImages) => [...prevImages, reader.result]); // Update preview state
+        };
+        reader.readAsDataURL(file); // Read the file content
+      });
     }
 
   };
 
-     const handleSubmit = function (e) {
-      e.preventDefault();
-     };
-     const handleRemoveImage = function (index){
-       setImagePreview((prevImages) => prevImages.filter((curEl,i)=>i !==index)); 
-       setselectedImage((prevImages) =>
-         prevImages.filter((curEl, i) => i !== index)
-       ); 
-     }
+  const handleSubmit = function (e) {
+    e.preventDefault();
+  };
+  const handleRemoveImage = function (index) {
+    setImagePreview((prevImages) => prevImages.filter((curEl, i) => i !== index));
+    setselectedImage((prevImages) =>
+      prevImages.filter((curEl, i) => i !== index)
+    );
+  }
   return (
     <div className="">
       {/* Background overlay */}
@@ -69,7 +69,7 @@ imageRef.current.click();
                 </h4>
               </div>
             </div>
-            <button onClick={()=>close()} className="h-8 w-8 border border-stone-500 rounded-full p-[0.6rem]  bg-transparent">
+            <button onClick={() => close()} className="h-8 w-8 border border-stone-500 rounded-full p-[0.6rem]  bg-transparent">
               <img src="\images\close-circle.svg" />
             </button>
           </div>
@@ -119,9 +119,8 @@ imageRef.current.click();
                 onChange={handleImageChange}
               />
               <button
-                className={` py-2 px-8 rounded-[1.3rem] text-white ${
-                  textContent ? "bg-secondary600" : "bg-secondary400"
-                }`}
+                className={` py-2 px-8 rounded-[1.3rem] text-white ${textContent ? "bg-secondary600" : "bg-secondary400"
+                  }`}
               >
                 post
               </button>

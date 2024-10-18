@@ -7,9 +7,12 @@ import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
 import { Outlet } from 'react-router-dom';
 
 export default function HomePage() {
-      return <div>
-        <Outlet/>
-      </div>
+  const className = "md:max-w-[1170px]   md:w-[90vw]  m-auto";
+  return (
+    <div>
+      <Outlet />
+    </div>
+  )
 }
 
 

@@ -80,7 +80,7 @@ const PaymentForm = () => {
     };
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
+        <div className="bg-white p-4 rounded-lg shadow-md mx-auto md:w-1/2 pb-[5rem]">
             <h3 className='mb-[3rem] mt-[0.6rem] '>
                 <Link to='/home/bills'>
                     <HiArrowLeft className='inline mr-2 text-black' />
@@ -143,7 +143,7 @@ const PaymentForm = () => {
                     </label>
                 </div>
                 <input
-                    type="text"
+                    type="number"
                     id="cvv"
                     className="border border-gray-300 p-3 rounded-lg w-full mb-1"
                     placeholder="Enter 3-digit CVV"
