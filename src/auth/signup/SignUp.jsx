@@ -1,10 +1,10 @@
 
-import React, {  useContext, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import Logo from "../../components/Logo";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { IoIosEye } from "react-icons/io";
 import { HiChevronDown, HiChevronUp, HiOutlineCalendar, HiOutlineEyeSlash } from "react-icons/hi2";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
@@ -22,71 +22,95 @@ import Loader from "../../components/Loader";
 
 
 
+
 export default function SignUp() {
-  const queryClient=useQueryClient()
+  const queryClient = useQueryClient();
   const { authUserData, userId } = useUser();
-  console.log(authUserData, userId);
-  const { handleSubmit, watch, register,formState:{errors},setError ,reset} = useForm();
-  const [showsignUp,setShowSignup]=useState(false)
+  const {
+    handleSubmit,
+    watch,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const ToggleOpen = () => setOpen(!open);
-  const ToggleOpen2 = () => setOpen2(!open2);
+
+  // Synchronize `showSignup` with the URL on the first render and subsequent updates
+  const [showSignup, setShowSignup] = useState(
+    () => searchParams.get("value") !== "false"
+  );
 
   const password = watch("password");
 
-const {mutate,isPending} = useMutation({
-  mutationFn: signUp,
-  onSuccess:()=>{
-    setShowSignup(false) 
-  },
-  onError:(error)=>{
-    setShowSignup(true)
-  toast.error(error.message);
-  }
-});
+  const { mutate, isPending } = useMutation({
+    mutationFn: signUp,
+    onSuccess: () => {
+      searchParams.set("value", "false"); // Set as string for URL compatibility
+      setSearchParams(searchParams);
+      setShowSignup(false);
+    },
+    onError: (error) => {
+      setShowSignup(true);
+      toast.error(error.message);
+    },
+  });
 
-const { mutate: googleSignUp, isPending: loading } = useMutation({
-  mutationFn: signInWithGoogle,
-  onSuccess: () => {
-    setShowSignup(false);
-     queryClient.invalidateQueries("user");
-  },
-  onError: (error) => {
-    setShowSignup(true);
-    toast.error(error.message);
-  },
-});
-    const validateConfirmPassword = (value) => {
-      if (value !== password) {
-        return "Passwords do not match";
-      }
-      return true; // Validation passed
-    };
+  const { mutate: googleSignUp, isPending: loading } = useMutation({
+    mutationFn: signInWithGoogle,
+    onSuccess: () => {
+      searchParams.set("value", "false"); 
+      setSearchParams(searchParams);
+      setShowSignup(false);
+      queryClient.invalidateQueries("user");
+    },
+    onError: (error) => {
+      setShowSignup(true);
+      toast.error(error.message);
+    },
+  });
 
-  const onSubmit = function (data, e) {
-    e.preventDefault()
+  const validateConfirmPassword = (value) => {
+    if (value !== password) {
+      return "Passwords do not match";
+    }
+    return true; // Validation passed
+  };
+
+  const onSubmit = (data, e) => {
+    e.preventDefault();
     const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
     mutate(user);
-    console.log(user);
   };
-  
+
+  useEffect(() => {
+    // Only set the default value if `value` is not present in the URL
+    if (!searchParams.has("value")) {
+      searchParams.set("value", "true"); // Default to true if parameter does not exist
+      setSearchParams(searchParams);
+    } else {
+      // Synchronize showSignup state with the value in the URL
+      const showSignupParam = searchParams.get("value") !== "false";
+      setShowSignup(showSignupParam);
+    }
+  }, [searchParams, setSearchParams]);
+
   return (
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
-        {showsignUp && (
+        {showSignup && (
           <div className="flex flex-col gap-2">
             <Link to="/" className="flex justify-center">
-              <img src="/images/shool-pluglogo.png" alt="img" />
+              <img src="\images\shool-pluglogo.png" alt="img" />
             </Link>
-
             <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
               Nice to have you, Sign up
             </h3>
           </div>
         )}
-        <div className=" rounded-md   md:w-[500px]">
-          {showsignUp ? (
+        <div className="rounded-md md:w-[500px]">
+          {showSignup ? (
             <form
               className="flex flex-col p-3 gap-y-4"
               onSubmit={handleSubmit(onSubmit)}
@@ -95,7 +119,7 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
                 <input
                   type="name"
                   id="text"
-                  placeholder="full name (as used in your student iD)"
+                  placeholder="full name (as used in your student ID)"
                   className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
                   required
                   {...register("fullName")}
@@ -135,8 +159,8 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
                   })}
                 />
                 {errors.phoneNumber && (
-                  <p className="text-red-500 capitalize ">
-                    not a valid phone number{" "}
+                  <p className="text-red-500 capitalize">
+                    Not a valid phone number
                   </p>
                 )}
               </div>
@@ -144,7 +168,7 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
                 errors
                 isPending={isPending}
                 open={open}
-                ToggleOpen={ToggleOpen}
+                ToggleOpen={() => setOpen(!open)}
                 placeholder="create password"
                 register={register}
               />
@@ -153,7 +177,7 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
                 register={register}
                 isPending={isPending}
                 open2={open2}
-                ToggleOpen2={ToggleOpen2}
+                ToggleOpen2={() => setOpen2(!open2)}
                 placeholder="confirm password"
               />
               <div className="flex items-center gap-1 capitalize">
@@ -164,23 +188,21 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
                   required
                 />
                 <div>
-                  agree to our <Link>terms</Link> and <Link>policies</Link>{" "}
+                  agree to our <Link>terms</Link> and <Link>policies</Link>
                 </div>
               </div>
-              <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
+              <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2 md:grid-cols-2">
                 <button
                   disabled={loading}
                   onClick={googleSignUp}
-                  className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent"
+                  className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center rounded-md text-secondary600 capitalize bg-transparent"
                 >
-                  {" "}
                   <span>sign up with</span>
                   <span>
                     <img src="/images/google-icon.png" alt="img" />
                   </span>
                 </button>
-                <button className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
-                  {" "}
+                <button className="bg-secondary500 p-3 rounded-md font-semibold text-white capitalize">
                   {isPending ? "signingUp..." : "sign up"}
                 </button>
               </div>
@@ -214,6 +236,8 @@ const { mutate: googleSignUp, isPending: loading } = useMutation({
     </main>
   );
 }
+
+
 
 export const PasswordField = ({
   label,
@@ -306,6 +330,7 @@ function StudentInfo({ userId }) {
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
+
   const { mutate: education, isPending } = useMutation({
     mutationFn: EducationalSignUp,
     onSuccess: () => {
@@ -327,6 +352,7 @@ navigate("/profilepic");
     console.log(stundentInfo);
     education(stundentInfo);
   };
+
   return (
     <div className="flex w-full flex-col gap-y-4">
       <div className="flex flex-col items-center gap-2">
