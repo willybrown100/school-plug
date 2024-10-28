@@ -154,7 +154,7 @@ p {
   margin-bottom: 1.2rem;
   max-width: 35rem;
   color: black;
-  font-family: "Lora", sans-serif;
+ 
   /* font-family:s 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
 }
 
@@ -196,7 +196,7 @@ body {
   line-height: 1.5;
   color: black;
   font-size: 0.875rem;
-  font-family: "Lora", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 h1 {
@@ -251,11 +251,33 @@ fill: #2161c3;
   border-top-color: transparent;
   animation: spin 1s linear infinite;
 }
+.custom-radio input[type="radio"]:checked + label {
+  background-color: #2B70DB; 
+
+}
+
+.custom-radio label:after {
+  content: "";
+  display: none;
+  width: 3px; 
+  height: 3px; 
+  background-color: blue; 
+  border-radius: 50%;
+  position: absolute; 
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-radio input[type="radio"]:checked + label:after {
+  display: block; /* Show when checked */
+}
+
 
 
 
 .forget,.signup,
-.signBg,.forgotbg{
+.signBg,.forgotbg,.sugsignup,.sugsignin,.sugpassword{
  
     min-height: 100dvh;
     background:
@@ -332,4 +354,73 @@ input{
 .slick-dots li.slick-active button:before {
   color: #2161c3; /* Set color for the active dot */
   opacity: 1; /* Make the active dot fully opaque */
+}
+
+.label::before{
+content: "";
+position: absolute;
+background-color: #fff;
+width: 14px;
+height: 14px;
+margin: 3px;
+border-radius: 50%;
+transition: 0.2s;
+}
+.checkbtn:checked + .label{
+background-color: #2161c3;
+}
+.checkbtn:checked + .label::before{
+transform: translateX(20px);
+}
+
+/* =====label1== */
+.label1::before{
+content: "";
+position: absolute;
+background-color: #fff;
+width: 14px;
+height: 14px;
+margin: 3px;
+border-radius: 50%;
+transition: 0.2s;
+}
+.checkbtn1:checked + .label1{
+background-color: #2161c3;
+}
+.checkbtn1:checked + .label1::before{
+transform: translateX(20px);
+}
+
+.label2::before{
+content: "";
+position: absolute;
+background-color: #fff;
+width: 14px;
+height: 14px;
+margin: 3px;
+border-radius: 50%;
+transition: 0.2s;
+}
+.checkbtn2:checked + .label2{
+background-color: #2161c3;
+}
+.checkbtn2:checked + .label2::before{
+transform: translateX(20px);
+}
+
+.label3::before{
+content: "";
+position: absolute;
+background-color: #fff;
+width: 14px;
+height: 14px;
+margin: 3px;
+border-radius: 50%;
+transition: 0.2s;
+}
+.checkbtn3:checked + .label3{
+background-color: #2161c3;
+}
+.checkbtn3:checked + .label3::before{
+transform: translateX(20px);
 }

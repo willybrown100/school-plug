@@ -19,6 +19,8 @@ import { format, parseISO } from "date-fns";
 import useUser from "../../hooks/useUser";
 import toast from "react-hot-toast";
 import Loader from "../../components/Loader";
+import { getRedirectResult } from "firebase/auth";
+import { auth } from "../../services/firebase-config";
 
 
 
@@ -43,7 +45,12 @@ export default function SignUp() {
   );
 
   const password = watch("password");
-
+  const validateConfirmPassword = (value) => {
+    if (value !== password) {
+      return "Passwords do not match";
+    }
+    return true; // Validation passed
+  };
   const { mutate, isPending } = useMutation({
     mutationFn: signUp,
     onSuccess: () => {
@@ -60,7 +67,7 @@ export default function SignUp() {
   const { mutate: googleSignUp, isPending: loading } = useMutation({
     mutationFn: signInWithGoogle,
     onSuccess: () => {
-      searchParams.set("value", "false"); 
+      searchParams.set("value", "false");
       setSearchParams(searchParams);
       setShowSignup(false);
       queryClient.invalidateQueries("user");
@@ -70,13 +77,6 @@ export default function SignUp() {
       toast.error(error.message);
     },
   });
-
-  const validateConfirmPassword = (value) => {
-    if (value !== password) {
-      return "Passwords do not match";
-    }
-    return true; // Validation passed
-  };
 
   const onSubmit = (data, e) => {
     e.preventDefault();
@@ -95,6 +95,8 @@ export default function SignUp() {
       setShowSignup(showSignupParam);
     }
   }, [searchParams, setSearchParams]);
+
+
 
   return (
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
@@ -197,7 +199,7 @@ export default function SignUp() {
                   onClick={googleSignUp}
                   className="border flex p-1 justify-center gap-x-6 border-secondary600 items-center rounded-md text-secondary600 capitalize bg-transparent"
                 >
-                  <span>sign up with</span>
+                  <span>{loading ? "please wait.." : "sign up with"}</span>
                   <span>
                     <img src="/images/google-icon.png" alt="img" />
                   </span>
@@ -278,6 +280,7 @@ export const PasswordField = ({
     </div>
   </div>
 );
+
 export const ConfirmPasswordField = ({
   isPending,
   label,

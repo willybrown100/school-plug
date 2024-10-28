@@ -12,7 +12,9 @@ console.log(active)
     setSelectedOption(e.target.value);
    setDisable(false)
   };
-
+  const handleClick = function (i) {
+    setActive(i);
+  };
   const payment = [
     {
       name: "sug fee",
@@ -48,9 +50,7 @@ console.log(active)
       ),
     },
   ];
-  const handleClick = function (i) {
-    setActive(i)
-  };
+
 
   return (
     <div className="hidden lg:block w-full">

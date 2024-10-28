@@ -11,7 +11,6 @@ export default {
       },
       fontFamily: {
         heading: "Inter,sans-serif",
-        fontbody: "Lora,sans-serif,",
       },
       screens: {
         // Define custom max-width breakpoints
@@ -20,6 +19,9 @@ export default {
         "max-lg": { max: "1023px" }, // Up to 1023px
         "max-xl": { max: "1279px" }, // Up to 1279px
       },
+    },
+    fontFamily: {
+      heading: "Inter,sans-serif",
     },
   },
   plugins: [],
