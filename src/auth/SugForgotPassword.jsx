@@ -7,9 +7,9 @@ import { IoIosEye } from 'react-icons/io';
 import { HiOutlineEyeSlash } from 'react-icons/hi2';
 import toast from 'react-hot-toast';
 import MiniLoader from '../ui/MiniLoader';
-import { sugForgetPassword } from '../services/sugApis.JS';
-import { sugVerifyPasswordCode } from '../services/sugApis.JS';
-import { sugNewPassword } from '../services/sugApis.JS';
+import { sugForgetPassword } from '../services/sugApis.js';
+import { sugVerifyPasswordCode } from '../services/sugApis.js';
+import { sugNewPassword } from '../services/sugApis.js';
 import { useForm } from 'react-hook-form';
 
 export default function SugForgotPassword() {
