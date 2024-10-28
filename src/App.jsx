@@ -18,8 +18,6 @@ import Materials from "./features/Materials";
 import Trends from "./features/Trends";
 import Events from "./features/Events";
 
-
-
 import PaymentForm from "./components/PaymentForm";
 import CreatePost from "./features/CreatePost";
 import CardForm from "./components/CardForm";
@@ -27,7 +25,19 @@ import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
 import BillInformation from "./components/BillInformation";
 import UsersFeed from "./components/UsersFeed";
-
+import SugSignup from "./auth/signup/SugSignup";
+import SugSignin from "./auth/SugSignin";
+import SugForgotPassword from "./auth/SugForgotPassword";
+import SugAppLayout from "./components/SugAppLayout";
+import SugFeed from "./features/sug/SugFeed";
+import SugProfile from "./features/sug/SugProfile";
+import EditSugProfile from "./components/EditSugProfile";
+import SugProfilez from "./features/sug/SugProfilez";
+import AdminAssist from "./features/sug/AdminAssist";
+import SugAccountSetting from "./features/sug/SugAccountSetting";
+import SugChangePassword from "./features/sug/SugChangePassword";
+import SugImportedRegNums from "./features/sug/SugImportedRegNums";
+import SugSchoolFaculties from "./features/sug/SugSchoolFaculties";
 
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -46,16 +56,37 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="sugsignup" element={<SugSignup />} />
+            <Route path="sugforgotpassword" element={<SugForgotPassword />} />
+            <Route path="sugsignin" element={<SugSignin />} />
             <Route path="post" element={<CreatePost />} />
             <Route path="loader" element={<Loader />} />
             <Route path="forgotPassword" element={<ForgotPassword />} />
             <Route path="profilepic" element={<UserProfile />} />
+            <Route path="sughome" element={<SugAppLayout />}>
+              <Route index element={<Navigate to="sugfeed" />} />
+              <Route path="sugfeed" index element={<SugFeed />} />
+              <Route path="sugprofile" element={<SugProfile />}>
+                <Route index element={<Navigate to="sugprofilez" />} />
+                <Route path="sugprofilez" index element={<SugProfilez />} />
+                <Route path="sugeditprofile" element={<EditSugProfile />} />
+                <Route path="adminassist" element={<AdminAssist />} />
+                <Route path="acctsetting" element={<SugAccountSetting />} />
+                <Route path="sugfaculties" element={<SugSchoolFaculties />} />
+                <Route
+                  path="sugchangepassword"
+                  element={<SugChangePassword />}
+                />
+                <Route path="importedregnum" element={<SugImportedRegNums />} />
+              </Route>
+            </Route>
+
             <Route path="home" element={<AppLayout />}>
-              <Route  element={<Navigate to="home/homePage" />} />
-              <Route path="homePage"  element={<HomePage />} >
-              <Route  index element={<Navigate to="feed" />} />
-              <Route  path="feed" element={<UsersFeed/>}/>
-              <Route path="billz"  element={<BillInformation/>}/>
+              <Route element={<Navigate to="home/homePage" />} />
+              <Route path="homePage" element={<HomePage />}>
+                <Route index element={<Navigate to="feed" />} />
+                <Route path="feed" element={<UsersFeed />} />
+                <Route path="billz" element={<BillInformation />} />
               </Route>
               <Route path="events" element={<Events />} />
               <Route path="material" element={<Materials />} />

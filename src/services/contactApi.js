@@ -1,4 +1,4 @@
-import { signInWithPopup } from "firebase/auth";
+import { getRedirectResult, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { auth, provider } from "../services/firebase-config";
 
 export default async function signUp(data){
@@ -30,6 +30,9 @@ export default async function signUp(data){
      console.log(error)
     }
 }
+
+
+
 export  async function getAuthUser(token){
   console.log(token)
     try {
@@ -51,6 +54,8 @@ export  async function getAuthUser(token){
       throw error; 
     }
 }
+
+
 export  async function EducationalSignUp(data){
   console.log(data)
     try {
@@ -109,6 +114,8 @@ export  async function signIn(data){
       throw error;
     }
 }
+
+
 export  async function forgetPassword(data){
   console.log(data)
     try {
@@ -130,9 +137,9 @@ export  async function forgetPassword(data){
     }
 
    const result = await response.json();
-    if (result) {
-      localStorage.setItem("userDetails", JSON.stringify(result));
-    }
+    // if (result) {
+    //   localStorage.setItem("userDetails", JSON.stringify(result));
+    // }
    console.log(result)
         return result
     } catch (error) {
@@ -140,6 +147,7 @@ export  async function forgetPassword(data){
       throw error;
     }
 }
+
 export  async function verifyPasswordCode(data){
   console.log(data)
     try {
@@ -171,6 +179,7 @@ export  async function verifyPasswordCode(data){
       throw error;
     }
 }
+
 
 export  async function newPassword(data){
   console.log(data)
@@ -313,7 +322,104 @@ export const handleUpload2 = async ({ profilePhoto, token, userId }) => {
 
 };
 
+export const schoolInfo1 = async ({
+  userId,
+  university,
+  state,
+  aboutUniversity,
+  uniProfilePicture,
+}) => {
+  try {
+  console.log({userId, university, state, aboutUniversity, uniProfilePicture});
+ 
 
+  const formData = new FormData();
+  console.log(formData);
+  formData.append("uniProfilePicture", uniProfilePicture);
+  
+  formData.append("university", university);
+  formData.append("aboutUniversity", aboutUniversity);
+  formData.append("state", state);
+  formData.append("userId", userId);
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:, ${value}`);
+  }
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/school/schoolInfo",
+      {
+        method: "POST",
+        
+        body: formData,
+      }
+    );
+    
+  
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+     if (data) {
+       localStorage.setItem("schoolInfoData", JSON.stringify(data));
+     }
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};
+
+export const schoolInfo = async ({ 
+  userId, 
+  university, 
+  state, 
+  aboutUniversity, 
+  uniProfilePicture 
+}) => {
+  try {
+    console.log({
+      userId,
+      university,
+      state,
+      aboutUniversity,
+      uniProfilePicture,
+    });
+    const formData = new FormData();
+    formData.append("uniProfilePicture", uniProfilePicture);
+    formData.append("university", university);
+    formData.append("aboutUniversity", aboutUniversity);
+    formData.append("state", state);
+    formData.append("userId", userId);
+    
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    console.log(formData)
+    
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/school/schoolInfo",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+    if (data) {
+      localStorage.setItem("schoolInfoData", JSON.stringify(data));
+    }
+
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};
+// signup=====
 export const signInWithGoogle = async () => {
    provider.setCustomParameters({
      prompt: "select_account",
@@ -324,7 +430,6 @@ export const signInWithGoogle = async () => {
     console.log("User signed in:", signedInUser);
 
    
-    
     // Get the current user's ID token
     const idToken = await signedInUser.getIdToken(/* forceRefresh */ true);
     const data = {
@@ -361,10 +466,16 @@ export const signInWithGoogle = async () => {
 
     return userResult;
   } catch (error) {
+    
+     await signInWithRedirect(auth, provider);
     console.error("Error signing in:", error.message);
     throw error;
   }
 };
+
+// =====
+
+
 
 
 export const userSignInWithGoogle = async () => {

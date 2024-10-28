@@ -60,7 +60,7 @@ console.log(data)
           <input
             type="email"
             placeholder="enter email or phone number"
-            className="border p-3 md:p-2 rounded-md bg-transparent w-full"
+            className="border p-3 md:p-2 rounded-md bg-transparent w-full bg-white"
             {...register("email", { required: "this field is required" })}
           />
           <PasswordField

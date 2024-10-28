@@ -33,3 +33,8 @@ const provider = new GoogleAuthProvider(); // Initialize GoogleAuthProvider
 
 // Export the `auth` and `provider` objects
 export { auth, provider };
+
+
+
+// ========
+// ================
