@@ -8,8 +8,8 @@ export default function SugProfilez() {
    const sugImg = data?.data?.uniProfilePicture;
    const uni = data?.data?.university;
    const aboutUni = data?.data?.aboutUniversity;
-     const aboutUniz = data?.data?.user;
-     const {  faculties } = data?.data?.user || {};
+   
+     const {  faculties,fullName } = data?.data?.user || {};
 
    console.log(data, sugImg, uni);
   const [chec, setCheck] = useState("");
@@ -19,17 +19,17 @@ export default function SugProfilez() {
     navigate(-1);
   };
   return (
-    <section className=" px-3 min-h-screen">
+    <section className="  min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-x-2 items-center">
           <button onClick={handleClick} className="bg-transparent">
-            <img src="\src\assets\arrow-left.svg" alt="icon" />
+            <img src="\assets\arrow-left.svg" alt="icon" />
           </button>
           <p className="mb-0 font-semibold capitalize">profile</p>
         </div>
 
         <Link to="/sughome/sugprofile/acctsetting">
-          <img src="\src\assets\setting-2.svg" alt="settings" />
+          <img src="\assets\setting-2.svg" alt="settings" />
         </Link>
       </div>
 
@@ -38,7 +38,7 @@ export default function SugProfilez() {
       <article className="my-4 border border-stone-400 p-3 rounded-md">
         <div className="flex gap-x-2 items-center">
           <h3 className="mb-0">school info </h3>
-          <img src="\src\assets\info-circle.svg" alt="i" />
+          <img src="\assets\info-circle.svg" alt="i" />
         </div>
 
         <div className="bg-stone-50 p-1 rounded-md ">
@@ -46,7 +46,7 @@ export default function SugProfilez() {
             <p className="mb-0 text-stone-700">School Faculties</p>
             <Link to="/sughome/sugprofile/sugfaculties">
               <img
-                src="\src\assets\arrowRight.svg"
+                src="\assets\arrowRight.svg"
                 alt="icon"
                 className="bg-white p-3 rounded-full"
               />
@@ -67,7 +67,7 @@ export default function SugProfilez() {
           <p className="mb-0 text-stone-700">Imported Reg No.</p>
           <Link to="/sughome/sugprofile/importedregnum">
             <img
-              src="\src\assets\arrowRight.svg"
+              src="\assets\arrowRight.svg"
               alt="icon"
               className="bg-white p-3 rounded-full"
             />
@@ -78,7 +78,7 @@ export default function SugProfilez() {
       <article className="my-4 border border-stone-400 p-3 rounded-md">
         <div className="flex gap-x-2 items-center">
           <h3 className="mb-0">Admin assist </h3>
-          <img src="\src\assets\verify.svg" alt="i" />
+          <img src="\assets\verify.svg" alt="i" />
         </div>
 
         <div className="bg-stone-50 p-1 rounded-md ">
@@ -86,7 +86,7 @@ export default function SugProfilez() {
             <p className="mb-0 text-stone-700">Add Admin</p>
             <Link to="/sughome/sugprofile/adminassist">
               <img
-                src="\src\assets\profile-add.svg"
+                src="\assets\profile-add.svg"
                 alt="icon"
                 className="bg-white p-3 rounded-full"
               />

@@ -4,13 +4,14 @@ import { HiOutlineEyeSlash } from 'react-icons/hi2';
 import { IoIosEye } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import MiniLoader from "../ui/MiniLoader"
 import toast from 'react-hot-toast';
 import { sugSignIn } from '../services/sugApis';
 
 export default function SugSignin() {
+  const queryClient =useQueryClient()
   const navigate = useNavigate()
     const [open, setOpen] = useState(false);
      const {
@@ -24,6 +25,7 @@ export default function SugSignin() {
        mutationFn: sugSignIn,
        onSuccess: () => {
          navigate("/sughome");
+         queryClient.invalidateQueries("sug");
        },
        onError: (error) => {
          toast.error(error.message);

@@ -12,10 +12,10 @@ const handleClick = function(){
 }
   return (
     <section>
-      <article className="p-3">
+      <article className="">
         <div className="flex gap-x-2 items-center mb-5">
           <button onClick={handleClick} className="bg-transparent">
-            <img src="\src\assets\arrow-left.svg" alt="icon" />
+            <img src="\assets\arrow-left.svg" alt="icon" />
           </button>
           <p className="mb-0 font-semibold capitalize">account settings</p>
         </div>
@@ -28,7 +28,7 @@ const handleClick = function(){
               className="bg-white w-8 h-8 flex justify-center items-center rounded-full"
             >
               <img
-                src="\src\assets\arrowRight.svg"
+                src="\assets\arrowRight.svg"
                 alt="icon"
                 className="  rounded-full"
               />
@@ -102,7 +102,7 @@ const handleClick = function(){
             <p className="mb-0 capitalize tracking-wide">log out</p>
             <button className="bg-white w-8 h-8 flex justify-center items-center rounded-full">
               <img
-                src="\src\assets\logout.svg"
+                src="\assets\logout.svg"
                 alt="icon"
                 className="  rounded-full"
               />
@@ -125,7 +125,7 @@ function OpenModal() {
       <Modals.Open opens="deleteModal">
         <button className="bg-white w-8 h-8 flex justify-center items-center rounded-full">
           <img
-            src="\src\assets\arrowRight.svg"
+            src="\assets\arrowRight.svg"
             alt="icon"
             className="  rounded-full"
           />
