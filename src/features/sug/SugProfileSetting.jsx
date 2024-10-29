@@ -25,7 +25,7 @@ export default function SugProfileSetting() {
           <img src="\assets\edit.svg" alt="edit" />
         </Link>
       </div>
-      <p className="  text-stone-700 p-2 rounded-md bg-stone-50  max-w-full">
+      <p className="  text-stone-700 p-2 rounded-md bg-stone-50 break-words max-w-full">
         {aboutUni}
       </p>
 
