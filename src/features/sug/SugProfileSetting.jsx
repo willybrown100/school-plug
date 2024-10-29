@@ -25,7 +25,9 @@ export default function SugProfileSetting() {
           <img src="\assets\edit.svg" alt="edit" />
         </Link>
       </div>
-      <p className="  text-stone-700 p-2 rounded-md bg-stone-50">{aboutUni}</p>
+      <p className="  text-stone-700 p-2 rounded-md bg-stone-50  max-w-full">
+        {aboutUni}
+      </p>
 
       <div className="flex flex-col gap-y-2 bg-stone-50 p-1">
         <h4 className="mb-0 capitalize">
