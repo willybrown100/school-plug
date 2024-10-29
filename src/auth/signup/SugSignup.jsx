@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import Modals from "../../components/Modals";
 import FileImportModal from "../../components/FileImportModal";
 import {   schoolInfo  } from "../../services/contactApi";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import MiniLoader from "../../ui/MiniLoader";
 import useUser from "../../hooks/useUser";
@@ -320,7 +320,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
 }
 
 function SchoolFaculty() {
-
+const queryClient =useQueryClient()
     const [facultyName, setFacultyName] = useState([]);
     const [selectedFaculties, setSelectedFaculties] = useState([]);
     const { selectedFile} = useContext(DateContext);
@@ -342,6 +342,7 @@ function SchoolFaculty() {
       onSuccess: () => {
         toast.success("registration successful")
         navigate("/sughome");
+          queryClient.invalidateQueries("sug");
       },
       onError: (error) => {
         toast.error(error.message);
@@ -447,7 +448,7 @@ function SchoolFaculty() {
           </div>
         </div>
         <button
-          disabled={dis}
+          disabled={isPending}
           className={`${
             dis ? "bg-secondary400" : "bg-secondary600"
           } text-white rounded-md font-heading font-semibold tracking-wide capitalize p-2 w-full mt-10`}

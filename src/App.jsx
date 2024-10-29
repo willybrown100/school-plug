@@ -38,6 +38,7 @@ import SugAccountSetting from "./features/sug/SugAccountSetting";
 import SugChangePassword from "./features/sug/SugChangePassword";
 import SugImportedRegNums from "./features/sug/SugImportedRegNums";
 import SugSchoolFaculties from "./features/sug/SugSchoolFaculties";
+import SugCreatePost from "./features/SugCreatePost";
 
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -60,6 +61,7 @@ export default function App() {
             <Route path="sugforgotpassword" element={<SugForgotPassword />} />
             <Route path="sugsignin" element={<SugSignin />} />
             <Route path="post" element={<CreatePost />} />
+            <Route path="sugpost" element={<SugCreatePost />} />
             <Route path="loader" element={<Loader />} />
             <Route path="forgotPassword" element={<ForgotPassword />} />
             <Route path="profilepic" element={<UserProfile />} />

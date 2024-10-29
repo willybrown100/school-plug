@@ -1,5 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import useGetSugUser from '../../hooks/useGetSugUser';
+import MiniLoader from '../../ui/MiniLoader';
+import BlueLoader from '../../components/BlueLoader';
 
 
 const faculty = [
@@ -12,17 +15,22 @@ const faculty = [
 
 ]
 export default function SugSchoolFaculties() {
+      const { data, isLoading } = useGetSugUser();
+     
+      const {faculties} = data?.data?.user || {};
+      
+
     const navigate = useNavigate()
     const handleClick = function(){
 navigate(-1)
     }
   return (
     <section className="min-h-screen ">
-      <article className="p-3 pb-[10rem]">
+      <article className="pb-[10rem]">
         <div className="flex justify-between gap-x-2 items-center">
           <div className="flex gap-x-2 items-center ">
             <button onClick={handleClick} className="bg-transparent">
-              <img src="\src\assets\arrow-left.svg" alt="icon" />
+              <img src="\assets\arrow-left.svg" alt="icon" />
             </button>
             <h4 className="mb-0 font-semibold capitalize">School faculties</h4>
           </div>
@@ -45,10 +53,15 @@ navigate(-1)
             </p>
           </div>
           <ul className="mt-5">
-            {faculty.map((item) => (
+            {isLoading && (
+              <div className='flex  justify-center items-baseline'>
+                <BlueLoader />
+              </div>
+            )}
+            {faculties?.map((item) => (
               <li className="relative p-2">
                 <div className="border  border-stone-500 p-2 rounded-md">
-                  <h5 className="pl-3">{item.faculty}</h5>
+                  <h5 className="pl-3">{item.facultyName}</h5>
                   <button className="absolute border p-1 border-green-500 px-1 top-4 left-0 ">
                     <div className="w-3  h-3 rounded-full bg-secondary500"></div>
                   </button>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import grayCheckIcon from '../assets/gray.svg'; // Gray checkmark icon
-import greenCheckIcon from '../assets/green.svg'; // Green checkmark icon
+import grayCheckIcon from '../../public/assets/gray.svg';
+// import grayCheckIcon from '../assets/gray.svg';
+import greenCheckIcon from '../../public/assets/green.svg';
+// import greenCheckIcon from '../assets/green.svg';
 import { useLocation, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { HiArrowLeft } from "react-icons/hi";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";

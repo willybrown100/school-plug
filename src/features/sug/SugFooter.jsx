@@ -302,7 +302,7 @@ export default function SugFooter() {
               <div className="flex items-center gap-x-2">
                 <span className="text-white font-heading capitalize">post</span>
                 <Link
-                  to="/post"
+                  to="/sugpost"
                   className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
                 >
                   <GoPlus className={`text-3xl text-white`} />

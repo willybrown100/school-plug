@@ -7,10 +7,10 @@ export default function AdminAssist() {
        navigate(-1);
      };
   return (
-    <section className="p-3">
+    <section className="">
       <div className="flex gap-x-2 items-center mb-5">
-        <button onClick={handleClick}>
-          <img src="\src\assets\arrow-left.svg" alt="icon" />
+        <button onClick={handleClick} className='bg-transparent'>
+          <img src="\assets\arrow-left.svg" alt="icon" />
         </button>
         <p className="mb-0 font-semibold capitalize">admin assist</p>
       </div>
@@ -18,7 +18,7 @@ export default function AdminAssist() {
       <article className="border border-stone-500 rounded-md p-2">
         <div className="flex gap-x-2 items-center">
           <h3 className="mb-0 font-semibold text-stone-600">add admin</h3>
-          <img src="\src\assets\circlesmall.svg" alt="icon" />
+          <img src="\assets\circlesmall.svg" alt="icon" />
         </div>
         <p className="text-sm text-stone-400">Add a max of three admins</p>
 
@@ -38,7 +38,7 @@ export default function AdminAssist() {
 
       <div className="flex justify-center my-4">
         <button className="text-center flex justify-center my-4">
-          <img src="\src\assets\add-circle.svg" alt="icon" className="" />
+          <img src="\assets\add-circle.svg" alt="icon" className="" />
         </button>
       </div>
     </section>

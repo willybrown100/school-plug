@@ -33,7 +33,7 @@ navigate(-1)
      }
   return (
     <section>
-      <article className="p-3 min-h-screen">
+      <article className=" min-h-screen">
         <div className="flex gap-x-2 items-center mb-5">
           <button onClick={handleClick} className="bg-transparent">
             <img src="\src\assets\arrow-left.svg" alt="icon" />

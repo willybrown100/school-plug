@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/Button';
+import useGetSugUser from '../../hooks/useGetSugUser';
+import BlueMiniLoader from '../../ui/BlueMiniLoader';
 
 const reg = [
     { regNums: "Reg5349",faculty:"faculty of arts" },
@@ -13,17 +15,21 @@ const reg = [
 ];
 
 export default function SugImportedRegNums() {
+  const { data, isLoading } = useGetSugUser();
+
+  const { students } = data?.data?.user || {};
+
     const navigate = useNavigate()
     const handleClick=function(){
         navigate(-1)
     }
   return (
     <section>
-      <article className="p-3">
+      <article className="">
         <div className="flex justify-between items-center gap-x-3 mb-5">
           <div className="flex gap-x-2 items-center ">
             <button onClick={handleClick} className="bg-transparent">
-              <img src="\src\assets\arrow-left.svg" alt="icon" />
+              <img src="\assets\arrow-left.svg" alt="icon" />
             </button>
             <p className="mb-0 font-semibold capitalize">Imported Reg no.</p>
           </div>
@@ -35,7 +41,9 @@ export default function SugImportedRegNums() {
         <article className="border border-stone-400 rounded-md  p-2">
           <div className="flex justify-between items-center">
             <h4 className="font-semibold">Imported Reg. No.</h4>
-            <p className="mb-0 text-secondary600 font-semibold">25,000</p>
+            <p className="mb-0 text-secondary600 font-semibold">
+              {isLoading?<BlueMiniLoader/>:students?.length}
+            </p>
           </div>
           <div className="flex justify-between items-center">
             <p className="mb-0  text-stone-500">Add or remove Reg. No.</p>
@@ -63,7 +71,7 @@ export default function SugImportedRegNums() {
         <article className=" mt-6 border border-stone-500 p-2 rounded-md">
           <div className="flex gap-x-3 items-center mb-3">
             <h4 className="mb-0">Add a new Reg No.</h4>
-            <img src="\src\assets\circlesmall.svg" alt="icon" />
+            <img src="\assets\circlesmall.svg" alt="icon" />
           </div>
           <form className="flex flex-col gap-y-3">
             <div className="flex flex-col gap-y-1 bg-stone-50 p-2">
