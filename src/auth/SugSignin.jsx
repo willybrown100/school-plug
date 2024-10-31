@@ -55,7 +55,7 @@ export default function SugSignin() {
               <input
                 type="email"
                 placeholder="email"
-                className="p-1 border w-full border-stone-400 rounded-md"
+                className="p-2 border w-full border-stone-400 rounded-md"
                 {...register("email")}
                 required
                 disabled={isPending}
@@ -127,7 +127,7 @@ export const PasswordField = ({
         type={!open ? "password" : "text"}
         id="password"
         disabled={isPending}
-        className="w-full md:p-2 border outline-none border-stone-400 p-1 rounded-md"
+        className="w-full md:p-2 border outline-none border-stone-400 p-2 rounded-md"
         placeholder={placeholder}
         {...register("password")}
         autoComplete="current-password"
