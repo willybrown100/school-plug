@@ -2,15 +2,30 @@ import React, { useEffect, useRef, useState } from 'react'
 import { HiXMark } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
+import useGetSugUser from '../hooks/useGetSugUser';
+import useSug from '../hooks/useSug';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createSugPost } from '../services/sugApis';
+import toast from 'react-hot-toast';
+import BlueMiniLoader from '../ui/BlueMiniLoader';
+import MiniLoader from '../ui/MiniLoader';
+
 
 export default function SugCreatePost() {
+  const { userId } = useSug();
+  console.log(userId)
+  const { data, isLoading }=useGetSugUser()
+  const uniProfilePicture = data?.data?.uniProfilePicture;
+
+
+ 
  const imageRef = useRef(null);
  const inputRef = useRef(null);
  const [textContent, setTextContent] = useState("");
  const [imagePreview, setImagePreview] = useState([]);
  const [selectedImage, setselectedImage] = useState([]);
  const disable = imagePreview.length === 3;
- console.log(selectedImage);
+const queryClient = useQueryClient()
  // Slider settings
  const settings = {
    dots: true,
@@ -31,6 +46,17 @@ export default function SugCreatePost() {
    ],
  };
 
+ const { mutate,isPending } = useMutation({
+   mutationFn: createSugPost,
+   onSuccess:()=>{
+    toast.success("post sucessfull,view")
+navigate("/sughome");
+queryClient.invalidateQueries("sugposts");
+   },
+   onError:(error)=>{
+       toast.error(error.message);
+   }
+ });
  const navigate = useNavigate();
  const handleClick = function (e) {
    e.preventDefault();
@@ -52,7 +78,8 @@ export default function SugCreatePost() {
 
  const handleSubmit = function (e) {
    e.preventDefault();
-   console.log(selectedImage, textContent);
+   console.log({adminId:userId,image:selectedImage, text:textContent});
+   mutate({ adminId:userId, image: selectedImage, text: textContent });
  };
  const handleChange = function (event) {
    const textarea = event.target;
@@ -61,6 +88,7 @@ export default function SugCreatePost() {
    setTextContent(textarea.value);
  };
  const handleButtonClick = function () {
+  // e.preventDefault()
    if (imageRef.current) {
      imageRef.current.click();
    }
@@ -82,7 +110,7 @@ export default function SugCreatePost() {
    <div className="px-3 mt-4">
      <form className="px-4 " onSubmit={handleSubmit}>
        <div className="h-[70vh]  grid grid-rows-[auto,1fr]">
-         <div className="flex border-b-2 items-center justify-between ">
+         <div className="flex border-b-2 items-center justify-between mb-2">
            <button
              onClick={handleClick}
              className="border mb-2 bg-transparent rounded-full  border-stone-400   p-1"
@@ -90,23 +118,33 @@ export default function SugCreatePost() {
              <HiXMark />
            </button>
            <button
-             disabled={!textContent}
+             disabled={!textContent || isPending}
              className={` ${
                !textContent ? "bg-secondary400" : "bg-secondary600 "
              }
                  
  mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
            >
-             post
+             {isPending ? (
+              //  <div>
+                 <MiniLoader />
+              //  </div>
+             ) : (
+               "post"
+             )}
            </button>
          </div>
 
          <div className="overflow-y-scroll overflow-x-hidden scroll">
            <div className="flex gap-x-2 ">
              <img
-               src="\images\black-man-with-happy-expression 1.png"
+               src={
+                 uniProfilePicture
+                   ? uniProfilePicture
+                   : "/images/profile-circle.svg"
+               }
                alt="img"
-               className="rounded-full self-start"
+               className="rounded-full self-start w-16 h-16"
              />
              <textarea
                ref={inputRef}
@@ -131,10 +169,10 @@ export default function SugCreatePost() {
                      alt={`Preview ${index}`}
                      style={{
                        width: "100%",
-                       height: "auto",
+                       height: "",
                        borderRadius: "10px",
                      }}
-                     className="object-cover p-2"
+                     className="object-cover h-[10rem] p-2"
                    />
                    <button
                      onClick={() => handleRemoveImage(index)}
@@ -153,6 +191,7 @@ export default function SugCreatePost() {
        <button
          onClick={handleButtonClick}
          disabled={disable}
+         type='button'
          className="absolute right-2  bottom-2 "
        >
          <img

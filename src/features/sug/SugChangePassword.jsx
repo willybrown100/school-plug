@@ -36,7 +36,7 @@ navigate(-1)
       <article className=" min-h-screen">
         <div className="flex gap-x-2 items-center mb-5">
           <button onClick={handleClick} className="bg-transparent">
-            <img src="\src\assets\arrow-left.svg" alt="icon" />
+            <img src="\assets\arrow-left.svg" alt="icon" />
           </button>
           <h3 className="mb-0 font-semibold capitalize">change password</h3>
         </div>

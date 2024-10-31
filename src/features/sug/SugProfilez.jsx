@@ -96,7 +96,7 @@ export default function SugProfilez() {
             <p className=" inline-block border border-secondary400 rounded-full mb-0 p-1">
               {" "}
               <span className="border-2 border-green-600 w-7 h-7 rounded-full flex justify-center items-center">
-                3
+                0
               </span>
             </p>
             <p className="mb-0 capitalize text-secondary600">added</p>

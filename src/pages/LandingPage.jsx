@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Loader from '../components/Loader'
-import BlueLoader from '../components/BlueLoader'
+// import Loader from '../components/Loader'
+// import BlueLoader from '../components/BlueLoader'
+import PageLoad from '../ui/PageLoad';
 
 export default function LandingPage() {
   return (
@@ -14,7 +15,7 @@ export default function LandingPage() {
         <Link to="/sugsignup">sugsignup</Link>
         <Link to="/profilePic">userdummyImage</Link>
         <Link to="/sughome">sugdashboard</Link>
-        {/* <Loader/> */}
+        <PageLoad/>
         <Link to="/home/homePage">internal page</Link>
       </div>
     </div>

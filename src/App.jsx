@@ -103,14 +103,15 @@ export default function App() {
             gutter={12}
             containerStyle={{ margin: "8px" }}
             toastOptions={{
-              success: { duration: 3000 },
+              success: { duration: 3000, icon: null },
               error: { duration: 5000 },
               style: {
-                fontSize: "16px",
+                fontSize: "13px",
                 maxWidth: "500px",
-                padding: "12px 20px",
-                backgroundColour: "white",
-                color: "",
+                padding: "7px 15px",
+                backgroundColor: "#2161c3",
+                color: "white",
+                borderRadius:"1rem"
               },
             }}
           />

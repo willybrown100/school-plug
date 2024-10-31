@@ -92,7 +92,7 @@ export default function SugSignup() {
                 placeholder="SUG full name"
                 required
                 disabled={isPending}
-                className="border w-full border-stone-400 rounded-md p-1 placeholder:capitalize  px-2 outline-none"
+                className="border w-full border-stone-400 rounded-md p-2 placeholder:capitalize  px-2 outline-none"
                 {...register("sugFullName")}
               />
               <input
@@ -100,7 +100,7 @@ export default function SugSignup() {
                 placeholder="email"
                 required
                 disabled={isPending}
-                className="border w-full placeholder:capitalize border-stone-400 rounded-md p-1  px-2 outline-none"
+                className="border w-full placeholder:capitalize border-stone-400 rounded-md p-2  px-2 outline-none"
                 {...register("email")}
               />
               <input
@@ -108,7 +108,7 @@ export default function SugSignup() {
                 placeholder="phone number"
                 required
                 disabled={isPending}
-                className="border w-full border-stone-400 placeholder:capitalize  rounded-md p-1 px-2 outline-none"
+                className="border w-full border-stone-400 placeholder:capitalize  rounded-md p-2 px-2 outline-none"
                 {...register("phoneNumber")}
               />
               <PasswordField
@@ -133,7 +133,7 @@ export default function SugSignup() {
                 </p>
               </div>
             </div>
-            <Button disable={isPending} className="w-full text-center mt-10">
+            <Button disable={isPending} className="w-full p-3 text-center mt-10">
               {" "}
               {isPending ? (
                 <div className="flex justify-center items-center">
@@ -248,7 +248,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             value={university}
             required
             onChange={(e) => setUniversity(e.target.value)}
-            className="border border-stone-400 placeholder:text-[0.9rem]  rounded-md  p-1 w-full"
+            className="border border-stone-400 placeholder:text-[0.9rem]  rounded-md  p-2 w-full"
           />
           <input
             type="text"
@@ -256,14 +256,14 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             value={state}
             required
             onChange={(e) => setState(e.target.value)}
-            className="border border-stone-400 placeholder:text-[0.9rem]  rounded-md  p-1 w-full"
+            className="border border-stone-400 placeholder:text-[0.9rem]  rounded-md  p-2 w-full"
           />
           <textarea
             placeholder="About University"
             value={aboutUniversity}
             required
             onChange={(e) => setAboutUniversity(e.target.value)}
-            className="border border-stone-400 rounded-md h-[8rem] p-1 w-full"
+            className="border border-stone-400 rounded-md h-[8rem] p-2 w-full"
           />
 
           {imagePreview ? (
@@ -499,12 +499,12 @@ export const PasswordField = ({
         type={!open ? "password" : "text"}
         id="password"
         disabled={isPending}
-        className="w-full md:p-2 border placeholder:capitalize outline-none border-stone-400 p-1 rounded-md"
+        className="w-full md:p-2 border placeholder:capitalize outline-none border-stone-400 p-2 rounded-md"
         placeholder={placeholder}
         {...register("password")}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-3 cursor-pointer">
         {open ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
@@ -539,7 +539,7 @@ export const ConfirmPasswordField = ({
         disabled={isPending}
         type={!open2 ? "password" : "text"}
         id="confirmPassword"
-        className="w-full md:p-2 border outline-none placeholder:capitalize border-stone-400 p-1 rounded-md"
+        className="w-full md:p-2 border outline-none placeholder:capitalize border-stone-400 p-2 rounded-md"
         placeholder={placeholder}
         {...register("confirmPassword", {
           required: "Please confirm your password",
@@ -547,7 +547,7 @@ export const ConfirmPasswordField = ({
         })}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-3 cursor-pointer">
         {open2 ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
