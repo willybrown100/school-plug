@@ -28,7 +28,7 @@ console.log(item.item)
   const toggleText = () => setIsExpanded((prev) => !prev);
 
   // Time ago format
-  const timeAgo = `${formatDistanceToNowStrict(new Date(createdAt))} ago`;
+  // const timeAgo = `${formatDistanceToNowStrict(new Date(createdAt))} ago`;
 
   // Conditionally show full or partial text
   const textContent = isExpanded ? text : text.slice(0, 50);
@@ -58,6 +58,51 @@ const handleLike = function(){
   console.log({ postId: _id, userId });
 }
 
+const timeAgo = (createdAt) => {
+  const now = new Date();
+  const createdDate = new Date(createdAt);
+  const differenceInSeconds = Math.floor((now - createdDate) / 1000);
+
+  // Handling edge case for yesterday
+  const isYesterday =
+    differenceInSeconds >= 86400 && differenceInSeconds < 172800;
+  if (isYesterday) {
+    return "Yesterday";
+  }
+
+  // Granular time display
+  if (differenceInSeconds < 60) {
+    return `${differenceInSeconds} second${
+      differenceInSeconds !== 1 ? "s" : ""
+    } ago`;
+  } else if (differenceInSeconds < 3600) {
+    const minutes = Math.floor(differenceInSeconds / 60);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  } else if (differenceInSeconds < 86400) {
+    const hours = Math.floor(differenceInSeconds / 3600);
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  } else if (differenceInSeconds < 604800) {
+    // less than a week
+    const days = Math.floor(differenceInSeconds / 86400);
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
+  } else if (differenceInSeconds < 2419200) {
+    // less than a month
+    const weeks = Math.floor(differenceInSeconds / 604800);
+    return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
+  } else if (differenceInSeconds < 29030400) {
+    // less than a year
+    const months = Math.floor(differenceInSeconds / 2419200);
+    return `${months} month${months !== 1 ? "s" : ""} ago`;
+  } else {
+    const years = Math.floor(differenceInSeconds / 29030400);
+    return `${years} year${years !== 1 ? "s" : ""} ago`;
+  }
+};
+
+// Usage
+const timeAgoString = timeAgo(createdAt);
+
+
   return (
     <li className="bg-white w-full p-3">
       <div className="flex justify-between">
@@ -67,7 +112,7 @@ const handleLike = function(){
             <h5 className="mb-0 capitalize font-semibold">admin</h5>
             <h5 className="mb-0 capitalize font-semibold">{uni}</h5>
             <h5 className="mb-0 text-sm font-light flex gap-x-2">
-              {timeAgo} <img src="/assets/clock.svg" alt="Time" />
+              {timeAgo(createdAt)} <img src="/assets/clock.svg" alt="Time" />
             </h5>
           </div>
         </div>

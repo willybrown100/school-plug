@@ -322,52 +322,7 @@ export const handleUpload2 = async ({ profilePhoto, token, userId }) => {
 
 };
 
-export const schoolInfo1 = async ({
-  userId,
-  university,
-  state,
-  aboutUniversity,
-  uniProfilePicture,
-}) => {
-  try {
-  console.log({userId, university, state, aboutUniversity, uniProfilePicture});
- 
 
-  const formData = new FormData();
-  console.log(formData);
-  formData.append("uniProfilePicture", uniProfilePicture);
-  
-  formData.append("university", university);
-  formData.append("aboutUniversity", aboutUniversity);
-  formData.append("state", state);
-  formData.append("userId", userId);
-  for (let [key, value] of formData.entries()) {
-    console.log(`${key}:, ${value}`);
-  }
-    const response = await fetch(
-      "https://student-plug.onrender.com/api/school/schoolInfo",
-      {
-        method: "POST",
-        
-        body: formData,
-      }
-    );
-    
-  
-    if (!response.ok) {
-      throw new Error("Failed to upload image");
-    }
-
-    const data = await response.json();
-     if (data) {
-       localStorage.setItem("schoolInfoData", JSON.stringify(data));
-     }
-    console.log("Upload successful:", data);
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    throw error;
-  }
-};
 
 export const schoolInfo = async ({ 
   userId, 
@@ -419,6 +374,7 @@ export const schoolInfo = async ({
     throw error;
   }
 };
+
 // signup=====
 export const signInWithGoogle = async () => {
    provider.setCustomParameters({
