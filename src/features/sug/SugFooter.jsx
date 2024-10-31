@@ -255,13 +255,13 @@ export default function SugFooter() {
     <div className=" ">
       {/* Bottom navigation */}
       <div
-        className={` p-2 fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
+        className={` p-2 shadow-xl fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "translate-y-full"
         } bg-white shadow-md md:hidden `}
       >
         <ul className="flex justify-between items-center gap-x-2">
           {links.map((item) => (
-            <SugNavlinks item={item} key={item.name} />
+            <SugNavlinks item={item} key={item.path} />
           ))}
         </ul>
 

@@ -151,11 +151,56 @@ export async function sugNewPassword(data) {
   }
 }
 
+export async function sugLikPost({postId,userId}) {
+  console.log({ postId, userId });
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/sugPost/${postId}/like`,
+      {
+      method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({userId}),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function getAuthSug(userId) {
-  console.log(userId);
+ 
   try {
     const response = await fetch(
       `https://student-plug.onrender.com/api/school/getSug/${userId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getSugPosts(adminId) {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/sugPost/posts/${adminId}`
     );
 
     const result = await response.json();
@@ -251,3 +296,48 @@ export async function getFaculties() {
     throw error;
   }
 }
+
+
+
+
+
+export const createSugPost = async ({ image, adminId, text }) => {
+  console.log({ image, adminId });
+  if (!image || !adminId) return; // Ensure both image and userId are present
+
+  const formData = new FormData();
+
+  if (Array.isArray(image)) {
+    image.forEach((img) => {
+      formData.append("image", img);
+    });
+  } else {
+    formData.append("image", image);
+  }
+  // Append the image file
+
+  formData.append("adminId", adminId);
+  formData.append("text", text);
+
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:${value} `);
+  }
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/sugPost/create",
+      {
+        method: "POST",
+        body: formData, // Send FormData
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+    const data = await response.json();
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};

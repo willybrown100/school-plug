@@ -15,7 +15,7 @@ export default function SugProfileSetting() {
     <article className="border border-stone-400 p-3  rounded-md">
       <div className="flex justify-between items-center">
         <div className="flex gap-x-3 items-center my-2">
-          <img src={sugImg} alt={fullName} className="rounded-full w-14 h-14" />
+          <img src={sugImg?sugImg:"/images/profile-circle.svg"} alt={fullName} className="rounded-full w-14 h-14" />
           <div className="flex flex-col ">
             <h3 className="mb-0">{uni}</h3>
             <p className="mb-0 capitalize">{state} state</p>

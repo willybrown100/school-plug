@@ -8,7 +8,7 @@ export default function SugNavbar() {
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
   const {fullName} = data?.data?.user || {};
-  console.log(data, sugImg, uni);
+
 
   const {pathname}=useLocation()
   const pathn = pathname.split("/").at(2)
@@ -20,7 +20,11 @@ export default function SugNavbar() {
           <div className="flex items-center justify-between gap-x-2">
             <div className="flex gap-x-4 items-center">
               <img
-                src={sugImg}
+                src={
+                  sugImg
+                    ? sugImg
+                    : "/images/profile-circle.svg"
+                }
                 alt={fullName}
                 className="rounded-full w-14 h-14"
               />
