@@ -6,7 +6,7 @@ export default function Bills() {
   const [selectedOption, setSelectedOption] = useState("");
   const [disable, setDisable] = useState(true);
   const [active, setActive] = useState(null);
-console.log(active)
+
 
   const handleChange = function (e) {
     setSelectedOption(e.target.value);

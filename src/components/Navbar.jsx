@@ -2,14 +2,13 @@ import React from "react";
 import {  HiMagnifyingGlass } from "react-icons/hi2";
 import { Link,  useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
-// import { useEffect, useState } from "react";
+
 import ProfileMobileView from "./ProfileMobileView";
 
 export default function Navbar() {
   const { pathname } = useLocation();
 
-  // const pathn = pathname.split("/").at(2);
-  // const pathna = pathname.split("/").at(3);
+
 
   const links = [
     {
@@ -311,35 +310,8 @@ export default function Navbar() {
   ];
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
 
- 
 
-
-  // const [isVisible, setIsVisible] = useState(true);
-  // const [lastScrollY, setLastScrollY] = useState(0);
-
-  // const handleScroll = () => {
-  //   if (typeof window !== "undefined") {
-  //     const currentScrollY = window.scrollY;
-
-  //     // Show navbar if scrolling up and hide it if scrolling down
-  //     if (currentScrollY < lastScrollY) {
-  //       setIsVisible(true); // Scrolling up
-  //     } else {
-  //       setIsVisible(false); // Scrolling down
-  //     }
-
-  //     // Update the last scroll position
-  //     setLastScrollY(currentScrollY);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [lastScrollY]);
+  
 
   return (
     <nav
@@ -385,8 +357,8 @@ export default function Navbar() {
         </div>
 
         <ul className="hidden md:flex items-center lg:hidden justify-between">
-          {links.map((item) => (
-            <NavLinks item={item} key={item.name} />
+          {links.map((item,i) => (
+            <NavLinks item={item} key={i} />
           ))}
         </ul>
 
