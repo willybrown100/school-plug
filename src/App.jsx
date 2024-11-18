@@ -12,7 +12,7 @@ import Loader from "./components/Loader";
 import UserProfile from "./auth/UserProfile";
 import AppLayout from "./components/AppLayout";
 import HomePage from "./features/HomePage";
-import { DateProvider } from "./DateContext";
+import {  DateProvider } from "./DateContext";
 import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
@@ -42,7 +42,9 @@ import SugCreatePost from "./features/SugCreatePost";
 import SugPaybills from "./features/SugPaybills";
 import SugPendingPost from "./features/SugPendingPost";
 import SugNotification from "./features/sug/SugNotification"
-// import { io } from "socket.io-client";
+import { WebSocketProvider } from "./WebSocketProvider";
+
+
 
 //once the component mount we connect to the servr immediately just once
 const queryClient = new QueryClient({
@@ -53,83 +55,84 @@ const queryClient = new QueryClient({
   },
 });
 export default function App() {
-  // useEffect(()=>{
-  // const socket = io("https://localhost:3000");
-  // console.log(socket.on("test",(msg)=>{
-  //   console.log(msg)
-  // }))
-  // },[])
-  return (
-    <DateProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="sugsignup" element={<SugSignup />} />
-            <Route path="sugforgotpassword" element={<SugForgotPassword />} />
-            <Route path="sugsignin" element={<SugSignin />} />
-            <Route path="post" element={<CreatePost />} />
-            <Route path="sugpost" element={<SugCreatePost />} />
-            <Route path="loader" element={<Loader />} />
-            <Route path="forgotPassword" element={<ForgotPassword />} />
-            <Route path="profilepic" element={<UserProfile />} />
-            <Route path="sughome" element={<SugAppLayout />}>
-              <Route index element={<Navigate to="sugfeed" />} />
-              <Route path="sugfeed" index element={<SugFeed />} />
-              <Route path="sugpaybills" element={<SugPaybills />} />
-              <Route path="sugnotification" element={<SugNotification />} />
-              <Route path="pendingpost" element={<SugPendingPost />} />
-              <Route path="sugprofile" element={<SugProfile />}>
-                <Route index element={<Navigate to="sugprofilez" />} />
-                <Route path="sugprofilez" index element={<SugProfilez />} />
-                <Route path="sugeditprofile" element={<EditSugProfile />} />
-                <Route path="adminassist" element={<AdminAssist />} />
-                <Route path="acctsetting" element={<SugAccountSetting />} />
-                <Route path="sugfaculties" element={<SugSchoolFaculties />} />
-                <Route
-                  path="sugchangepassword"
-                  element={<SugChangePassword />}
-                />
-                <Route path="importedregnum" element={<SugImportedRegNums />} />
-              </Route>
-            </Route>
 
-            <Route path="home" element={<AppLayout />}>
-              <Route element={<Navigate to="home/homePage" />} />
-              <Route path="homePage" element={<HomePage />}>
-                <Route index element={<Navigate to="feed" />} />
-                <Route path="feed" element={<UsersFeed />} />
-                <Route path="billz" element={<BillInformation />} />
+
+  return (
+    <WebSocketProvider >
+      <DateProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="signin" element={<SignIn />} />
+              <Route path="signup" element={<SignUp />} />
+              <Route path="sugsignup" element={<SugSignup />} />
+              <Route path="sugforgotpassword" element={<SugForgotPassword />} />
+              <Route path="sugsignin" element={<SugSignin />} />
+              <Route path="post" element={<CreatePost />} />
+              <Route path="sugpost" element={<SugCreatePost />} />
+              <Route path="loader" element={<Loader />} />
+              <Route path="forgotPassword" element={<ForgotPassword />} />
+              <Route path="profilepic" element={<UserProfile />} />
+              <Route path="sughome" element={<SugAppLayout />}>
+                <Route index element={<Navigate to="sugfeed" />} />
+                <Route path="sugfeed" index element={<SugFeed />} />
+                <Route path="sugpaybills" element={<SugPaybills />} />
+                <Route path="sugnotification" element={<SugNotification />} />
+                <Route path="pendingpost" element={<SugPendingPost />} />
+                <Route path="sugprofile" element={<SugProfile />}>
+                  <Route index element={<Navigate to="sugprofilez" />} />
+                  <Route path="sugprofilez" index element={<SugProfilez />} />
+                  <Route path="sugeditprofile" element={<EditSugProfile />} />
+                  <Route path="adminassist" element={<AdminAssist />} />
+                  <Route path="acctsetting" element={<SugAccountSetting />} />
+                  <Route path="sugfaculties" element={<SugSchoolFaculties />} />
+                  <Route
+                    path="sugchangepassword"
+                    element={<SugChangePassword />}
+                  />
+                  <Route
+                    path="importedregnum"
+                    element={<SugImportedRegNums />}
+                  />
+                </Route>
               </Route>
-              <Route path="events" element={<Events />} />
-              <Route path="material" element={<Materials />} />
-              <Route path="trends" element={<Trends />} />
-              <Route path="bills" element={<PayBills />} />
-              <Route path="payment-form" element={<PaymentForm />} />
-              <Route path="card-form" element={<CardForm />} />
-            </Route>
-          </Routes>
-          <Toaster
-            position="top-center"
-            gutter={12}
-            containerStyle={{ margin: "8px" }}
-            toastOptions={{
-              success: { duration: 3000, icon: null },
-              error: { duration: 5000 },
-              style: {
-                fontSize: "13px",
-                maxWidth: "500px",
-                padding: "7px 15px",
-                backgroundColor: "#2161c3",
-                color: "white",
-                borderRadius: "1rem",
-              },
-            }}
-          />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </DateProvider>
+
+              <Route path="home" element={<AppLayout />}>
+                <Route element={<Navigate to="home/homePage" />} />
+                <Route path="homePage" element={<HomePage />}>
+                  <Route index element={<Navigate to="feed" />} />
+                  <Route path="feed" element={<UsersFeed />} />
+                  <Route path="billz" element={<BillInformation />} />
+                </Route>
+                <Route path="events" element={<Events />} />
+                <Route path="material" element={<Materials />} />
+                <Route path="trends" element={<Trends />} />
+                <Route path="bills" element={<PayBills />} />
+                <Route path="payment-form" element={<PaymentForm />} />
+                <Route path="card-form" element={<CardForm />} />
+              </Route>
+            </Routes>
+            <Toaster
+              position="top-center"
+              gutter={12}
+              containerStyle={{ margin: "8px" }}
+              toastOptions={{
+                success: { duration: 3000, icon: null },
+                error: { duration: 5000 },
+                style: {
+                  fontSize: "13px",
+                  maxWidth: "500px",
+                  padding: "7px 15px",
+                  backgroundColor: "#2161c3",
+                  color: "white",
+                  borderRadius: "1rem",
+                },
+              }}
+            />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </DateProvider>
+    </WebSocketProvider>
   );
 }
