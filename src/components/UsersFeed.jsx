@@ -6,8 +6,7 @@ import UserDetails from './UserDetails';
 
 import {  useQuery } from '@tanstack/react-query';
 import { getParticularSchData } from '../services/contactApi';
-
-import { getRegisteredSchools } from '../services/sugApis';
+import useGetRegSchools from "../hooks/useGetRegSchools"
 import StudentPerPost from './StudentPerPost';
 
 import PageLoader from './PageLoader';
@@ -20,10 +19,7 @@ const { data:authStudent } = useGetUser()
 const { studentInfo } = authStudent;
 const uni = studentInfo?.university;
 console.log(uni)
-  const { data: school=[] } = useQuery({
-    queryFn: getRegisteredSchools,
-    queryKey: ["regSchools"],
-  }); 
+const {school} = useGetRegSchools()
  
   const schools = school?.schools
   const sch = schools?.filter((item)=>item.university === uni) 
