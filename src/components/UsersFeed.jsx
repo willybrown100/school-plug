@@ -6,17 +6,20 @@ import UserDetails from './UserDetails';
 
 import {  useQuery } from '@tanstack/react-query';
 import { getParticularSchData } from '../services/contactApi';
-import useStudentInfo from '../hooks/useStudentInfo';
+
 import { getRegisteredSchools } from '../services/sugApis';
 import StudentPerPost from './StudentPerPost';
 
 import PageLoader from './PageLoader';
+import useGetUser from '../hooks/useGetUser';
 
 export default function UsersFeed() {
 const [open, setOpen] = useState(null);
-  const {uni}=useStudentInfo()
-  console.log(uni)
 
+const { data:authStudent } = useGetUser()
+const { studentInfo } = authStudent;
+const uni = studentInfo?.university;
+console.log(uni)
   const { data: school=[] } = useQuery({
     queryFn: getRegisteredSchools,
     queryKey: ["regSchools"],

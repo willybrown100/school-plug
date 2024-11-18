@@ -5,6 +5,7 @@ export default function useSchool() {
 
  const schoolDatas = JSON.parse(userInfo);
 const id = schoolDatas?.schoolData?._id;
- //  console.log(authUserData?.token);
- return { schoolDatas, id };
+  const uni = schoolDatas?.schoolData?.university;
+ 
+ return { schoolDatas, id, uni };
 }

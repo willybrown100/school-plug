@@ -42,8 +42,9 @@ import SugCreatePost from "./features/SugCreatePost";
 import SugPaybills from "./features/SugPaybills";
 import SugPendingPost from "./features/SugPendingPost";
 import SugNotification from "./features/sug/SugNotification"
+// import { io } from "socket.io-client";
 
-// import { DateProvider } from "./DateContext";
+//once the component mount we connect to the servr immediately just once
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -52,6 +53,12 @@ const queryClient = new QueryClient({
   },
 });
 export default function App() {
+  // useEffect(()=>{
+  // const socket = io("https://localhost:3000");
+  // console.log(socket.on("test",(msg)=>{
+  //   console.log(msg)
+  // }))
+  // },[])
   return (
     <DateProvider>
       <QueryClientProvider client={queryClient}>

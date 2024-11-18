@@ -195,6 +195,8 @@ export async function getParticularSchData(schoolInfoId) {
   }
 }
 
+
+
 export async function EducationalSignUp(data) {
   console.log(data);
   try {
