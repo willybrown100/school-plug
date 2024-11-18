@@ -7,7 +7,7 @@ import {   studentComment, studentLikePost } from "../services/contactApi";
 import useUser from "../hooks/useUser";
 import toast from "react-hot-toast";
 import useGetUser from "../hooks/useGetUser";
-// import { getStudentComments } from "../services/sugApis";
+
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeStampAgo } from "../utils/timeStampAgo";
 
