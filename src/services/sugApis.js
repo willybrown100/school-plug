@@ -255,7 +255,6 @@ export async function getSugPosts(schoolInfoId) {
   console.log(schoolInfoId);
   try {
     const response = await fetch(
-      // `https://student-plug.onrender.com/api/sugPost/posts/${adminId}`
       `https://student-plug.onrender.com/api/school/${schoolInfoId}`
     );
 

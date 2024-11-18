@@ -8,7 +8,8 @@ import useSchool from '../../hooks/useSchool';
 import PageLoader from '../../components/PageLoader';
 
 export default function SugFeed() {
-const {id}=useSchool()
+const {id,uni}=useSchool()
+console.log(uni)
 
 const [open, setOpen] = useState(null);
  
