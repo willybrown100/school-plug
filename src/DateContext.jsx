@@ -7,6 +7,7 @@ function DateProvider({ children }) {
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [facultyFiles, setFacultyFiles] = useState({});
+    const [socket, setSocket] = useState(null);
   const [fileName, setFileName] = useState("");
   return (
     <DateContext.Provider
@@ -21,6 +22,8 @@ function DateProvider({ children }) {
         setFileName,
         facultyFiles,
         setFacultyFiles,
+        socket,
+        setSocket,
       }}
     >
       {children}

@@ -48,10 +48,12 @@ export default function SignIn() {
       toast.error(error.message);
     },
   });
-  const onSubmit = function (data) {
+  const onSubmit = function (data,e) {
+    e.preventDefault()
     mutate(data);
     console.log(data);
   };
+  // const handleGoogle = function()
   return (
     <main className="signBg min-h-[100vh] grid place-items-center ">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-6 rounded-[1.2rem] flex flex-col gap-y-6">
@@ -88,6 +90,7 @@ export default function SignIn() {
           </Link>
           <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
             <button
+            type="button"
               onClick={goodleSignin}
               disabled={googleLoading}
               className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 p-1 capitalize bg-transparent"

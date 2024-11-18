@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import {   studentComment, studentLikePost } from "../services/contactApi";
 import useUser from "../hooks/useUser";
 import toast from "react-hot-toast";
 import useGetUser from "../hooks/useGetUser";
-
+import {WebSocketContext} from "../WebSocketProvider"
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeStampAgo } from "../utils/timeStampAgo";
 
@@ -40,10 +40,10 @@ const postId =_id
    const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-console.log(activeTab)
+  const { socket, notifications } = useContext(WebSocketContext);
+console.log(socket, notifications);
   const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
-
 
 
  async function getStudentComments() {
@@ -136,11 +136,24 @@ const handleLike = () => {
     userId: studentId,
   });
 
-console.log({
-  postId: _id,
-  ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
-  userId: studentId,
-});
+
+    if (socket && socket.readyState === WebSocket.OPEN) {
+    
+         const message = {
+           event: "likePost", // Event type expected by the server
+           payload: {
+             postId: postId, 
+             userId: userId, 
+             adminId: null, 
+           },
+         };
+
+      socket.send(JSON.stringify(message));
+      console.log("Like event sent to the server");
+    } else {
+      console.error("WebSocket connection is not open");
+    }
+
 
 
 };
