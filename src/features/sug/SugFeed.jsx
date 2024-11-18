@@ -3,19 +3,26 @@ import React, { useState } from 'react'
 import { getSugPosts } from '../../services/sugApis';
 
 import PerPost from '../../components/PerPost';
-
-import useSchool from '../../hooks/useSchool';
 import PageLoader from '../../components/PageLoader';
+import useGetRegSchools from '../../hooks/useGetRegSchools';
+import useGetSugUser from '../../hooks/useGetSugUser';
 
 export default function SugFeed() {
-const {id,uni}=useSchool()
-console.log(uni)
-
 const [open, setOpen] = useState(null);
+const { data:sugData } = useGetSugUser();
+const uni = sugData?.data?.university
+const { school } = useGetRegSchools();
+ const schools = school?.schools;
+ console.log(schools, uni);
+ const sch = schools?.filter((item) => item.university === uni);
+ const schObj = sch?.at(0);
  
-  const {data=[],isLoading} = useQuery({
-    queryFn: ()=>getSugPosts(id),
-    queryKey:["sugposts"]
+ const schoolInfoId = schObj?._id;
+ console.log(schoolInfoId);
+  const { data = [], isLoading } = useQuery({
+    queryFn: () => getSugPosts(schoolInfoId),
+    queryKey: ["sugposts"],
+    enabled: !!schoolInfoId,
   });
 console.log(data.posts);
 if(isLoading)return <PageLoader/>
