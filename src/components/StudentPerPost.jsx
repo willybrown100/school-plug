@@ -1,66 +1,74 @@
 /* eslint-disable react/prop-types */
-import React from "react";
-import useGetSugUser from "../hooks/useGetSugUser";
-
-import { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { sugCommentPost, sugLikPost } from "../services/sugApis";
-import toast from "react-hot-toast";
-import useSug from "../hooks/useSug";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { sugDeletePost } from "../services/contactApi";
-import {timeStampAgo} from "../utils/timeStampAgo"
+import {   studentComment, studentLikePost } from "../services/contactApi";
+import useUser from "../hooks/useUser";
+import toast from "react-hot-toast";
+import useGetUser from "../hooks/useGetUser";
+// import { getStudentComments } from "../services/sugApis";
 import BlueMiniLoader from "../ui/BlueMiniLoader";
+import { timeStampAgo } from "../utils/timeStampAgo";
 
-export default function PerPost({ item, onClick, open }) {
-  const queryClient = useQueryClient();
-  const { data } = useGetSugUser();
-  const { userId: sugId, token } = useSug();
-  const sugImg = data?.data?.uniProfilePicture;
-  const uni = data?.data?.university;
+
+export default function StudentPerPost({ item }) {
   const {
     text,
     images,
     createdAt,
-    _id,
-    likes,
-    user,
-    userId,
     faculty,
     department,
+    _id,
+    user,
+    likes,
+    userId,
     postType,
+    university,
   } = item;
-  const { register, handleSubmit, reset } = useForm();
+
+  const queryClient = useQueryClient();
+  const { data } = useGetUser();
+  
+  const { userId: studentId } = useUser();
+const postId =_id
+
+  const { register, handleSubmit,reset } = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [commentContents, setCommentContent] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [datas,setDatas]=useState([])
+  const [loading,   setLoading]=useState()
+   const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  const postId = _id;
-
+console.log(activeTab)
   const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
 
-  async function getAllComments() {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `https://student-plug.onrender.com/api/add/posts/${postId}`
-      );
 
-      const result = await response.json();
-      setCommentContent(result.comments);
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+
+ async function getStudentComments() {
+  setLoading(true)
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/add/posts/${postId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    setDatas(result.comments);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  } finally {
+    setLoading(false); 
   }
+}
 
+
+
+console.log(datas)
   const closeImageModal = () => setSelectedImageIndex(null);
 
   const showNextImage = () =>
@@ -109,62 +117,70 @@ export default function PerPost({ item, onClick, open }) {
     }
   };
   const { mutate, isLoading: isLiking } = useMutation({
-    mutationFn: sugLikPost,
+    mutationFn: studentLikePost,
     onSuccess: () => {
-      queryClient.invalidateQueries("sugposts");
-      toast.success("like successful");
+      queryClient.invalidateQueries("schoolpost");
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const { mutate: isDelete, isLoading: isDeleting } = useMutation({
-    mutationFn: sugDeletePost,
-    onSuccess: () => {
-      queryClient.invalidateQueries("sugposts");
-      toast.success("delete successful");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
+
+
+
+const handleLike = () => {
+  mutate({
+    postId: _id,
+    ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
+    userId: studentId,
   });
 
-  const { mutate: isComment, isLoading: isCommenting } = useMutation({
-    mutationFn: sugCommentPost,
-    onSuccess: () => {
-      getAllComments();
-      toast.success("comment successful");
-      reset();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+console.log({
+  postId: _id,
+  ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
+  userId: studentId,
+});
 
-  const handleLike = () => {
-    mutate({ postId: _id, userId: sugId });
-    console.log({ postId: _id, userId: sugId });
+
+};
+
+
+
+  const handleOpenCommentModal = function(index) { 
+    getStudentComments()
+    setCommentModalVisible(true) 
+ setActiveTab(index);
+
+  };
+  const handleCloseCommentModal = () => setCommentModalVisible(false);
+
+   const { mutate: comment, isLoading: isCommenting } = useMutation({
+     mutationFn: studentComment,
+     onSuccess: () => {
+   
+      getStudentComments()
+      toast.success("succesfull")
+      reset()
+     },
+     onError:(error)=>{
+      toast.error(error.message)
+     }
+   });
+
+  const onSubmit = function ({text}) {
+    comment({ text, isAdmin:false, userId: studentId, postId: _id });
+    console.log({ text, isAdmin: false, userId: studentId, postId: _id });
+  };
+  const onSubmitLargeScreen = function ({comments}) {
+    comment({
+      text: comments,
+      isAdmin: false,
+      userId: studentId,
+      postId: _id,
+    });
   };
 
-  const handleDelete = function () {
-    console.log({ postId: _id, token });
-    isDelete({ postId: _id, token });
-  };
-
-  const handleOpenCommentModal = function () {
-    getAllComments();
-    setCommentModalVisible(true);
-  };
-
-  const handleCloseCommentModal = function () {
-    setCommentModalVisible(false);
-  };
-
-  const onSubmit = function ({ text }) {
-    console.log({ isAdmin: true, userId: sugId, text, postId: _id });
-    isComment({ isAdmin: true, userId: sugId, text, postId: _id });
-  };
   return (
     <li className="bg-white w-full p-3">
       {/* Post Content */}
@@ -180,59 +196,29 @@ export default function PerPost({ item, onClick, open }) {
             className="w-14 h-14 rounded-full"
           />
           <div className="flex flex-col">
-            {postType === "admin" && (
-              <h5 className="mb-0 capitalize font-semibold">admin</h5>
-            )}
+            <h5 className="capitalize">{postType === "admin" && "admin"}</h5>
+            <h5 className="mb-0 capitalize font-semibold">{university}</h5>
             {postType === "student" && (
               <h4 className="mb-0 capitalize font-semibold">
                 {user?.fullName}
               </h4>
             )}
-            {postType === "admin" && (
-              <h5 className="mb-0 capitalize font-semibold">{uni}</h5>
-            )}
             {postType === "student" && (
-              <h5 className="capitalize text-stone-800">
-                faculty of {faculty},{department} departrment.
+              <h5 className="capitalize tracking-wide text-stone-800">
+                faculty of {faculty}, {department} department.
               </h5>
             )}
-            <h5 className="mb-0 text-stone-700 text-sm font-light flex gap-x-2">
+            <h5 className="mb-0 text-sm  text-stone-700 font-light flex gap-x-2">
               {timeAgo(createdAt)} <img src="/assets/clock.svg" alt="Time" />
             </h5>
           </div>
         </div>
-        <button onClick={onClick} className="bg-transparent">
-          <img
-            src="/assets/more.svg"
-            alt="More options"
-            className="self-start cursor-pointer"
-          />
-        </button>
-        {open && (
-          <div className="p-2 absolute pr-6 shadow-md bg-white rounded-md bottom-[-2.5rem] right-2">
-            {" "}
-            <div className="bg-stone-100 flex gap-x-3 pr-8 rounded-md items-center p-1">
-              <img
-                src="\assets\trash.svg"
-                alt="trash"
-                className="border border-[#f5c662] p-2 w-[2.2rem] h-[2.2rem] rounded-full"
-              />
-              <button
-                disabled={isDeleting}
-                onClick={handleDelete}
-                className="capitalize"
-              >
-                delete post
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Text Content */}
       <p className="text-stone-700 mt-4 break-words max-full">
         {isExpanded ? text : text.slice(0, 50)}
-        {text.length > 50 && (
+        {text?.length > 50 && (
           <span
             onClick={toggleText}
             className="text-stone-600 cursor-pointer ml-1"
@@ -244,9 +230,9 @@ export default function PerPost({ item, onClick, open }) {
 
       <div
         className={`grid gap-x-2 mt-2 ${
-          images.length === 2
+          images?.length === 2
             ? "grid-cols-2"
-            : images.length === 1
+            : images?.length === 1
             ? "grid-cols-1"
             : "grid-cols-3"
         }`}
@@ -277,7 +263,7 @@ export default function PerPost({ item, onClick, open }) {
             <span>Like</span>
           </button>
           <button
-            onClick={handleOpenCommentModal}
+            onClick={() => handleOpenCommentModal(postId)}
             className="flex bg-transparent items-center gap-x-1"
           >
             <img
@@ -305,7 +291,10 @@ export default function PerPost({ item, onClick, open }) {
       {/* Comment Modal */}
       {commentModalVisible && (
         // <div className=" ">
-        <div className="fixed rounded-tl-[1rem] rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="fixed rounded-tl-[1rem] md:hidden rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp"
+        >
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold">Comments</h2>
             <button
@@ -322,13 +311,13 @@ export default function PerPost({ item, onClick, open }) {
                 <BlueMiniLoader />
               </div>
             )}
-            {!commentContents?.length ? (
+            {!datas?.length ? (
               <div className="flex justify-center">
                 <p className="capitalize text-stone-700">no comment yet</p>
               </div>
             ) : (
-              commentContents?.map((item) => (
-                <li key={item?._id} className="mb-3">
+              datas?.map((item) => (
+                <li key={item?._id} className="mb-4">
                   <div className="flex items-center gap-x-3">
                     <img
                       src={
@@ -340,6 +329,7 @@ export default function PerPost({ item, onClick, open }) {
                       className="h-[3rem] w-[3rem] rounded-full"
                     />
                     <div>
+              
                       <p className="mb-0  flex gap-x-1 items-center">
                         <span className="font-semibold">
                           {" "}
@@ -358,14 +348,14 @@ export default function PerPost({ item, onClick, open }) {
               ))
             )}
           </ul>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex items-center gap-x-2 mt-2"
-          >
-            <img src={sugImg} alt="aadmin" className="w-10 h-10 rounded-full" />
+          <div className="flex items-center gap-x-2 mt-2">
+            <img
+              src={data?.user?.profilePhoto}
+              alt="aadmin"
+              className="w-8 h-8 rounded-full"
+            />
             <input
               type="text"
-              // onChange={(e) => setTextContent(e.target.value)}
               {...register("text")}
               placeholder="Add Your Comment Here"
               className="w-full  bg-stone-100 outline-none placeholder:text-sm rounded-md"
@@ -376,8 +366,8 @@ export default function PerPost({ item, onClick, open }) {
             >
               &uarr;
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
         //  </div>
       )}
 
@@ -397,7 +387,7 @@ export default function PerPost({ item, onClick, open }) {
               alt="Expanded view"
               className="w-full h-auto object-contain"
             />
-            {images.length > 1 && (
+            {images?.length > 1 && (
               <button
                 className="absolute top-1/2 h-8 w-8 grid place-items-center right-4 transform -translate-y-1/2 bg-black text-white rounded-full hover:bg-gray-700"
                 onClick={showNextImage}
@@ -414,6 +404,70 @@ export default function PerPost({ item, onClick, open }) {
           </div>
         </div>
       )}
+
+      {activeTab === postId && (
+        <div className="mt-3 hidden md:block overflow-y-auto">
+          <ul className="mt-4 overflow-y-auto">
+            {loading && (
+              <div className="flex justify-center">
+                <BlueMiniLoader />
+              </div>
+            )}
+            {!datas?.length ? (
+              <div className="flex justify-center">
+                <p className="capitalize text-stone-700">no comment yet</p>
+              </div>
+            ) : (
+              datas?.map((item) => (
+                <li key={item?._id} className="mb-4">
+                  <div className="flex items-center gap-x-3">
+                    <img
+                      src={
+                        item.user?.profilePhoto
+                          ? item.user.profilePhoto
+                          : "/images/profile-circle.svg"
+                      }
+                      alt="img"
+                      className="h-[3rem] w-[3rem] rounded-full"
+                    />
+                    <div>
+                      <p className="mb-0 font-semibold">
+                        {item?.user?.fullName}
+                      </p>
+                      <p className="mb-0 font-medium capitalize text-stone-900">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
+          <form
+            className="flex items-center gap-x-3"
+            onSubmit={handleSubmit(onSubmitLargeScreen)}
+          >
+            <img
+              src={data?.user?.profilePhoto}
+              alt="img"
+              className="w-8 h-8 rounded-full"
+            />
+            <input
+              type="text"
+              {...register("comments")}
+              placeholder="Add Your Comment Here"
+              className="border w-full border-stone-600 p-1 placeholder:text-stone-600 placeholder:text-sm pl-2  rounded-2xl"
+            />
+            <button
+              disabled={isCommenting}
+              className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
+            >
+              &uarr;
+            </button>
+          </form>
+        </div>
+      )}
     </li>
   );
 }
+

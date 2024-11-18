@@ -1,6 +1,11 @@
 import React, { useContext, useRef, useState } from 'react'
 import useGetUser from '../hooks/useGetUser';
 import { ModalContext } from './Modals';
+import { studentCreatePost } from '../services/contactApi';
+import useUser from '../hooks/useUser';
+import MiniLoader from "../ui/MiniLoader"
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 export default function PostModal() {
   const { close } = useContext(ModalContext)
@@ -9,17 +14,32 @@ export default function PostModal() {
   const [selectedImage, setselectedImage] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const { data } = useGetUser();
+  const { userId } = useUser();
   const { user, studentInfo } = data
   const img = data?.user?.profilePhoto;
-  console.log(imagePreview, selectedImage);
+  const queryClient =useQueryClient()
+  console.log( selectedImage);
   const disable =
     imagePreview.length === 3 || selectedImage.length === 3;
-  const handleClick = function (e) {
+  const handleClick = function () {
 
     if (imageRef.current) {
       imageRef.current.click();
     }
   }
+
+    const { mutate, isLoading } = useMutation({
+      mutationFn: studentCreatePost,
+      onSuccess: () => {
+        queryClient.invalidateQueries("schoolpost");
+   
+        toast.success("post successful,view");
+        close()
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
 
   const handleImageChange = (event) => {
     const file = Array.from(event.target.files);
@@ -39,6 +59,8 @@ export default function PostModal() {
 
   const handleSubmit = function (e) {
     e.preventDefault();
+    console.log({image:selectedImage,text:textContent,userId})
+    mutate({ image: selectedImage, text: textContent, userId });
   };
   const handleRemoveImage = function (index) {
     setImagePreview((prevImages) => prevImages.filter((curEl, i) => i !== index));
@@ -64,12 +86,15 @@ export default function PostModal() {
               <div className="flex flex-col">
                 <h4 className="mb-0 font-semibold capitalize">{user?.name}</h4>
                 <h4 className="mb-0">
-                  faculty of arts,
+                  faculty of {studentInfo?.faculty},
                   <span>{studentInfo?.department} department</span>
                 </h4>
               </div>
             </div>
-            <button onClick={() => close()} className="h-8 w-8 border border-stone-500 rounded-full p-[0.6rem]  bg-transparent">
+            <button
+              onClick={() => close()}
+              className="h-8 w-8 border border-stone-500 rounded-full p-[0.6rem]  bg-transparent"
+            >
               <img src="\images\close-circle.svg" />
             </button>
           </div>
@@ -84,7 +109,7 @@ export default function PostModal() {
               {imagePreview && (
                 <div className="flex my-3 items-center gap-x-4">
                   {imagePreview?.map((image, i) => (
-                    <div className="relative">
+                    <div className="relative" key={i}>
                       <img
                         src={image}
                         alt={`Selected ${i}`}
@@ -119,10 +144,11 @@ export default function PostModal() {
                 onChange={handleImageChange}
               />
               <button
-                className={` py-2 px-8 rounded-[1.3rem] text-white ${textContent ? "bg-secondary600" : "bg-secondary400"
-                  }`}
+                className={` py-2 px-8 rounded-[1.3rem] text-white ${
+                  textContent ? "bg-secondary600" : "bg-secondary400"
+                }`}
               >
-                post
+               {isLoading?<MiniLoader/>:"post"}
               </button>
             </div>
           </form>

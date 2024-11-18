@@ -1,9 +1,6 @@
+/* eslint-disable react/prop-types */
 
-
-
-
-
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import Select from "react-select";
 import DatePicker from "react-datepicker";
@@ -12,7 +9,6 @@ import { HiChevronDown } from "react-icons/hi2";
 import { components } from "react-select";
 import { DateContext } from "../../DateContext";
 import { formatDate } from "../../utils/dateFormat";
-
 
 // Example options for react-select
 const monthOptions = [
@@ -60,26 +56,26 @@ const CustomHeader = ({ date, changeMonth, changeYear }) => {
         options={yearOptions}
         onChange={handleYearChange}
         styles={customStyles}
-        components={{DropdownIndicator}}
-        />
+        components={{ DropdownIndicator }}
+      />
       <Select
         defaultValue={monthOptions[date.getMonth()]}
         options={monthOptions}
         onChange={handleMonthChange}
         styles={customStyles}
-        components={{DropdownIndicator}}
+        components={{ DropdownIndicator }}
       />
     </div>
   );
 };
 
-const CustomDatePicker = ({placeholder }) => {
+const CustomDatePicker = ({ placeholder }) => {
   // const [selectedDate, setSelectedDate] = useState(new Date());
   const { selectedDate, setSelectedDate } = useContext(DateContext);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    console.log(date)
+    console.log(date);
   };
 
   return (
@@ -91,15 +87,7 @@ const CustomDatePicker = ({placeholder }) => {
         required
         // {icon}
         className=" w-full outline-none bg-transparent overflow-scroll placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
-        renderCustomHeader={({
-          date,
-          changeMonth,
-          changeYear,
-          decreaseMonth,
-          increaseMonth,
-          prevMonthButtonDisabled,
-          nextMonthButtonDisabled,
-        }) => (
+        renderCustomHeader={({ date, changeMonth, changeYear }) => (
           <CustomHeader
             date={date}
             changeMonth={changeMonth}
@@ -113,14 +101,13 @@ const CustomDatePicker = ({placeholder }) => {
 
 export default CustomDatePicker;
 
-
-export const CustomDatePicker2 = ({placeholder }) => {
+export const CustomDatePicker2 = ({ placeholder }) => {
   // const [selectedDate, setSelectedDate] = useState(new Date());
   const { selectedDate2, setSelectedDate2 } = useContext(DateContext);
 
   const handleDateChange = (date) => {
     setSelectedDate2(date);
-    console.log(date)
+    console.log(date);
   };
 
   return (
@@ -131,15 +118,7 @@ export const CustomDatePicker2 = ({placeholder }) => {
         onChange={handleDateChange}
         // {icon}
         className=" w-full bg-transparent outline-none placeholder:capitalize placeholder:pl-6 relative p-[7px]  "
-        renderCustomHeader={({
-          date,
-          changeMonth,
-          changeYear,
-          decreaseMonth,
-          increaseMonth,
-          prevMonthButtonDisabled,
-          nextMonthButtonDisabled,
-        }) => (
+        renderCustomHeader={({ date, changeMonth, changeYear }) => (
           <CustomHeader
             date={date}
             changeMonth={changeMonth}
@@ -151,11 +130,9 @@ export const CustomDatePicker2 = ({placeholder }) => {
   );
 };
 
-
-const CustomMenuList = (props) => {
-  return <components.MenuList {...props} className="custom-date-picker-menu" />;
-};
-
+// const CustomMenuList = (props) => {
+//   return <components.MenuList {...props} className="custom-date-picker-menu" />;
+// };
 
 const DropdownIndicator = (props) => {
   return (
@@ -173,10 +150,9 @@ const DropdownIndicator = (props) => {
   );
 };
 
-
 // Custom styles for react-select
 const customStyles = {
-  control: (provided, state) => ({
+  control: (provided) => ({
     ...provided,
     backgroundColor: "#fff",
     border: "none",
@@ -196,7 +172,7 @@ const customStyles = {
 
     padding: 0,
     border: state.isSelected ? "red" : "none",
-    border: "none",
+    // border: "none",
     maxHeight: "190px",
     overflow: "auto",
     className: `${provided.className} custom-date-picker-menu`,
@@ -230,6 +206,3 @@ const customStyles = {
     border: "none",
   }),
 };
-
-
-

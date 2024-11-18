@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../../ui/Button";
@@ -6,27 +8,31 @@ import { IoIosEye } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import Modals from "../../components/Modals";
 import FileImportModal from "../../components/FileImportModal";
-import {   schoolInfo  } from "../../services/contactApi";
+import { schoolInfo } from "../../services/contactApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import MiniLoader from "../../ui/MiniLoader";
-import useUser from "../../hooks/useUser";
+
 import { DateContext } from "../../DateContext";
 import useSug from "../../hooks/useSug";
 import Loader from "../../components/Loader";
 import useSchool from "../../hooks/useSchool";
 import BlueLoader from "../../components/BlueLoader";
-import { getFaculties, schoolFacultyandReg, sugSignUp } from "../../services/sugApis";
+import {
+  getFaculties,
+  schoolFacultyandReg,
+  sugSignUp,
+} from "../../services/sugApis";
 
 export default function SugSignup() {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const initialStep = searchParams.get("steps") || 1;
   const [steps, setSteps] = useState(Number(initialStep));
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: sugSignUp,
     onSuccess: () => {
       searchParams.set("steps", 2);
@@ -41,8 +47,8 @@ export default function SugSignup() {
     handleSubmit,
     watch,
     register,
-    formState: { errors },
-    reset,
+ 
+    // reset,
   } = useForm();
 
   const password = watch("password");
@@ -91,7 +97,7 @@ export default function SugSignup() {
                 type="text"
                 placeholder="SUG full name"
                 required
-                disabled={isPending}
+                disabled={isLoading}
                 className="border w-full border-stone-400 rounded-md p-2 placeholder:capitalize  px-2 outline-none"
                 {...register("sugFullName")}
               />
@@ -99,7 +105,7 @@ export default function SugSignup() {
                 type="email"
                 placeholder="email"
                 required
-                disabled={isPending}
+                disabled={isLoading}
                 className="border w-full placeholder:capitalize border-stone-400 rounded-md p-2  px-2 outline-none"
                 {...register("email")}
               />
@@ -107,7 +113,7 @@ export default function SugSignup() {
                 type="text"
                 placeholder="phone number"
                 required
-                disabled={isPending}
+                disabled={isLoading}
                 className="border w-full border-stone-400 placeholder:capitalize  rounded-md p-2 px-2 outline-none"
                 {...register("phoneNumber")}
               />
@@ -115,12 +121,12 @@ export default function SugSignup() {
                 open={open}
                 ToggleOpen={() => setOpen(!open)}
                 register={register}
-                isPending={isPending}
+                isPending={isLoading}
                 placeholder="create password"
-                />
+              />
               <ConfirmPasswordField
                 open2={open2}
-                isPending={isPending}
+                isPending={isLoading}
                 placeholder="confirm password"
                 ToggleOpen2={() => setOpen2(!open2)}
                 register={register}
@@ -133,9 +139,12 @@ export default function SugSignup() {
                 </p>
               </div>
             </div>
-            <Button disable={isPending} className="w-full p-3 text-center mt-10">
+            <Button
+              disable={isLoading}
+              className="w-full p-3 text-center mt-10"
+            >
               {" "}
-              {isPending ? (
+              {isLoading ? (
                 <div className="flex justify-center items-center">
                   <MiniLoader />
                 </div>
@@ -185,7 +194,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
   console.log(userId, authUserData);
   // console.log(uniProfilePhoto, userId);
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: schoolInfo,
     onSuccess: () => {
       searchParams.set("steps", 3);
@@ -215,7 +224,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
   };
 
   const handleClick = function (e) {
-    e.preventDefault()
+    e.preventDefault();
     if (imageRef.current) {
       imageRef.current.click();
     }
@@ -242,14 +251,25 @@ function SchoolInfo({ searchParams, setSearchParams }) {
       </div>
       <form className="" onSubmit={handleSubmit}>
         <div className="  flex flex-col gap-y-4 bg-white p-3">
-          <input
+          {/* <input
             type="text"
             placeholder="School Name"
             value={university}
             required
             onChange={(e) => setUniversity(e.target.value)}
             className="border border-stone-400 placeholder:text-[0.9rem]  rounded-md  p-2 w-full"
-          />
+          /> */}
+          <select
+            required
+            value={university}
+            className=" border border-stone-700 p-2 rounded-md"
+            onChange={(e) => setUniversity(e.target.value)}
+          >
+            <option className="capitalize" value="Yaba Tech">
+              Yaba Tech
+            </option>
+            <option value="Unilag">Unilag</option>
+          </select>
           <input
             type="text"
             placeholder="state "
@@ -306,7 +326,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             disable ? "bg-secondary400" : "bg-secondary600"
           }  p-2 capitalize font-semibold tracking-wide rounded-md text-white`}
         >
-          {isPending ? (
+          {isLoading ? (
             <div className="flex justify-center">
               <MiniLoader />
             </div>
@@ -320,60 +340,58 @@ function SchoolInfo({ searchParams, setSearchParams }) {
 }
 
 function SchoolFaculty() {
-const queryClient =useQueryClient()
-    const [facultyName, setFacultyName] = useState([]);
-    const [selectedFaculties, setSelectedFaculties] = useState([]);
-    const { selectedFile} = useContext(DateContext);
-    console.log(selectedFile, facultyName, selectedFaculties);
-    const dis=facultyName.length===0 ||!selectedFile
-    const { schoolDatas,id } = useSchool();
-     console.log(id);
-    const navigate = useNavigate()
-    const numOfSelected = facultyName.length
-    const { data =[], isLoading } = useQuery({
-      queryFn: () => getFaculties(id),
-      queryKey: ["schoolId"],
-    });
-  
+  const queryClient = useQueryClient();
+  const [facultyName, setFacultyName] = useState([]);
+  const [selectedFaculties, setSelectedFaculties] = useState([]);
+  const { selectedFile } = useContext(DateContext);
+  console.log(selectedFile, facultyName, selectedFaculties);
+  const dis = facultyName.length === 0 || !selectedFile;
+  const { id } = useSchool();
+  console.log(id);
+  const navigate = useNavigate();
+  const numOfSelected = facultyName.length;
+  const { data = [], isLoading } = useQuery({
+    queryFn: () => getFaculties(id),
+    queryKey: ["schoolId"],
+  });
 
-    console.log(data)
-    const { mutate, isPending } = useMutation({
-      mutationFn: schoolFacultyandReg,
-      onSuccess: () => {
-        toast.success("registration successful")
-        navigate("/sughome");
-          queryClient.invalidateQueries("sug");
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+  console.log(data);
+  const { mutate, isLoading: schoolLoading } = useMutation({
+    mutationFn: schoolFacultyandReg,
+    onSuccess: () => {
+      toast.success("registration successful");
+      navigate("/sughome");
+      queryClient.invalidateQueries("sug");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
-  const handleFacultyChange = (faculty,id) => {
+  const handleFacultyChange = (faculty, id) => {
     // Check if the faculty is already selected
     if (facultyName.includes(faculty)) {
       // Remove the faculty from the array
-      setFacultyName(
-        facultyName.filter((selected) => selected !== faculty)
-        
-      );
+      setFacultyName(facultyName.filter((selected) => selected !== faculty));
       setSelectedFaculties(
         selectedFaculties.filter((selectedId) => selectedId !== id)
       );
     } else {
       // Add the faculty to the array
       setFacultyName([...facultyName, faculty]);
-      setSelectedFaculties([...selectedFaculties,id])
+      setSelectedFaculties([...selectedFaculties, id]);
     }
   };
-  
+
   const handleSubmit = function (e) {
     e.preventDefault();
-    
-    console.log(  {schoolInfoId: id,
+
+    console.log({
+      schoolInfoId: id,
       facultyName,
       file: selectedFile,
-      selectedFaculties})
+      selectedFaculties,
+    });
     mutate({
       schoolInfoId: id,
       facultyName,
@@ -381,7 +399,6 @@ const queryClient =useQueryClient()
       selectedFaculties,
     });
   };
-
 
   return (
     <div className="p-3">
@@ -395,9 +412,7 @@ const queryClient =useQueryClient()
         <div className="bg-white rounded-md p-2 shadow-md">
           <div className="flex justify-between items-center ">
             <div>
-              <h3 className="mb-1 text-stone-600">
-                faculty / school / college
-              </h3>
+              <h3 className="mb-1 text-stone-600">faculty/school/college</h3>
               <p className="text-sm  text-stone-400">Select all that applies</p>
             </div>
             <p className="border border-secondary400 rounded-full mb-0 p-1">
@@ -448,30 +463,33 @@ const queryClient =useQueryClient()
           </div>
         </div>
         <button
-          disabled={isPending}
+          disabled={schoolLoading}
           className={`${
             dis ? "bg-secondary400" : "bg-secondary600"
           } text-white rounded-md font-heading font-semibold tracking-wide capitalize p-2 w-full mt-10`}
         >
-          {isPending ? <Loader /> : "create school account"}
+          create school account
         </button>
+        {schoolLoading && <Loader />}
       </form>
     </div>
   );
 }
 
 function OpenModal() {
-    
-       const { selectedFile, fileName } =
-         useContext(DateContext);
-       console.log(selectedFile)
-       const handleClick= function(e){
-e.preventDefault()
-       }
+  const { selectedFile, fileName } = useContext(DateContext);
+  console.log(selectedFile);
+  const handleClick = function (e) {
+    e.preventDefault();
+  };
   return (
     <Modals>
       <Modals.Open opens="UserModal">
-        <button type="button" onClick={handleClick} className="mb-0 capitalize bg-transparent pl-2 font-heading font-medium">
+        <button
+          type="button"
+          onClick={handleClick}
+          className="mb-0 capitalize bg-transparent pl-2 font-heading font-medium"
+        >
           {fileName
             ? `${fileName}   (Click to import) `
             : "0 Reg No. imported (Click to import)"}
@@ -484,12 +502,12 @@ e.preventDefault()
   );
 }
 export const PasswordField = ({
-  label,
+  
   isPending,
   placeholder,
   register,
-  errors,
-  errorMessage,
+ 
+
   open,
   ToggleOpen,
 }) => (

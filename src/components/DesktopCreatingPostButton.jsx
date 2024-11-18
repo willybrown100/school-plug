@@ -2,11 +2,14 @@ import React from 'react'
 import useGetUser from '../hooks/useGetUser';
 import Modals from "../components/Modals"
 import PostModal from "../components/PostModal"
+
+
 export default function DesktopCreatingPostButton() {
 
-     const { data, isLoading } = useGetUser();
+     const { data } = useGetUser();
      const img = data?.user?.profilePhoto;
-     console.log(img);
+  
+     console.log(data);
   return (
     <div className="mt-6 hidden md:block">
       <div className="bg-white rounded-lg p-4 ">
@@ -45,9 +48,8 @@ function OpenModal() {
   return (
     <Modals>
       <Modals.Open opens="externalPageUserModal">
-  
         <button className="w-full border p-2 text-stone-400 text-left capitalize border-stone-500 rounded-md ">
-          what's happening
+          what&rsquo;s happening
         </button>
       </Modals.Open>
       <Modals.Window name="externalPageUserModal">

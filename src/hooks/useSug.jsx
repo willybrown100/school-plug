@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 export default function useSug() {
    const userInfo = localStorage.getItem("sugDetails");
@@ -6,8 +6,9 @@ export default function useSug() {
  
   
      const userId = authUserData?.userId
-     console.log(userId);
-  return { authUserData, userId };
+     const token = authUserData?.token;
+
+  return { authUserData, userId, token };
 }
 
 

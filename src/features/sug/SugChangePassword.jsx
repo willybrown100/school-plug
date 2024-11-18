@@ -1,36 +1,33 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { HiOutlineEyeSlash } from 'react-icons/hi2';
-import { IoIosEye } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../ui/Button';
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { HiOutlineEyeSlash } from "react-icons/hi2";
+import { IoIosEye } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import Button from "../../ui/Button";
 
 export default function SugChangePassword() {
-      const [open, setOpen] = useState(false);
-      const [open1, setOpen1] = useState(false);
-      const [open2, setOpen2] = useState(false);
-    const navigate = useNavigate()
-    const handleClick = function(){
-navigate(-1)
-    }
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const navigate = useNavigate();
+  const handleClick = function () {
+    navigate(-1);
+  };
 
-    
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
 
-      const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        getValues,
-      } = useForm();
+  const validateConfirmPassword = (value) =>
+    value === getValues("password") || "Passwords do not match";
 
-      const validateConfirmPassword = (value) =>
-        value === getValues("password") || "Passwords do not match";
-
- 
-  
-     const onSubmit = function(data){
-        console.log(data)
-     }
+  const onSubmit = function (data) {
+    console.log(data);
+  };
   return (
     <section>
       <article className=" min-h-screen">
@@ -82,14 +79,13 @@ navigate(-1)
   );
 }
 
-
 export const PasswordField = ({
-label,
-//   isPending,
+  label,
+  //   isPending,
   placeholder,
   register,
-  errors,
-  
+ 
+
   open,
   ToggleOpen,
 }) => (
@@ -122,20 +118,7 @@ label,
   </div>
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
 // ===========
-
 
 export const PasswordField1 = ({
   label,
@@ -226,4 +209,3 @@ export const ConfirmPasswordField = ({
 );
 
 // Main Component
-

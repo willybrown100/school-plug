@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import SugNavbar from "./SugNavbar";
-import Footer from "./Footer";
+
 import SugFooter from "../features/sug/SugFooter";
 
 export default function SugAppLayout() {

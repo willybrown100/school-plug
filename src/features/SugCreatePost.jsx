@@ -4,20 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import useGetSugUser from '../hooks/useGetSugUser';
 import useSug from '../hooks/useSug';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createSugPost } from '../services/sugApis';
-import toast from 'react-hot-toast';
-import BlueMiniLoader from '../ui/BlueMiniLoader';
+
+
 import MiniLoader from '../ui/MiniLoader';
+import useCreateSugPost from '../hooks/useCreateSugPost';
+import useSchool from '../hooks/useSchool';
+
+
+
+
 
 
 export default function SugCreatePost() {
   const { userId } = useSug();
+  const { id } = useSchool();
+
   console.log(userId)
-  const { data, isLoading }=useGetSugUser()
+  const { data,  }=useGetSugUser()
   const uniProfilePicture = data?.data?.uniProfilePicture;
 
-
+const { mutate, postLoading } = useCreateSugPost();
+console.log(postLoading);
  
  const imageRef = useRef(null);
  const inputRef = useRef(null);
@@ -25,7 +32,7 @@ export default function SugCreatePost() {
  const [imagePreview, setImagePreview] = useState([]);
  const [selectedImage, setselectedImage] = useState([]);
  const disable = imagePreview.length === 3;
-const queryClient = useQueryClient()
+// const queryClient = useQueryClient()
  // Slider settings
  const settings = {
    dots: true,
@@ -46,17 +53,7 @@ const queryClient = useQueryClient()
    ],
  };
 
- const { mutate,isPending } = useMutation({
-   mutationFn: createSugPost,
-   onSuccess:()=>{
-    toast.success("post sucessfull,view")
-navigate("/sughome");
-queryClient.invalidateQueries("sugposts");
-   },
-   onError:(error)=>{
-       toast.error(error.message);
-   }
- });
+
  const navigate = useNavigate();
  const handleClick = function (e) {
    e.preventDefault();
@@ -78,8 +75,14 @@ queryClient.invalidateQueries("sugposts");
 
  const handleSubmit = function (e) {
    e.preventDefault();
-   console.log({adminId:userId,image:selectedImage, text:textContent});
-   mutate({ adminId:userId, image: selectedImage, text: textContent });
+   console.log({
+     adminId: userId,
+     image: selectedImage,
+     text: textContent,
+     schoolInfoId: id,
+   });
+   mutate({ adminId:userId, image: selectedImage, text: textContent,schoolInfoId:id });
+//  navigate("/sughome");
  };
  const handleChange = function (event) {
    const textarea = event.target;
@@ -118,20 +121,21 @@ queryClient.invalidateQueries("sugposts");
              <HiXMark />
            </button>
            <button
-             disabled={!textContent || isPending}
+             disabled={!textContent || postLoading}
              className={` ${
                !textContent ? "bg-secondary400" : "bg-secondary600 "
              }
                  
  mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
            >
-             {isPending ? (
+             {postLoading ? (
               //  <div>
                  <MiniLoader />
               //  </div>
              ) : (
                "post"
              )}
+             {/* POST */}
            </button>
          </div>
 
@@ -191,7 +195,7 @@ queryClient.invalidateQueries("sugposts");
        <button
          onClick={handleButtonClick}
          disabled={disable}
-         type='button'
+         type="button"
          className="absolute right-2  bottom-2 "
        >
          <img

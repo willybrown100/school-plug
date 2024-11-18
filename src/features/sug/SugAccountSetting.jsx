@@ -117,9 +117,7 @@ const handleClick = function(){
 
 function OpenModal() {
 
-  const handleClick = function (e) {
-    e.preventDefault();
-  };
+
   return (
     <Modals>
       <Modals.Open opens="deleteModal">

@@ -1,39 +1,44 @@
+/* eslint-disable react/prop-types */
 
-import React, {  useContext, useEffect, useState } from "react";
-import Logo from "../../components/Logo";
-import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
+import React, { useContext, useEffect, useState } from "react";
+
+
 import { IoIosEye } from "react-icons/io";
-import { HiChevronDown, HiChevronUp, HiOutlineCalendar, HiOutlineEyeSlash } from "react-icons/hi2";
+import {
+  HiChevronDown,
+ 
+  HiOutlineCalendar,
+  HiOutlineEyeSlash,
+} from "react-icons/hi2";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import { Controller, useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
+import { useForm } from "react-hook-form";
+
 import CustomDatePicker, { CustomDatePicker2 } from "./DatePicker";
 import Button from "../../ui/Button";
-import signUp, { EducationalSignUp, signInWithGoogle } from "../../services/contactApi";
+import signUp, {
+  EducationalSignUp,
+  signInWithGoogle,
+} from "../../services/contactApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "../../ui/MiniLoader";
 import { DateContext } from "../../DateContext";
-import dateFormat, { convertDateToDDMMYYYY } from "../../utils/dateFormat";
-import { format, parseISO } from "date-fns";
+import  { convertDateToDDMMYYYY } from "../../utils/dateFormat";
+
 import useUser from "../../hooks/useUser";
 import toast from "react-hot-toast";
 import Loader from "../../components/Loader";
-import { getRedirectResult } from "firebase/auth";
-import { auth } from "../../services/firebase-config";
-
-
 
 
 export default function SignUp() {
   const queryClient = useQueryClient();
-  const { authUserData, userId } = useUser();
+  const {  userId } = useUser();
   const {
     handleSubmit,
     watch,
     register,
     formState: { errors },
-    reset,
+    // reset,
   } = useForm();
   const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -51,7 +56,7 @@ export default function SignUp() {
     }
     return true; // Validation passed
   };
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: signUp,
     onSuccess: () => {
       searchParams.set("value", "false"); // Set as string for URL compatibility
@@ -64,7 +69,7 @@ export default function SignUp() {
     },
   });
 
-  const { mutate: googleSignUp, isPending: loading } = useMutation({
+  const { mutate: googleSignUp, isLoading: loading } = useMutation({
     mutationFn: signInWithGoogle,
     onSuccess: () => {
       searchParams.set("value", "false");
@@ -96,8 +101,6 @@ export default function SignUp() {
     }
   }, [searchParams, setSearchParams]);
 
-
-
   return (
     <main className="signupBg min-h-[100vh] grid place-items-center p-4">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-5 rounded-[1.2rem] flex flex-col gap-y-6">
@@ -125,7 +128,7 @@ export default function SignUp() {
                   className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
                   required
                   {...register("fullName")}
-                  disabled={isPending}
+                  disabled={isLoading}
                 />
                 {errors?.fullName?.message && (
                   <p className="text-red-500 text-sm capitalize">
@@ -136,7 +139,7 @@ export default function SignUp() {
               <input
                 type="email"
                 id="email"
-                disabled={isPending}
+                disabled={isLoading}
                 placeholder="email"
                 className="border p-3 md:p-2 rounded-md border-stone-700 w-full placeholder:capitalize"
                 {...register("email", {
@@ -148,7 +151,7 @@ export default function SignUp() {
               <div>
                 <input
                   type="text"
-                  disabled={isPending}
+                  disabled={isLoading}
                   id="phone_number"
                   placeholder="phone number"
                   required
@@ -168,7 +171,7 @@ export default function SignUp() {
               </div>
               <PasswordField
                 errors
-                isPending={isPending}
+                isPending={isLoading}
                 open={open}
                 ToggleOpen={() => setOpen(!open)}
                 placeholder="create password"
@@ -177,7 +180,7 @@ export default function SignUp() {
               <ConfirmPasswordField
                 validateConfirmPassword={validateConfirmPassword}
                 register={register}
-                isPending={isPending}
+                isPending={isLoading}
                 open2={open2}
                 ToggleOpen2={() => setOpen2(!open2)}
                 placeholder="confirm password"
@@ -205,7 +208,13 @@ export default function SignUp() {
                   </span>
                 </button>
                 <button className="bg-secondary500 p-3 rounded-md font-semibold text-white capitalize">
-                  {isPending ? "signingUp..." : "sign up"}
+                  {isLoading ? (
+                    <div className="flex justify-center">
+                      <MiniLoader />{" "}
+                    </div>
+                  ) : (
+                    "sign up"
+                  )}
                 </button>
               </div>
             </form>
@@ -239,15 +248,12 @@ export default function SignUp() {
   );
 }
 
-
-
 export const PasswordField = ({
   label,
   isPending,
   placeholder,
   register,
-  errors,
-  errorMessage,
+ 
   open,
   ToggleOpen,
 }) => (
@@ -276,7 +282,6 @@ export const PasswordField = ({
           />
         )}
       </span>
-    
     </div>
   </div>
 );
@@ -325,21 +330,24 @@ export const ConfirmPasswordField = ({
   </div>
 );
 
-  
 function StudentInfo({ userId }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { selectedDate, selectedDate2 } = useContext(DateContext);
   const [university, setUniversity] = useState("");
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
 
-  const { mutate: education, isPending } = useMutation({
+  const { mutate: education, isLoading } = useMutation({
     mutationFn: EducationalSignUp,
     onSuccess: () => {
-navigate("/profilepic");
+      navigate("/profilepic");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
+ 
 
   const handleSubmit = function (e) {
     e.preventDefault();
@@ -367,15 +375,17 @@ navigate("/profilepic");
         </h3>
       </div>
       <form className="flex flex-col p-3 gap-y-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={university}
-          placeholder="university of study"
-          className="w-full md:p-2 border placeholder:capitalize p-2 border-stone-700 rounded-md"
-          onChange={(e) => setUniversity(e.target.value)}
-          id="university"
+        <select
           required
-        />
+          value={university}
+          className=" border border-stone-700 p-2 rounded-md"
+          onChange={(e) => setUniversity(e.target.value)}
+        >
+          <option className="capitalize" value="Yaba Tech">
+            Yaba Tech
+          </option>
+          <option value="Unilag">Unilag</option>
+        </select>
         <input
           type="text"
           value={faculty}
@@ -420,56 +430,10 @@ navigate("/profilepic");
         </div>
 
         <Button className="mt-16 md:mt-2">
-          {isPending ? "creating account..." : "create an account"}
+          {isLoading ? "creating account..." : "create an account"}
         </Button>
-        {isPending && <Loader />}
+        {isLoading && <Loader />}
       </form>
     </div>
   );
 }
-
-
-
-const SignupForm = () => {
-    const { register, handleSubmit, watch, setError, formState: { errors } } = useForm();
-
-    const password = watch("password"); // Watch password field
-
-    const onSubmit = (data) => {
-        console.log(data);
-        // Perform signup logic
-    };
-
-    const validateConfirmPassword = (value) => {
-        if (value !== password) {
-            return "Passwords do not match";
-        }
-        return true; // Validation passed
-    };
-
-    return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-                <label>Password</label>
-                <input
-                    type="password"
-                    {...register("password", { required: "Password is required" })}
-                />
-                {errors.password && <span>{errors.password.message}</span>}
-            </div>
-            <div>
-                <label>Confirm Password</label>
-                <input
-                    type="password"
-                    {...register("confirmPassword", {
-                        required: "Please confirm your password",
-                        validate: validateConfirmPassword, // Custom validation function
-                    })}
-                />
-                {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
-            </div>
-            <button type="submit">Sign Up</button>
-        </form>
-    );
-};
-

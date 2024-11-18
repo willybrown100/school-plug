@@ -24,8 +24,8 @@ export async function sugSignUp(data) {
 
     return result;
   } catch (error) {
-    throw error;
     console.log(error);
+    throw error;
   }
 }
 
@@ -151,17 +151,52 @@ export async function sugNewPassword(data) {
   }
 }
 
-export async function sugLikPost({postId,userId}) {
+
+
+
+
+export async function sugLikPost({ postId, userId }) {
   console.log({ postId, userId });
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/sugPost/${postId}/like`,
+     ` https://student-plug.onrender.com/api/sugPost/${postId}/like`,
       {
-      method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({userId}),
+        body: JSON.stringify({ userId }),    
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
+
+export async function sugCommentPost({ postId, text,isAdmin,userId }) {
+
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/add/posts/${postId}/comments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, isAdmin,text }),
       }
     );
 
@@ -186,7 +221,6 @@ export async function getAuthSug(userId) {
     const response = await fetch(
       `https://student-plug.onrender.com/api/school/getSug/${userId}`
     );
-
     const result = await response.json();
 
     console.log(result);
@@ -197,10 +231,12 @@ export async function getAuthSug(userId) {
   }
 }
 
-export async function getSugPosts(adminId) {
+
+export async function getAllComments(postId) {
+  console.log(postId)
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/sugPost/posts/${adminId}`
+      `https://student-plug.onrender.com/api/add/posts/${postId}?postType=admin`
     );
 
     const result = await response.json();
@@ -212,6 +248,36 @@ export async function getSugPosts(adminId) {
     throw error;
   }
 }
+
+
+
+export async function getSugPosts(schoolInfoId) {
+  console.log(schoolInfoId);
+  try {
+    const response = await fetch(
+      // `https://student-plug.onrender.com/api/sugPost/posts/${adminId}`
+      `https://student-plug.onrender.com/api/school/${schoolInfoId}`
+    );
+
+    // Check if the response status indicates a 404 error
+    if (response.status === 404) {
+      console.log("Error: Post not found");
+      return { error: "Post not found" }; // Return an error object or handle it appropriately
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error("An error occurred:", error.message);
+    throw error; // Rethrow the error to be handled by the caller if needed
+  }
+}
+
 
 export async function schoolFacultyandReg({
   facultyName,
@@ -296,14 +362,29 @@ export async function getFaculties() {
     throw error;
   }
 }
+export async function getRegisteredSchools() {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/school/get-schools`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 
 
 
 
-export const createSugPost = async ({ image, adminId, text }) => {
+export const createSugPost = async ({ image, adminId, text ,schoolInfoId}) => {
   console.log({ image, adminId });
-  if (!image || !adminId) return; // Ensure both image and userId are present
+  if (!image || !adminId) return; 
 
   const formData = new FormData();
 
@@ -317,6 +398,7 @@ export const createSugPost = async ({ image, adminId, text }) => {
   // Append the image file
 
   formData.append("adminId", adminId);
+  formData.append("schoolInfoId", schoolInfoId);
   formData.append("text", text);
 
   for (let [key, value] of formData.entries()) {

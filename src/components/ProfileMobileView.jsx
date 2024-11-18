@@ -1,12 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
-import React from 'react'
+
+import React, { useEffect } from 'react'
 import useGetUser from '../hooks/useGetUser';
 import SmallLoader from './SmallLoader';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileMobileView() {
+  const navigate = useNavigate()
  const {data,isLoading}=useGetUser()
  const img =data?.user?.profilePhoto;
-
+console.log(data)
+useEffect(() => {
+  if (data?.message === "Invalid Token") {
+    navigate("/signin");
+  }
+},[data.message]);
   return (
     <div>
       {isLoading ? (

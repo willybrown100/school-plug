@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import Button from '../../ui/Button';
+
 import useGetSugUser from '../../hooks/useGetSugUser';
 import BlueMiniLoader from '../../ui/BlueMiniLoader';
 
@@ -50,8 +50,8 @@ export default function SugImportedRegNums() {
             <p className="mb-0 capitalize text-stone-500">added</p>
           </div>
           <ul className="overflow-auto h-[50vh]  divide divide-y">
-            {reg.map((item) => (
-              <li className="flex justify-between py-3 items-center">
+            {reg.map((item,i) => (
+              <li className="flex justify-between py-3 items-center" key={i}>
                 <div>
                   <p className="mb-2 capitalize font-semibold  text-stone-600">
                     {item.regNums}

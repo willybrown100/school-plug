@@ -1,8 +1,8 @@
 import React from 'react'
 import UserDetails from '../components/UserDetails';
 import Bills from '../components/Bills';
-import DefaultSchool from '../components/DefaultSchool';
-import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
+
+
 
 export default function Trends() {
    const className = "md:max-w-[1250px]   md:w-[90vw]  m-auto";

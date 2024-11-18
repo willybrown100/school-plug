@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Button from "../ui/Button";
+
 import { useNavigate } from "react-router-dom";
 import useGetSugUser from "../hooks/useGetSugUser";
 import { useForm } from "react-hook-form";
@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
 export default function EditSugProfile() {
-  const { data, isLoading } = useGetSugUser();
+  const { data, } = useGetSugUser();
 const ImageRef = useRef()
   // Destructure and set default form values
   const sugImg = data?.data?.uniProfilePicture;
@@ -36,10 +36,10 @@ const ImageRef = useRef()
     if (data) {
       reset(editvalue);
     }
-  }, [data, reset]);
+  }, [data, reset, editvalue]);
 
   const navigate = useNavigate();
-  const handleClick = function (e) {
+  const handleClick = function () {
     navigate(-1);
   };
   const handleRefClick = function(){

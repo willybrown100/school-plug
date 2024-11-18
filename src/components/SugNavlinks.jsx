@@ -1,11 +1,11 @@
-import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function SugNavlinks({ item }) {
   const { pathname } = useLocation();
   const { name, icon, path } = item;
-  const pathn = pathname.split("/").at(2);
-  const pathna = pathname.split("/").at(3);
+ 
   // console.log(pathn, icon);
 
   return (

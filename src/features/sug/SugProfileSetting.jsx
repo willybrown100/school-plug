@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import useGetSugUser from '../../hooks/useGetSugUser';
 
 export default function SugProfileSetting() {
-   const { data, isLoading } = useGetSugUser();
+   const { data} = useGetSugUser();
     const sugImg = data?.data?.uniProfilePicture;
     const uni = data?.data?.university;
     const state = data?.data?.state;
       const aboutUni = data?.data?.aboutUniversity;
       const aboutUniz = data?.data?.user;
-      const { fullName, email, phoneNumber,} = data?.data?.user || {};
+      const { fullName, email} = data?.data?.user || {};
    console.log(data, aboutUniz);
   return (
     <article className="border border-stone-400 p-3  rounded-md">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
-import { Link, useSearchParams } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 
 export default function Bills() {
   const [selectedOption, setSelectedOption] = useState("");
@@ -53,7 +53,7 @@ console.log(active)
 
 
   return (
-    <div className="hidden lg:block w-full">
+    <div className="hidden lg:block w-full sticky md:top-[9.9rem] max-h-screen overflow-y-auto lg:top-[5rem]">
       <div className="bg-white rounded-lg p-4">
         <h5 className="font-semibold capitalize font-heading">pay Bills</h5>
         <p className="text-sm text-stone-500">
@@ -87,9 +87,14 @@ console.log(active)
           } w-full grid grid-cols-1 text-center   text-white hover:text-white rounded-md  font-heading capitalize font-semibold mt-3`}
         >
           {!disable ? (
-            <button className="bg-transparent p-2 capitalize">make payment now</button>
+            <button className="bg-transparent p-2 capitalize">
+              make payment now
+            </button>
           ) : (
-            <button disabled={disable} className="bg-transparent p-2 capitalize">
+            <button
+              disabled={disable}
+              className="bg-transparent p-2 capitalize"
+            >
               make payment now
             </button>
           )}

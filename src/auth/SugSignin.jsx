@@ -1,40 +1,41 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { HiOutlineEyeSlash } from 'react-icons/hi2';
-import { IoIosEye } from 'react-icons/io';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '../ui/Button';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { HiOutlineEyeSlash } from "react-icons/hi2";
+import { IoIosEye } from "react-icons/io";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../ui/Button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import MiniLoader from "../ui/MiniLoader"
-import toast from 'react-hot-toast';
-import { sugSignIn } from '../services/sugApis';
+import MiniLoader from "../ui/MiniLoader";
+import toast from "react-hot-toast";
+import { sugSignIn } from "../services/sugApis";
 
 export default function SugSignin() {
-  const queryClient =useQueryClient()
-  const navigate = useNavigate()
-    const [open, setOpen] = useState(false);
-     const {
-       handleSubmit,
-     
-       register,
-       formState: { errors },
-       reset,
-     } = useForm();
-     const { mutate, isPending } = useMutation({
-       mutationFn: sugSignIn,
-       onSuccess: () => {
-         navigate("/sughome");
-         queryClient.invalidateQueries("sug");
-       },
-       onError: (error) => {
-         toast.error(error.message);
-       },
-     });
-     const onSubmit = function(data){
-      console.log(data)
-      mutate(data)
-     }
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const {
+    handleSubmit,
+
+    register,
+ 
+    // reset,
+  } = useForm();
+  const { mutate, isLoading } = useMutation({
+    mutationFn: sugSignIn,
+    onSuccess: () => {
+      navigate("/sughome");
+      queryClient.invalidateQueries("sug");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const onSubmit = function (data) {
+    console.log(data);
+    mutate(data);
+  };
   return (
     <div className="sugsignin">
       <div className="p-3">
@@ -58,14 +59,14 @@ export default function SugSignin() {
                 className="p-2 border w-full border-stone-400 rounded-md"
                 {...register("email")}
                 required
-                disabled={isPending}
+                disabled={isLoading}
               />
               <PasswordField
                 open={open}
                 ToggleOpen={() => setOpen(!open)}
                 register={register}
                 placeholder="password"
-                isPending={isPending}
+                isPending={isLoading}
               />
               <Link
                 to="/sugforgotpassword"
@@ -78,7 +79,7 @@ export default function SugSignin() {
 
           <div className="flex flex-col gap-y-3">
             <Button className="capitalize  w-full ">
-              {isPending ? (
+              {isLoading ? (
                 <div className="flex justify-center items-center">
                   <MiniLoader />
                 </div>
@@ -110,14 +111,12 @@ export default function SugSignin() {
   );
 }
 
-
 export const PasswordField = ({
-    label,
-      isPending,
+
+  isPending,
   placeholder,
   register,
-  errors,
-  errorMessage,
+
   open,
   ToggleOpen,
 }) => (
@@ -132,7 +131,7 @@ export const PasswordField = ({
         {...register("password")}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
+      <span className="absolute right-3 top-3 cursor-pointer">
         {open ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
