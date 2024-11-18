@@ -1,34 +1,43 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react'
-import { HiOutlineEyeSlash } from 'react-icons/hi2';
-import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
-import { signIn, userSignInWithGoogle } from '../services/contactApi';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+/* eslint-disable react/prop-types */
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { HiOutlineEyeSlash } from "react-icons/hi2";
+import { IoIosEye } from "react-icons/io";
+import { signIn, userSignInWithGoogle } from "../services/contactApi";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import MiniLoader from "../ui/MiniLoader";
 
 export default function SignIn() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate()
-       const { handleSubmit, register,formState:{errors},setError ,reset} = useForm();
-
-      const [open, setOpen] = useState(false);
-
-      const ToggleOpen = () => setOpen(!open);
+  const navigate = useNavigate();
+  const {
+    handleSubmit,
+    register,
     
-  const {mutate,isPending}=useMutation({
-    mutationFn:signIn,
-    onSuccess:()=>{
-navigate("/home/homePage")
- queryClient.invalidateQueries("user");
-    },
-    onError:(error)=>{
-      console.log(error)
-      toast.error(error.message)
-    }
-  })
+    // setError,
+    // reset,
+  } = useForm();
 
-  const { mutate: goodleSignin, isPending: isLoading } = useMutation({
+  const [open, setOpen] = useState(false);
+
+  const ToggleOpen = () => setOpen(!open);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: signIn,
+    onSuccess: () => {
+      navigate("/home/homePage");
+      queryClient.invalidateQueries("user");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: goodleSignin, isLoading: googleLoading } = useMutation({
     mutationFn: userSignInWithGoogle,
     onSuccess: () => {
       navigate("/home/homePage");
@@ -39,10 +48,10 @@ navigate("/home/homePage")
       toast.error(error.message);
     },
   });
-  const onSubmit = function(data){
-mutate(data)
-console.log(data)
-  }
+  const onSubmit = function (data) {
+    mutate(data);
+    console.log(data);
+  };
   return (
     <main className="signBg min-h-[100vh] grid place-items-center ">
       <article className="md:bg-white md:px-[6rem] w-[95w] lg:px-[8rem] py-6 rounded-[1.2rem] flex flex-col gap-y-6">
@@ -59,6 +68,7 @@ console.log(data)
         >
           <input
             type="email"
+            disabled={isLoading}
             placeholder="enter email or phone number"
             className="border p-3 md:p-2 rounded-md bg-transparent w-full bg-white"
             {...register("email", { required: "this field is required" })}
@@ -68,6 +78,7 @@ console.log(data)
             ToggleOpen={ToggleOpen}
             placeholder="enter your password"
             register={register}
+            isLoading={isLoading}
           />
           <Link
             to="/forgotpassword"
@@ -77,8 +88,9 @@ console.log(data)
           </Link>
           <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
             <button
-              onClick={goodleSignin} disabled={isLoading}
-              className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 capitalize bg-transparent"
+              onClick={goodleSignin}
+              disabled={googleLoading}
+              className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 p-1 capitalize bg-transparent"
             >
               {" "}
               <span>sign in with</span>
@@ -86,8 +98,14 @@ console.log(data)
                 <img src="/images/google-icon.png" alt="img" />
               </span>
             </button>
-            <button className="bg-secondary500 p-2 rounded-md font-semibold  text-white capitalize">
-              {isPending ? "signingUp.." : "  continue to signin"}
+            <button className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
+              {isLoading ? (
+                <div className="flex justify-center">
+                  <MiniLoader />{" "}
+                </div>
+              ) : (
+                "  continue to signin"
+              )}
             </button>
           </div>
         </form>
@@ -117,6 +135,7 @@ const PasswordField = ({
   placeholder,
   register,
   error,
+  isLoading,
   errorMessage,
   open,
   ToggleOpen,
@@ -129,6 +148,7 @@ const PasswordField = ({
         className="w-full md:p-2 border bg-white p-3 rounded-md"
         placeholder={placeholder}
         {...register("password")}
+        disabled={isLoading}
         autoComplete="current-password"
       />
       <span className="absolute right-3 top-4 cursor-pointer">

@@ -6,7 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignIn from "./auth/SignIn";
 import ForgotPassword from "./auth/ForgotPassword";
 import SignUp from "./auth/signup/SignUp";
-import Logo from "./components/Logo";
+
 import Loader from "./components/Loader";
 
 import UserProfile from "./auth/UserProfile";
@@ -39,6 +39,9 @@ import SugChangePassword from "./features/sug/SugChangePassword";
 import SugImportedRegNums from "./features/sug/SugImportedRegNums";
 import SugSchoolFaculties from "./features/sug/SugSchoolFaculties";
 import SugCreatePost from "./features/SugCreatePost";
+import SugPaybills from "./features/SugPaybills";
+import SugPendingPost from "./features/SugPendingPost";
+import SugNotification from "./features/sug/SugNotification"
 
 // import { DateProvider } from "./DateContext";
 const queryClient = new QueryClient({
@@ -68,6 +71,9 @@ export default function App() {
             <Route path="sughome" element={<SugAppLayout />}>
               <Route index element={<Navigate to="sugfeed" />} />
               <Route path="sugfeed" index element={<SugFeed />} />
+              <Route path="sugpaybills" element={<SugPaybills />} />
+              <Route path="sugnotification" element={<SugNotification />} />
+              <Route path="pendingpost" element={<SugPendingPost />} />
               <Route path="sugprofile" element={<SugProfile />}>
                 <Route index element={<Navigate to="sugprofilez" />} />
                 <Route path="sugprofilez" index element={<SugProfilez />} />
@@ -111,7 +117,7 @@ export default function App() {
                 padding: "7px 15px",
                 backgroundColor: "#2161c3",
                 color: "white",
-                borderRadius:"1rem"
+                borderRadius: "1rem",
               },
             }}
           />

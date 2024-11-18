@@ -4,12 +4,12 @@ import SugProfileSetting from "./SugProfileSetting";
 import useGetSugUser from "../../hooks/useGetSugUser";
 
 export default function SugProfilez() {
-   const { data, isLoading } = useGetSugUser();
+   const { data } = useGetSugUser();
    const sugImg = data?.data?.uniProfilePicture;
    const uni = data?.data?.university;
-   const aboutUni = data?.data?.aboutUniversity;
+
    
-     const {  faculties,fullName } = data?.data?.user || {};
+     const {  faculties} = data?.data?.user || {};
 
    console.log(data, sugImg, uni);
   const [chec, setCheck] = useState("");

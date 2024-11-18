@@ -1,51 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import Button from '../ui/Button';
-import { useMutation } from '@tanstack/react-query';
-import Logo from '../components/Logo';
-import { IoIosEye } from 'react-icons/io';
-import { HiOutlineEyeSlash } from 'react-icons/hi2';
-import toast from 'react-hot-toast';
-import MiniLoader from '../ui/MiniLoader';
-import { sugForgetPassword } from '../services/sugApis.js';
-import { sugVerifyPasswordCode } from '../services/sugApis.js';
-import { sugNewPassword } from '../services/sugApis.js';
-import { useForm } from 'react-hook-form';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+
+import { useMutation } from "@tanstack/react-query";
+import Logo from "../components/Logo";
+import { IoIosEye } from "react-icons/io";
+import { HiOutlineEyeSlash } from "react-icons/hi2";
+import toast from "react-hot-toast";
+import MiniLoader from "../ui/MiniLoader";
+import { sugForgetPassword } from "../services/sugApis.js";
+import { sugVerifyPasswordCode } from "../services/sugApis.js";
+import { sugNewPassword } from "../services/sugApis.js";
+import { useForm } from "react-hook-form";
 
 export default function SugForgotPassword() {
-   const [open1, setOpen1] = useState(false);
-   const [open2, setOpen2] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordCode, setPasswordCode] = useState("");
   const initialStep = searchParams.get("step") || 1;
   const [step, setStep] = useState(Number(initialStep));
 
-   const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        getValues,
-      } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
 
   const validateConfirmPassword = (value) =>
     value === getValues("password") || "Passwords do not match";
-  
+
   let userId = localStorage.getItem("sugId");
 
   // Check if it contains extra quotes and clean it up
   userId = userId.replace(/["]+/g, "");
 
-  console.log( password, confirmPassword);
-
-  const userEmail =  localStorage.getItem("sugemail");
+  const userEmail = localStorage.getItem("sugemail");
 
   console.log(userEmail, userId);
-  const ToggleOpen = () => setOpen(!open);
+
   const { mutate, isPending } = useMutation({
     mutationFn: sugForgetPassword,
     onSuccess: () => {
@@ -83,8 +82,11 @@ export default function SugForgotPassword() {
     passCode({ code: passwordCode });
   };
   const handleNewPassword = async (data) => {
- 
-    console.log({ userId, password:data.password, confirmPassword:data.confirmPassword });
+    console.log({
+      userId,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
     newPass({
       userId,
       password: data.password,
@@ -95,12 +97,12 @@ export default function SugForgotPassword() {
     e.preventDefault();
     mutate({ email: userEmail, resend: true });
   };
-const handleEmailSubmit = function(e){
-  e.preventDefault()
-console.log({email})
+  const handleEmailSubmit = function (e) {
+    e.preventDefault();
+    console.log({ email });
     localStorage.setItem("sugemail", email);
-mutate({email})
-}
+    mutate({ email });
+  };
   useEffect(() => {
     // When the component mounts, check if the step is in the URL
     // If so, set the step state accordingly
@@ -214,11 +216,11 @@ mutate({email})
               <div className="flex items-center justify-end gap-x-2">
                 <span className="text-stone-500">Didn’t receive code.</span>
                 <button
-                onClick={handleResend}
-                disabled={isPending}
-                className={` bg-transparent ${
-                  isPending ? "text-stone-500" : "text-secondary500"
-                }`}
+                  onClick={handleResend}
+                  disabled={isPending}
+                  className={` bg-transparent ${
+                    isPending ? "text-stone-500" : "text-secondary500"
+                  }`}
                 >
                   Resend
                 </button>
@@ -326,9 +328,6 @@ mutate({email})
   );
 }
 
-
-
-
 export const PasswordField1 = ({
   label,
   placeholder,
@@ -417,5 +416,4 @@ export const ConfirmPasswordField = ({
   </div>
 );
 
-// Main Component
 

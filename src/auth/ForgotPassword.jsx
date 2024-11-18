@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Logo from '../components/Logo';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import Logo from "../components/Logo";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { useForm } from 'react-hook-form';
-import { HiOutlineEyeSlash } from 'react-icons/hi2';
-import { IoIosEye } from 'react-icons/io';
-import { useMutation } from '@tanstack/react-query';
-import { forgetPassword, newPassword, verifyPasswordCode } from '../services/contactApi';
-import toast from 'react-hot-toast';
-
-
-
-
+import { HiOutlineEyeSlash } from "react-icons/hi2";
+import { IoIosEye } from "react-icons/io";
+import { useMutation } from "@tanstack/react-query";
+import {
+  forgetPassword,
+  newPassword,
+  verifyPasswordCode,
+} from "../services/contactApi";
+import toast from "react-hot-toast";
 
 const ForgetPassword = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,9 +28,9 @@ const ForgetPassword = () => {
   let userId = localStorage.getItem("userId");
 
   // Check if it contains extra quotes and clean it up
-  userId = userId.replace(/["]+/g, ""); 
+  userId = userId.replace(/["]+/g, "");
 
-  console.log(step, password,confirmPassword); 
+  console.log(step, password, confirmPassword);
 
   const userEmail = email && localStorage.getItem("email");
 
@@ -39,8 +39,8 @@ const ForgetPassword = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: forgetPassword,
     onSuccess: () => {
-               searchParams.set("step", 2);  
-               setSearchParams(searchParams); 
+      searchParams.set("step", 2);
+      setSearchParams(searchParams);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -49,8 +49,8 @@ const ForgetPassword = () => {
   const { mutate: passCode, isPending: loading } = useMutation({
     mutationFn: verifyPasswordCode,
     onSuccess: () => {
-         searchParams.set("step", 3); 
-         setSearchParams(searchParams);
+      searchParams.set("step", 3);
+      setSearchParams(searchParams);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -60,7 +60,7 @@ const ForgetPassword = () => {
     mutationFn: newPassword,
     onSuccess: () => {
       toast.success("password succesfully reset");
-      navigate("/signin")
+      navigate("/signin");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -77,21 +77,21 @@ const ForgetPassword = () => {
   };
   const handleNewPassword = async (e) => {
     e.preventDefault();
-    newPass({ userId ,password,confirmPassword});
+    newPass({ userId, password, confirmPassword });
   };
   const handleResend = async (e) => {
     e.preventDefault();
-    mutate({ email,resend:true });
+    mutate({ email, resend: true });
   };
 
-   useEffect(() => {
-     // When the component mounts, check if the step is in the URL
-     // If so, set the step state accordingly
-     const currentStep = searchParams.get("step");
-     if (currentStep) {
-       setStep(Number(currentStep)); // Ensure step is set to the correct value on reload
-     }
-   }, [searchParams]);
+  useEffect(() => {
+    // When the component mounts, check if the step is in the URL
+    // If so, set the step state accordingly
+    const currentStep = searchParams.get("step");
+    if (currentStep) {
+      setStep(Number(currentStep)); // Ensure step is set to the correct value on reload
+    }
+  }, [searchParams]);
 
   return (
     <article className="flex overflow-x-hidden w-full min-h-[100vh] m-auto forgotbg justify-center items-center">
@@ -273,19 +273,16 @@ const ForgetPassword = () => {
 
 export default ForgetPassword;
 
-
-
-
 export const PasswordField = ({
-  label,
+
   placeholder,
-  
+
   error,
   errorMessage,
   open,
   ToggleOpen,
-password,
-setPassword
+  password,
+  setPassword,
 }) => (
   <div className="Input-Data ">
     {/* <label className="text-[12px]">{label}</label> */}
@@ -296,7 +293,7 @@ setPassword
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
         value={password}
-        onChange={(e)=>setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         autoComplete="current-password"
       />
       <span className="absolute right-3 top-2 cursor-pointer">

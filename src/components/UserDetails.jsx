@@ -8,20 +8,21 @@ export default function UserDetails() {
 const {data,isLoading}=useGetUser()
 const {studentInfo,user}=data
 const img = user?.profilePhoto
-console.log(data)
+const department = studentInfo?.department.toLowerCase()
+console.log(department);
   return (
-    <div className="hidden md:block ">
+    <div className="hidden md:block sticky md:top-[9.9rem] lg:top-[5rem]  max-h-screen overflow-y-auto">
       <div className=" p-6 bg-white rounded-lg ">
         <div className="flex gap-x-6 items-center pb-9 border-b-2">
-          {isLoading?<SmallLoader/>:<img
-            src={
-              img
-                ? img
-                : "/images/profile-circle.svg"
-            }
-            alt={user?.name}
-            className="rounded-full h-[5rem] w-[5rem] object-cover"
-          />}
+          {isLoading ? (
+            <SmallLoader />
+          ) : (
+            <img
+              src={img ? img : "/images/profile-circle.svg"}
+              alt={user?.name}
+              className="rounded-full h-[5rem] w-[5rem] object-cover"
+            />
+          )}
           <h4 className="font-heading mb-0 font-semibold capitalize">
             {user?.name}
           </h4>
@@ -35,7 +36,7 @@ console.log(data)
               department:
             </p>
           </div>
-          <p className="capitalize mb-0 text-stone-600  font-heading">
+          <p className="capitalize mb-0  text-stone-600  font-heading">
             {studentInfo?.department}
           </p>
         </div>
@@ -47,7 +48,9 @@ console.log(data)
               faculty:
             </p>
           </div>
-          <p className="mb-0 capitalize text-stone-600  font-heading">jhj</p>
+          <p className="mb-0 capitalize text-stone-600  font-heading">
+            {studentInfo?.faculty}
+          </p>
         </div>
         <div className="flex flex-col gap-y-2  mt-[0.4rem]">
           <div className="flex gap-x-2 items-center">

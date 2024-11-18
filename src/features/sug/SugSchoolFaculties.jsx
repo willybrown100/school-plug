@@ -1,19 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import useGetSugUser from '../../hooks/useGetSugUser';
-import MiniLoader from '../../ui/MiniLoader';
+
 import BlueLoader from '../../components/BlueLoader';
 
 
-const faculty = [
-    {faculty:"faculty of art"},
-    {faculty:"faculty of art"},
-    {faculty:"faculty of art"},
-    {faculty:"faculty of art"},
-    {faculty:"faculty of art"},
-    {faculty:"faculty of art"},
 
-]
 export default function SugSchoolFaculties() {
       const { data, isLoading } = useGetSugUser();
      
@@ -58,8 +50,8 @@ navigate(-1)
                 <BlueLoader />
               </div>
             )}
-            {faculties?.map((item) => (
-              <li className="relative p-2">
+            {faculties?.map((item,i) => (
+              <li className="relative p-2" key={i}>
                 <div className="border  border-stone-500 p-2 rounded-md">
                   <h5 className="pl-3">{item.facultyName}</h5>
                   <button className="absolute border p-1 border-green-500 px-1 top-4 left-0 ">

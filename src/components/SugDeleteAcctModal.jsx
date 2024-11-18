@@ -1,3 +1,5 @@
+
+/* eslint-disable react/prop-types */
 import React, { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { HiOutlineEyeSlash } from 'react-icons/hi2';
@@ -11,7 +13,7 @@ export default function SugDeleteAcctModal() {
           const {
             register,
             handleSubmit,
-            formState: { errors },
+            
            
           } = useForm();
           const onSubmit =function(data){
@@ -49,7 +51,7 @@ export const PasswordField = ({
 //   isPending,
   placeholder,
   register,
-  errors,
+
   
   open,
   ToggleOpen,

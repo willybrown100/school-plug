@@ -2,8 +2,9 @@ import React, { useRef, useState } from 'react'
 import Button from '../ui/Button'
 import { useNavigate } from 'react-router-dom'
 import useUser from '../hooks/useUser'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { handleUpload, handleUpload2, uploadUserImage } from '../services/contactApi'
+import { useMutation,  } from '@tanstack/react-query'
+import {  handleUpload2} from '../services/contactApi'
+import toast from 'react-hot-toast'
 
 export default function UserProfile() {
   const {authUserData}=useUser()
@@ -62,16 +63,19 @@ function UserImage(){
   const navigate = useNavigate()
   const { authUserData,userId } = useUser();
   const token = authUserData.token;
-  const [imageFile, setImageFile] = useState(null);
+  // const [imageFile, setImageFile] = useState(null);
   const imageRef = useRef()
 
 const defaultImagePath = "/images/blackman2.png";
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: handleUpload2,
     onSuccess: () => {
 navigate("/home/homePage")
     },
+    onError:(error)=>{
+      toast.error(error.message)
+    }
   });
  
 
@@ -79,7 +83,7 @@ navigate("/home/homePage")
  const handleImageChange = (event) => {
    const file = event.target.files[0];
    if (file) {
-     setImageFile(file); 
+    //  setImageFile(file); 
      mutate({ profilePhoto: file, token, userId });
    }
  };
@@ -109,7 +113,7 @@ navigate("/home/homePage")
            onClick={handleClick}
            className="bg-white capitalize font-heading  p-2 rounded-md border border-secondary500"
          >
-           {isPending ? "wait.." : " change image"}
+           {isLoading ? "wait.." : " change image"}
          </button>
          <input
            type="file"

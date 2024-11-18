@@ -6,7 +6,7 @@ export default function FileImportModal() {
   const { close } = useContext(ModalContext);
   const [selectedOption,setSelectedOption]=useState("")
   const [active,setActive]=useState("")
-  const [disable,setDisable]=useState("")
+  // const [disable,setDisable]=useState("")
   
   console.log(selectedOption, active);
   const modalRef = useRef(null)
@@ -37,7 +37,7 @@ console.log(selectedFile)
       
   const handleChange = function (e) {
     setSelectedOption(e.target.value);
-    setDisable(false);
+    // setDisable(false);
   };
   const handleClick = function (i) {
     setActive(i);
@@ -95,7 +95,7 @@ console.log(selectedFile)
       <div className="relative min-h-screen ">
         <div
           ref={modalRef}
-          className="bg-white rounded-lg p-4 absolute  right-0 left-0  bottom-[4rem]"
+          className="bg-white rounded-lg p-4 absolute  right-0 left-0  bottom-[5rem]"
         >
           <h4 className="font-semibold">File import format</h4>
           <p className="text-sm text-stone-500 font-heading">

@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import useUser from '../hooks/useUser';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { studentCreatePost } from '../services/contactApi';
+import MiniLoader from "../ui/MiniLoader"
+import toast from 'react-hot-toast';
+import useGetUser from '../hooks/useGetUser';
 
 
 
@@ -17,7 +22,12 @@ export default function CreatePost() {
   const [selectedImage, setselectedImage] = useState([]);
 const disable = imagePreview.length===3
 console.log(selectedImage);
-  // Slider settings
+const queryClient = useQueryClient()
+const { userId } = useUser()
+const { data } = useGetUser()
+const {user}=data
+const img = user?.profilePhoto;
+
   const settings = {
     dots: true,
     infinite: false,
@@ -37,6 +47,17 @@ console.log(selectedImage);
     ],
   };
 
+  const {mutate,isLoading}=useMutation({
+    mutationFn:studentCreatePost,
+    onSuccess:()=>{
+      queryClient.invalidateQueries("schoolpost");
+      navigate("/home/homePage");
+      toast.success("post successful,view")
+    },
+    onError:(error)=>{
+      toast.error(error.message)
+    }
+  })
   const navigate = useNavigate();
   const handleClick = function (e) {
     e.preventDefault();
@@ -45,6 +66,7 @@ console.log(selectedImage);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0]; 
+    console.log(event.target.files)
     if (file) {
         setselectedImage((prevImg)=>[...prevImg,file])
 
@@ -58,7 +80,8 @@ console.log(selectedImage);
 
   const handleSubmit = function (e) {
     e.preventDefault();
-    console.log(imagePreview,textContent)
+    console.log({ image: selectedImage, text: textContent, userId });
+    mutate({ image: selectedImage, text: textContent, userId });
   };
   const handleChange = function (event) {
     const textarea = event.target;
@@ -93,24 +116,25 @@ console.log(selectedImage);
             </button>
             <button
               disabled={!textContent}
-              
               className={` ${
                 !textContent ? "bg-secondary400" : "bg-secondary600 "
               }
                  
  mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
             >
-              post
+              {isLoading ? <MiniLoader /> : "post"}
             </button>
           </div>
 
           <div className="overflow-y-scroll overflow-x-hidden scroll">
-            <div className="flex gap-x-2 ">
-              <img
-                src="\images\black-man-with-happy-expression 1.png"
-                alt="img"
-                className="rounded-full self-start"
-              />
+            <div className="flex gap-x-2 mt-2">
+              <div className="rounded-full w-[4.9rem]  h-[4rem] overflow-hidden">
+                <img
+                  src={img}
+                  alt="img"
+                  className=" object-cover w-full h-full  self-start "
+                />
+              </div>
               <textarea
                 ref={inputRef}
                 rows={1}
@@ -156,6 +180,7 @@ console.log(selectedImage);
         <button
           onClick={handleButtonClick}
           disabled={disable}
+          type="button"
           className="absolute right-2  bottom-2 "
         >
           <img
@@ -184,83 +209,7 @@ console.log(selectedImage);
 
  
 
-const ImageCarousel = () => {
-    const [images, setImages] = useState([]);
 
-    // Handle image upload
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImages((prevImages) => [...prevImages, reader.result]);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    // Slider settings
-    const settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: images.length >= 3 ? 3 : images.length, // Display images side by side
-        slidesToScroll: 1,
-        centerMode: images.length === 1, // Center mode for a single image
-        centerPadding: '0px', // Removes any padding when centerMode is active
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: images.length >= 3 ? 3 : images.length, // Adjust for smaller screens
-                    centerMode: images.length === 1, // Center single image
-                }
-            }
-        ]
-    };
-
-    return (
-        <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-            <label
-                style={{
-                    display: 'inline-block',
-                    padding: '10px 20px',
-                    backgroundColor: '#007bff',
-                    color: '#fff',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginBottom: '10px',
-                }}
-            >
-                <span role="img" aria-label="camera" style={{ marginRight: '5px' }}>
-                    📷
-                </span>
-                Add Image
-                <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                />
-            </label>
-
-            {/* Render the carousel if there are images */}
-            {images.length > 0 && (
-                <Slider {...settings}>
-                    {images.map((image, index) => (
-                        <div key={index} style={{ padding: '10px' }}>
-                            <img
-                                src={image}
-                                alt={`Preview ${index}`}
-                                style={{ width: '100%', height: 'auto', borderRadius: '5px' }}
-                            />
-                        </div>
-                    ))}
-                </Slider>
-            )}
-        </div>
-    );
-};
 
 
 

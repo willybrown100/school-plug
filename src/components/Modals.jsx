@@ -1,4 +1,4 @@
-// import React from 'react'
+/* eslint-disable react/prop-types */
 import React, {
   cloneElement,
   createContext,
@@ -23,7 +23,7 @@ export default function Modals({ children }) {
   );
 }
 function Open({ children, opens }) {
-  const { open, close } = useContext(ModalContext);
+  const { open } = useContext(ModalContext);
   return cloneElement(children, { onClick: () => open(opens) });
 }
 function Window({ children, name }) {
@@ -42,8 +42,6 @@ function Window({ children, name }) {
   if (name !== openName) return null;
   return (
     <div ref={ref} className="">
-   
-
       {children}
     </div>
   );

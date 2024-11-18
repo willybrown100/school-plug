@@ -1,8 +1,8 @@
-import React from "react";
+
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
@@ -25,7 +25,7 @@ export default firebaseConfig;
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // Initialize Firebase Analytics
-const analytics = getAnalytics(app);
+
 
 // Initialize Firebase Authentication and GoogleAuthProvider
 const auth = getAuth(app); // Initialize `auth`
