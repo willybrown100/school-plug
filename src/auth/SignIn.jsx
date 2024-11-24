@@ -101,7 +101,7 @@ export default function SignIn() {
                 <img src="/images/google-icon.png" alt="img" />
               </span>
             </button>
-            <button className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
+            <button disabled={isLoading} className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
               {isLoading ? (
                 <div className="flex justify-center">
                   <MiniLoader />{" "}

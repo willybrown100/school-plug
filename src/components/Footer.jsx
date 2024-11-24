@@ -6,27 +6,8 @@ import { GoPlus } from 'react-icons/go';
 
 
 export default function Footer() {
-  //  const [isVisible, setIsVisible] = useState(false);
-  //  let lastScrollTop = 0;
 
-  //  useEffect(() => {
-  //    const handleScroll = () => {
-  //      const scrollTop = window.scrollY;
-
-  //      if (scrollTop < lastScrollTop) {
-  //        // Scrolling up
-  //        setIsVisible(true);
-  //      } else {
-  //        // Scrolling down
-  //        setIsVisible(false);
-  //      }
-
-  //      lastScrollTop = scrollTop;
-  //    };
-
-  //    window.addEventListener("scroll", handleScroll);
-  //    return () => window.removeEventListener("scroll", handleScroll);
-  //  }, []);
+  //  
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollTop = useRef(0); // Use useRef to persist the value across renders
 
@@ -377,14 +358,15 @@ export default function Footer() {
           <p></p>
         ) : (
           <>
-            {pathname === "/home/homePage/feed" && (
+            {(pathname === "/home/homePage/feed" ||
+              pathname === "/home/trends") && (
               <button
                 onClick={handleClick}
                 className={`bg-secondary600 ${
-                  isVisible ? "scale-1" : "scale-0"
+                  isVisible ? "scale-100" : "scale-0"
                 } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
               >
-                <GoPlus className={`text-3xl text-white`} />
+                <GoPlus className="text-3xl text-white" />
               </button>
             )}
           </>
@@ -422,6 +404,10 @@ export default function Footer() {
     </div>
   );
 }
+
+
+
+
 
 
 

@@ -319,14 +319,14 @@ const handleLike = () => {
           </div>
 
           <ul className="mt-4 overflow-y-auto">
-            {loading && (
-              <div className="flex justify-center">
-                <BlueMiniLoader />
-              </div>
-            )}
-            {!datas?.length ? (
+            {!datas && (
               <div className="flex justify-center">
                 <p className="capitalize text-stone-700">no comment yet</p>
+              </div>
+            )}
+            {loading? (
+              <div className="flex justify-center">
+               <BlueMiniLoader/>
               </div>
             ) : (
               datas?.map((item) => (
@@ -342,7 +342,6 @@ const handleLike = () => {
                       className="h-[3rem] w-[3rem] rounded-full"
                     />
                     <div>
-              
                       <p className="mb-0  flex gap-x-1 items-center">
                         <span className="font-semibold">
                           {" "}
