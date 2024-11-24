@@ -10,7 +10,7 @@ export default function ProfileMobileView() {
  const img =data?.user?.profilePhoto;
 console.log(data)
 useEffect(() => {
-  if (data?.message === "Invalid Token") {
+  if (data?.message === "Token has expired") {
     navigate("/signin");
   }
 },[data.message]);

@@ -37,7 +37,7 @@ const {school} = useGetRegSchools()
  const className = "md:max-w-[1250px]   md:w-[90vw]  m-auto ";
 if(isLoading)return <PageLoader/>
  return (
-   <div className="min-h-screen max-sm:mt-[5.5rem] md:mt-[9.4rem] lg:mt-[4.4rem]  pb-[8rem]">
+   <div className="min-h-screen max-sm:mt-[6.5rem] md:mt-[9.4rem] lg:mt-[4.4rem]  pb-[8rem]">
      <div
        className={`${className} md:grid lg:grid-cols-[16rem,1fr,auto]  md:grid-cols-[16rem,1fr] gap-x-3 `}
      >
