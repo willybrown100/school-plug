@@ -8,7 +8,7 @@ export default function SugAppLayout() {
   return (
     <div className="  ">
       <SugNavbar />
-      <main className="bg-white py-4 min-h-screen">
+      <main className=" min-h-screen">
         <Outlet />
       </main>
       <SugFooter />

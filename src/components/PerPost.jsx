@@ -12,10 +12,14 @@ import { useForm } from "react-hook-form";
 import { sugDeletePost } from "../services/contactApi";
 import {timeStampAgo} from "../utils/timeStampAgo"
 import BlueMiniLoader from "../ui/BlueMiniLoader";
+import { useWebSocket } from "../WebSocketProvider";
 
 export default function PerPost({ item, onClick, open }) {
+  const {socket}=useWebSocket()
   const queryClient = useQueryClient();
   const { data } = useGetSugUser();
+  const name = data?.user?.name
+  console.log(name)
   const { userId: sugId, token } = useSug();
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
@@ -143,8 +147,15 @@ export default function PerPost({ item, onClick, open }) {
   });
 
   const handleLike = () => {
+    socket.emit("post_like_toggled", {
+      type: "like",
+      postId,
+      likerId: sugId,
+      likerName: name,
+    });
     mutate({ postId: _id, userId: sugId });
     console.log({ postId: _id, userId: sugId });
+
   };
 
   const handleDelete = function () {
@@ -304,81 +315,85 @@ export default function PerPost({ item, onClick, open }) {
 
       {/* Comment Modal */}
       {commentModalVisible && (
-        // <div className=" ">
-        <div className="fixed rounded-tl-[1rem] rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Comments</h2>
-            <button
-              onClick={handleCloseCommentModal}
-              className="text-xl font-semibold"
-            >
-              &times;
-            </button>
-          </div>
+        <div className="fixed inset-0 bg-black md:hidden  bg-opacity-50 z-50">
+          <div className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full h-[95vh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Comments</h2>
+              <button
+                onClick={handleCloseCommentModal}
+                className="text-xl font-semibold"
+              >
+                &times;
+              </button>
+            </div>
 
-          <ul className="mt-4 overflow-y-auto">
-            {loading && (
-              <div className="flex justify-center">
-                <BlueMiniLoader />
-              </div>
-            )}
-            {!commentContents?.length ? (
-              <div className="flex justify-center">
-                <p className="capitalize text-stone-700">no comment yet</p>
-              </div>
-            ) : (
-              commentContents?.map((item) => (
-                <li key={item?._id} className="mb-3">
-                  <div className="flex items-center gap-x-3">
-                    <img
-                      src={
-                        item.user?.profilePicture
-                          ? item.user.profilePicture
-                          : "/images/profile-circle.svg"
-                      }
-                      alt="img"
-                      className="h-[3rem] w-[3rem] rounded-full"
-                    />
-                    <div>
-                      <p className="mb-0  flex gap-x-1 items-center">
-                        <span className="font-semibold">
-                          {" "}
-                          {item?.user?.fullName}
-                        </span>
-                        <span className="text-[0.7rem] text-stone-600">
-                          {timeStampAgo(item?.createdAt)}
-                        </span>
-                      </p>
-                      <p className="mb-0 font-medium capitalize text-stone-900">
-                        {item.text}
-                      </p>
+            <ul className="mt-4 overflow-y-auto">
+              {loading && (
+                <div className="flex justify-center">
+                  <BlueMiniLoader />
+                </div>
+              )}
+              {!commentContents?.length ? (
+                <div className="flex justify-center">
+                  <p className="capitalize text-stone-700">no comment yet</p>
+                </div>
+              ) : (
+                commentContents?.map((item) => (
+                  <li key={item?._id} className="mb-3">
+                    <div className="flex items-center gap-x-3">
+                      <img
+                        src={
+                          item.user?.profilePicture
+                            ? item.user.profilePicture
+                            : "/images/profile-circle.svg"
+                        }
+                        alt="img"
+                        className="h-[3rem] w-[3rem] rounded-full"
+                      />
+                      <div>
+                        <p className="mb-0  flex gap-x-1 items-center">
+                          <span className="font-semibold">
+                            {" "}
+                            {item?.user?.fullName}
+                          </span>
+                          <span className="text-[0.7rem] text-stone-600">
+                            {timeStampAgo(item?.createdAt)}
+                          </span>
+                        </p>
+                        <p className="mb-0 font-medium capitalize text-stone-900">
+                          {item.text}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))
-            )}
-          </ul>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex items-center gap-x-2 mt-2"
-          >
-            <img src={sugImg} alt="aadmin" className="w-10 h-10 rounded-full" />
-            <input
-              type="text"
-              // onChange={(e) => setTextContent(e.target.value)}
-              {...register("text")}
-              placeholder="Add Your Comment Here"
-              className="w-full  bg-stone-100 outline-none placeholder:text-sm rounded-md"
-            />
-            <button
-              disabled={isCommenting}
-              className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
+                  </li>
+                ))
+              )}
+            </ul>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex items-center gap-x-2 mt-2"
             >
-              &uarr;
-            </button>
-          </form>
+              <img
+                src={sugImg}
+                alt="aadmin"
+                className="w-10 h-10 rounded-full"
+              />
+              <input
+                type="text"
+                // onChange={(e) => setTextContent(e.target.value)}
+                {...register("text")}
+                placeholder="Add Your Comment Here"
+                className="w-full  bg-transparent outline-none placeholder:text-sm rounded-md"
+              />
+              <button
+                disabled={isCommenting}
+                className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
+              >
+                &uarr;
+              </button>
+            </form>
+          </div>
         </div>
-        //  </div>
       )}
 
       {selectedImageIndex !== null && (
@@ -417,3 +432,6 @@ export default function PerPost({ item, onClick, open }) {
     </li>
   );
 }
+
+
+ 

@@ -333,7 +333,7 @@ export const ConfirmPasswordField = ({
 function StudentInfo({ userId }) {
   const navigate = useNavigate();
   const { selectedDate, selectedDate2 } = useContext(DateContext);
-  const [university, setUniversity] = useState("");
+  const [university, setUniversity] = useState("Yaba Tech");
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");

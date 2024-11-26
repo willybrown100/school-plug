@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {   studentComment, studentLikePost } from "../services/contactApi";
 import useUser from "../hooks/useUser";
 import toast from "react-hot-toast";
 import useGetUser from "../hooks/useGetUser";
-import {WebSocketContext} from "../WebSocketProvider"
+
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeStampAgo } from "../utils/timeStampAgo";
+import { useWebSocket } from "../WebSocketProvider";
 
 
 export default function StudentPerPost({ item }) {
@@ -29,7 +30,7 @@ export default function StudentPerPost({ item }) {
 
   const queryClient = useQueryClient();
   const { data } = useGetUser();
-  
+  const name = data?.user?.name
   const { userId: studentId } = useUser();
 const postId =_id
 
@@ -40,7 +41,7 @@ const postId =_id
    const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  const { socket, notifications } = useContext(WebSocketContext);
+  const { socket, notifications } = useWebSocket();
 console.log(socket, notifications);
   const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
@@ -136,24 +137,19 @@ const handleLike = () => {
     userId: studentId,
   });
 
+   socket.emit("post_liked", {
+     type: "like",
+     postId,
+     likerId: studentId,
+     likerName: name,
+   });
 
-    if (socket && socket.readyState === WebSocket.OPEN) {
-    
-         const message = {
-           event: "likePost", // Event type expected by the server
-           payload: {
-             postId: postId, 
-             userId: userId, 
-             adminId: null, 
-           },
-         };
-
-      socket.send(JSON.stringify(message));
-      console.log("Like event sent to the server");
-    } else {
-      console.error("WebSocket connection is not open");
-    }
-
+console.log("post_liked", {
+  type: "like",
+  postId,
+  likerId: studentId,
+  likerName: name,
+});
 
 
 };
@@ -303,84 +299,164 @@ const handleLike = () => {
 
       {/* Comment Modal */}
       {commentModalVisible && (
-        // <div className=" ">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="fixed rounded-tl-[1rem] md:hidden rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp"
-        >
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Comments</h2>
-            <button
-              onClick={handleCloseCommentModal}
-              className="text-xl font-semibold"
-            >
-              &times;
-            </button>
-          </div>
+   
+        // <form
+        //   onSubmit={handleSubmit(onSubmit)}
+        //   className="fixed rounded-tl-[1rem] md:hidden rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp"
+        // >
+        //   <div className="flex justify-between items-center">
+        //     <h2 className="text-lg font-semibold">Comments</h2>
+        //     <button
+        //       onClick={handleCloseCommentModal}
+        //       className="text-xl font-semibold"
+        //     >
+        //       &times;
+        //     </button>
+        //   </div>
 
-          <ul className="mt-4 overflow-y-auto">
-            {!datas && (
-              <div className="flex justify-center">
-                <p className="capitalize text-stone-700">no comment yet</p>
-              </div>
-            )}
-            {loading? (
-              <div className="flex justify-center">
-               <BlueMiniLoader/>
-              </div>
-            ) : (
-              datas?.map((item) => (
-                <li key={item?._id} className="mb-4">
-                  <div className="flex items-center gap-x-3">
-                    <img
-                      src={
-                        item.user?.profilePicture
-                          ? item.user.profilePicture
-                          : "/images/profile-circle.svg"
-                      }
-                      alt="img"
-                      className="h-[3rem] w-[3rem] rounded-full"
-                    />
-                    <div>
-                      <p className="mb-0  flex gap-x-1 items-center">
-                        <span className="font-semibold">
-                          {" "}
-                          {item?.user?.fullName}
-                        </span>
-                        <span className="text-[0.7rem] text-stone-600">
-                          {timeStampAgo(item?.createdAt)}
-                        </span>
-                      </p>
-                      <p className="mb-0 font-medium capitalize text-stone-900">
-                        {item.text}
-                      </p>
+        //   <ul className="mt-4 overflow-y-auto">
+        //     {!datas && (
+        //       <div className="flex justify-center">
+        //         <p className="capitalize text-stone-700">no comment yet</p>
+        //       </div>
+        //     )}
+        //     {loading? (
+        //       <div className="flex justify-center">
+        //        <BlueMiniLoader/>
+        //       </div>
+        //     ) : (
+        //       datas?.map((item) => (
+        //         <li key={item?._id} className="mb-4">
+        //           <div className="flex items-center gap-x-3">
+        //             <img
+        //               src={
+        //                 item.user?.profilePicture
+        //                   ? item.user.profilePicture
+        //                   : "/images/profile-circle.svg"
+        //               }
+        //               alt="img"
+        //               className="h-[3rem] w-[3rem] rounded-full"
+        //             />
+        //             <div>
+        //               <p className="mb-0  flex gap-x-1 items-center">
+        //                 <span className="font-semibold">
+        //                   {" "}
+        //                   {item?.user?.fullName}
+        //                 </span>
+        //                 <span className="text-[0.7rem] text-stone-600">
+        //                   {timeStampAgo(item?.createdAt)}
+        //                 </span>
+        //               </p>
+        //               <p className="mb-0 font-medium capitalize text-stone-900">
+        //                 {item.text}
+        //               </p>
+        //             </div>
+        //           </div>
+        //         </li>
+        //       ))
+        //     )}
+        //   </ul>
+        //   <div className="flex items-center gap-x-2 mt-2">
+        //     <img
+        //       src={data?.user?.profilePhoto}
+        //       alt="aadmin"
+        //       className="w-8 h-8 rounded-full"
+        //     />
+        //     <input
+        //       type="text"
+        //       {...register("text")}
+        //       placeholder="Add Your Comment Here"
+        //       className="w-full  bg-stone-100 outline-none placeholder:text-sm rounded-md"
+        //     />
+        //     <button
+        //       disabled={isCommenting}
+        //       className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
+        //     >
+        //       &uarr;
+        //     </button>
+        //   </div>
+        // </form>
+        <div className="fixed inset-0 bg-black md:hidden  bg-opacity-50 z-50">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full h-[95vh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp"
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Comments</h2>
+              <button
+                onClick={handleCloseCommentModal}
+                className="text-xl font-semibold"
+              >
+                &times;
+              </button>
+            </div>
+
+            <ul className="mt-4 overflow-y-auto">
+              {!datas && (
+                <div className="flex justify-center">
+                  <p className="capitalize text-stone-700">no comment yet</p>
+                </div>
+              )}
+              {loading ? (
+                <div className="flex justify-center">
+                  <BlueMiniLoader />
+                </div>
+              ) : (
+                datas?.map((item) => (
+                  <li key={item?._id} className="mb-4">
+                    <div className="flex items-center gap-x-3">
+                      <img
+                        src={
+                          item.user?.profilePicture
+                            ? item.user.profilePicture
+                            : "/images/profile-circle.svg"
+                        }
+                        alt="img"
+                        className="h-[3rem] w-[3rem] rounded-full"
+                      />
+                      <div>
+                        <p className="mb-0 flex gap-x-1 items-center">
+                          <span className="font-semibold">
+                            {" "}
+                            {item?.user?.fullName}
+                          </span>
+                          <span className="text-[0.7rem] text-stone-600">
+                            {timeStampAgo(item?.createdAt)}
+                          </span>
+                        </p>
+                        <p className="mb-0 font-medium capitalize text-stone-900">
+                          {item.text}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))
-            )}
-          </ul>
-          <div className="flex items-center gap-x-2 mt-2">
-            <img
-              src={data?.user?.profilePhoto}
-              alt="aadmin"
-              className="w-8 h-8 rounded-full"
-            />
-            <input
-              type="text"
-              {...register("text")}
-              placeholder="Add Your Comment Here"
-              className="w-full  bg-stone-100 outline-none placeholder:text-sm rounded-md"
-            />
-            <button
-              disabled={isCommenting}
-              className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
-            >
-              &uarr;
-            </button>
-          </div>
-        </form>
-        //  </div>
+                  </li>
+                ))
+              )}
+            </ul>
+
+            <div className="flex items-center gap-x-2 mt-2">
+              <img
+                src={data?.user?.profilePhoto}
+                alt="admin"
+                className="w-8 h-8 rounded-full"
+              />
+              <input
+                type="text"
+                {...register("text")}
+                placeholder="Add Your Comment Here"
+                className="w-full bg-stone-100 outline-none placeholder:text-sm rounded-md"
+              />
+              <button
+                disabled={isCommenting}
+                className="bg-secondary600 px-3 p-[1px] rounded-xl text-white"
+              >
+                &uarr;
+              </button>
+            </div>
+          </form>
+        </div>
+
+      
       )}
 
       {selectedImageIndex !== null && (

@@ -1,70 +1,62 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import useUser from "./hooks/useUser";
 import useSug from "./hooks/useSug";
+import { io } from "socket.io-client";
 
-// import useSug from "./hooks/useSug";
 
-const WebSocketContext = createContext();
-
- const WebSocketProvider = ({ children }) => {
-     const pathname = window.location.pathname;
-     console.log(pathname)
-    const {userId}=useUser()
-    const { userId:adminId } = useSug();
-      const identifier = pathname === "/sughome/sugfeed"?adminId:userId
-      console.log(identifier)
+const WebSocketContext = createContext()
+export const WebSocketProvider = ({ children }) => {
+  const pathname = window.location.pathname;
+  const { userId } = useUser();
+  const { userId: adminId } = useSug();
+  const user = pathname === "/sughome/sugfeed" ? adminId : userId;
   const [socket, setSocket] = useState(null);
-  const [notifications, setNotifications] = useState([]);
-  console.log(notifications)
 
   useEffect(() => {
-    const ws = new WebSocket(
-      `wss://student-plug.onrender.com/?userId=${identifier}`
-    );
+    console.log("Initializing socket connection...");
+    const newSocket = io("https://student-plug.onrender.com", {
+      query: { userId: user },
+      transports: ["websocket"],
+      withCredentials: true,
+    });
 
-    ws.onopen = () => {
-      console.log("WebSocket connected");
-      setSocket(ws);
-    };
+    newSocket.on("connect", () => {
+      console.log("Socket connected:", newSocket.id);
+    });
 
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log("Received message:", message);
-      setNotifications((prev) => [...prev, message]);
-    };
-      // ws.onmessage = (event) => {
-      //   const message = JSON.parse(event.data);
-      //   console.log("Received message:", message);
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
 
-      //   // Check if it's a notification
-      //   if (message.event === "newNotification") {
-      //     setNotifications((prevNotifications) => [
-      //       ...prevNotifications,
-      //       message.payload,
-      //     ]);
-      //   }
-      // };
+    newSocket.on("disconnect", (reason) => {
+      console.warn("Socket disconnected:", reason);
+    });
 
-    ws.onclose = () => {
-      console.log("WebSocket disconnected");
-      setSocket(null);
-    };
+    newSocket.on("post_liked", (data) => {
+      console.log("Client received post_liked event:", data);
+    });
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    setSocket(newSocket);
 
-    // Cleanup on component unmount
     return () => {
-      ws.close();
+      console.log("Cleaning up socket...");
+      newSocket.disconnect();
     };
-  }, []);
+  }, [user]);
 
   return (
-    <WebSocketContext.Provider value={{ socket, notifications }}>
+    <WebSocketContext.Provider value={{ socket }}>
       {children}
     </WebSocketContext.Provider>
   );
 };
-export { WebSocketProvider, WebSocketContext };
+
+
+export const useWebSocket = () => {
+  const context = useContext(WebSocketContext);
+  if (!context) {
+    throw new Error("useWebSocket must be used within a WebSocketProvider");
+  }
+  return context;
+};
