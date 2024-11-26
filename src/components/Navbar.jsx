@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {  HiMagnifyingGlass } from "react-icons/hi2";
 import { Link,  useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
 
 import ProfileMobileView from "./ProfileMobileView";
+import { useWebSocket } from "../WebSocketProvider";
 
 export default function Navbar() {
   const { pathname } = useLocation();
-
+const {socket}=useWebSocket()
 
 
   const links = [
@@ -310,13 +311,32 @@ export default function Navbar() {
   ];
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
 
+ useEffect(() => {
+   socket?.on("notification", (data) => {
+     console.log("Received notification:", data);
+   });
 
+   socket?.on("post_like_toggled", (data) => {
+     console.log("Post like toggled:", data);
+   });
+
+   socket?.on("post_likes_updated", (data) => {
+     console.log("Post likes updated:", data);
+   });
+
+   socket?.on("post_liked", (data) => {
+     console.log("Post liked:", data);
+   });
+
+   socket?.on("post_unliked", (data) => {
+     console.log("Post unliked:", data);
+   });
+ }, [socket]);
   
 
   return (
-    <nav
-      className={`bg-white p-2  z-[1] fixed top-0 left-0 w-full `}
-    >
+   <>
+   {pathname !== "/home/notifications"&& <nav className={`bg-white p-2  z-[1] fixed top-0 left-0 w-full `}>
       <article
         className={`${className}  max-lg:flex max-xl:flex-col max-lg:gap-y-2 `}
       >
@@ -342,12 +362,14 @@ export default function Navbar() {
             </div>
           </form>
           <div className=" hidden md:flex lg:hidden gap-2 items-center">
-            <img
-              src="\images\notification-bing.png"
-              alt="img"
-              loading="lazy"
-              className=" rounded-full p-2 border border-secondary400"
-            />
+         
+              <img
+                src="\images\notification-bing.png"
+                alt="img"
+                loading="lazy"
+                className=" rounded-full p-2 border border-secondary400"
+              />
+         
             {/* <img
               src="\images\messenger.png"
               alt="img"
@@ -357,7 +379,7 @@ export default function Navbar() {
         </div>
 
         <ul className="hidden md:flex items-center lg:hidden justify-between">
-          {links.map((item,i) => (
+          {links.map((item, i) => (
             <NavLinks item={item} key={i} />
           ))}
         </ul>
@@ -376,11 +398,13 @@ export default function Navbar() {
               </div>
             </form>
           </div>
+          <Link to="/home/notifications">
           <img
             src="\images\notification-bing.png"
             alt="img"
             className=" rounded-full p-2 border border-secondary400"
-          />
+            />
+            </Link>
           {/* <img
               src="\images\messenger.png"
               alt="img"
@@ -391,7 +415,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           <ul className="hidden lg:flex items-center gap-x-6 ">
             {links.map((item) => (
-              <NavLinks item={item} key={item.name}/>
+              <NavLinks item={item} key={item.name} />
             ))}
           </ul>
 
@@ -429,5 +453,7 @@ export default function Navbar() {
         </div>
       </article>
     </nav>
+    }
+    </>
   );
 }

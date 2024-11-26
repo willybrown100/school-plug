@@ -43,6 +43,8 @@ import SugPaybills from "./features/SugPaybills";
 import SugPendingPost from "./features/SugPendingPost";
 import SugNotification from "./features/sug/SugNotification"
 import { WebSocketProvider } from "./WebSocketProvider";
+import SugTrends from "./features/sug/SugTrends";
+import Notification from "./features/Notification";
 
 
 
@@ -58,7 +60,7 @@ export default function App() {
 
 
   return (
-    <WebSocketProvider >
+    <WebSocketProvider>
       <DateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -79,6 +81,7 @@ export default function App() {
                 <Route path="sugfeed" index element={<SugFeed />} />
                 <Route path="sugpaybills" element={<SugPaybills />} />
                 <Route path="sugnotification" element={<SugNotification />} />
+                <Route path="sugtrends" element={<SugTrends />} />
                 <Route path="pendingpost" element={<SugPendingPost />} />
                 <Route path="sugprofile" element={<SugProfile />}>
                   <Route index element={<Navigate to="sugprofilez" />} />
@@ -107,6 +110,7 @@ export default function App() {
                 </Route>
                 <Route path="events" element={<Events />} />
                 <Route path="material" element={<Materials />} />
+                <Route path="notifications" element={<Notification />} />
                 <Route path="trends" element={<Trends />} />
                 <Route path="bills" element={<PayBills />} />
                 <Route path="payment-form" element={<PaymentForm />} />

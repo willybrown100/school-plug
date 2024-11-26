@@ -126,10 +126,10 @@ export default function CreatePost() {
         "You have unsaved changes. Are you sure you want to leave?"
       );
       if (isConfirmed) {
-        navigate(-1); // Navigate back to the previous page
+        navigate(-1);
       }
     } else {
-      navigate(-1); // Navigate back if there are no unsaved changes
+      navigate(-1); 
     }
   };
 

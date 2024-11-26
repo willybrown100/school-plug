@@ -185,7 +185,7 @@ export default function SugSignup() {
 
 function SchoolInfo({ searchParams, setSearchParams }) {
   const imageRef = useRef();
-  const [university, setUniversity] = useState("");
+  const [university, setUniversity] = useState("Yaba Tech");
   const [state, setState] = useState("");
   const [aboutUniversity, setAboutUniversity] = useState("");
   const [uniProfilePicture, setUniProfilePicture] = useState("");

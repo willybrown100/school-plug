@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import useGetUser from '../hooks/useGetUser';
 import { ModalContext } from './Modals';
 import { studentCreatePost } from '../services/contactApi';
@@ -6,6 +6,7 @@ import useUser from '../hooks/useUser';
 import MiniLoader from "../ui/MiniLoader"
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function PostModal() {
   const { close } = useContext(ModalContext)
@@ -18,6 +19,7 @@ export default function PostModal() {
   const { user, studentInfo } = data
   const img = data?.user?.profilePhoto;
   const queryClient =useQueryClient()
+  const navigate = useNavigate()
   console.log( selectedImage);
   const disable =
     imagePreview.length === 3 || selectedImage.length === 3;
@@ -49,9 +51,9 @@ export default function PostModal() {
       file.forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImagePreview((prevImages) => [...prevImages, reader.result]); // Update preview state
+          setImagePreview((prevImages) => [...prevImages, reader.result]); 
         };
-        reader.readAsDataURL(file); // Read the file content
+        reader.readAsDataURL(file);
       });
     }
 
@@ -68,6 +70,36 @@ export default function PostModal() {
       prevImages.filter((curEl, i) => i !== index)
     );
   }
+
+    useEffect(() => {
+      const handleBeforeUnload = (event) => {
+        if (textContent.trim() !== "") {
+          const message =
+            "You have unsaved changes. Are you sure you want to leave?";
+          event.returnValue = message; // Standard for most browsers
+          return message; // For some older browsers
+        }
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }, [textContent]);
+    const handleClose = (e) => {
+      e.preventDefault();
+      if (textContent.trim() !== "") {
+        // Show confirmation prompt
+        const isConfirmed = window.confirm(
+          "You have unsaved changes. Are you sure you want to leave?"
+        );
+        if (isConfirmed) {
+          close();
+        }
+      } else {
+        navigate(-1);
+      }
+    };
   return (
     <div className="">
       {/* Background overlay */}
@@ -92,7 +124,7 @@ export default function PostModal() {
               </div>
             </div>
             <button
-              onClick={() => close()}
+              onClick={handleClose}
               className="h-8 w-8 border border-stone-500 rounded-full p-[0.6rem]  bg-transparent"
             >
               <img src="\images\close-circle.svg" />
@@ -148,7 +180,7 @@ export default function PostModal() {
                   textContent ? "bg-secondary600" : "bg-secondary400"
                 }`}
               >
-               {isLoading?<MiniLoader/>:"post"}
+                {isLoading ? <MiniLoader /> : "post"}
               </button>
             </div>
           </form>
