@@ -1,77 +1,142 @@
 import React, { useState } from 'react';
 import { HiArrowLeft } from "react-icons/hi";
 import img1 from "../../public/assets/bill.svg";
-// import img1 from '../assets/bill.svg';
 import img2 from "../../public/assets/teacher.svg";
-// import img2 from '../assets/teacher.svg';
+
 import img3 from '../../public/assets/book.svg';
-// import img3 from '../assets/book.svg';
-import { Link, useNavigate } from 'react-router-dom';
+
+import { Link} from 'react-router-dom';
+
 
 const PayBills = () => {
-    const [selectedFee, setSelectedFee] = useState(null);
+  const [active,setActive]=useState(null)
+    const [selectedFee, setSelectedFee] = useState("");
+  
+    const [selectedContent, setSelectedContent] = useState("");
+
+    console.log(selectedContent);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const navigate = useNavigate();
+ 
 
-    const fees = {
-        'SUG fee': { name: 'SUG fee', image: img1, amount: 'N1000' },
-        'Departmental fee': { name: 'Departmental fee', image: img2, amount: 'N1000' },
-        'Faculty fee': { name: 'Faculty fee', image: img3, amount: 'N1000' },
-    };
+ 
+ const handleChange = function (e) {
+ const selectedValue = e.target.value
 
-    const handleFeeChange = (event) => {
-        const feeId = event.target.value;
-        setSelectedFee(fees[feeId]);
-        setIsButtonDisabled(false);
-    };
+     const selectedPayment = payment.find(
+       (item) => item.Element.props.value === selectedValue
+     );
+     if(selectedPayment){
+      setSelectedFee(selectedValue);
+    
+      setSelectedContent({ selectedValue ,image:selectedPayment.image});
+     }
+console.log(selectedPayment)
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        navigate('/home/payment-form', { state: { selectedFee } });
-    };
+   setIsButtonDisabled(false);
+ };
+ const queryString = encodeURIComponent(JSON.stringify(selectedContent));
+    const payment = [
+      {
+        image:img1,
+        name: "sug fee",
+        Element: (
+          <input
+          type="radio"
+          onChange={handleChange}
+          value="sugFee"
+          checked={selectedFee === "sugFee"}
+          />
+        ),
+      },
+      {
+        image:img2,
+        name: "departmental fee",
+        Element: (
+          <input
+            type="radio"
+            onChange={handleChange}
+            value="departmentalfee"
+            checked={selectedFee === "departmentalfee"}
+          />
+        ),
+      },
+      {
+        image:img3,
+        name: "faculty fee",
+        Element: (
+          <input
+            type="radio"
+            onChange={handleChange}
+            value="facultyFee"
+            checked={selectedFee === "facultyFee"}
+          />
+        ),
+      },
+    ];
+
+
+
+   
+
+      const handleClick = function (i) {
+        setActive(i);
+      };
+
 
     return (
-        <div className='font-Inter container mx-auto p-3 md:w-1/2 h-[90vh] pb-[5rem]'>
-            <h3 className='mb-[3rem] mt-[0.6rem] '>
-                <Link to='/'>
-                    <HiArrowLeft className='inline mr-2 text-black' />
-                </Link>
-                Pay bills
-            </h3>
-            <section className='mb-[3rem]'>
-                <p className='text-[#0E2750] text-[14px]'>
-                    Select a bill you want to pay then proceed to making payment
-                </p>
-                {Object.keys(fees).map((feeKey, index) => (
-                    <div
-                        key={index}
-                        className={`flex items-center justify-between border px-3 mb-4 rounded-lg ${selectedFee?.name === fees[feeKey].name ? 'outline outline-1 outline-blue-500' : ''}`}
-                    >
-                        <div className="flex items-center">
-                            <img className='inline mr-4 ' src={fees[feeKey].image} alt={`${fees[feeKey].name} Image`} />
-                            <div className='flex flex-col mt-3'>
-                                <label htmlFor={`fee${index}`}>{fees[feeKey].name}</label>
-                                <p className='font-bold'>{fees[feeKey].amount}</p>
-                            </div>
-                        </div>
-                        <input
-                            type="radio"
-                            id={`fee${index}`}
-                            name="fee"
-                            value={feeKey}
-                            onChange={handleFeeChange}
-                        />
-                    </div>
-                ))}
-            </section>
-            <button
-                onClick={handleSubmit}
-                disabled={isButtonDisabled}
-                className={isButtonDisabled ? 'bg-[#B8CFF3] text-[#FAFAFA] py-3 px-[70px] rounded w-full font-bold' : 'bg-[#2B70DB] text-white py-3 px-[70px] rounded w-full font-bold'}
-            >
-                Make payment now
-            </button>
+      <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] bg-white  pb-[6rem]">
+        <div className="font-Inter container mx-auto p-3 md:w-1/2  ">
+          <h3 className="mb-[3rem] font-semibold mt-[0.6rem] ">
+            <Link to="/">
+              <HiArrowLeft className="inline mr-2 text-black" />
+            </Link>
+            Pay bills
+          </h3>
+          <section className="mb-[3rem]">
+            <p className="text-[#0E2750] text-[14px]">
+              Select a bill you want to pay then proceed to making payment
+            </p>
+            <ul className="flex flex-col gap-y-3">
+              {payment.map((item, i) => (
+                <li
+                  key={i}
+                  className={`${
+                    active === i
+                      ? "border border-secondary500"
+                      : "border border-stone-600"
+                  } flex p-3  gap-x-5 items-center rounded-lg`}
+                >
+                  <img src={item.image} alt="i" />
+                  {/* <div className='flex justify-between items-center'> */}
+
+                  <span
+                    className={`${
+                      active === i ? " text-secondary600" : ""
+                    } capitalize`}
+                  >
+                    {item.name}
+                  </span>
+                  <div className="ml-auto " onClick={() => handleClick(i)}>
+                    {item.Element}
+                  </div>
+                  {/* </div> */}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <Link
+            to={`/home/payment-form?option=${queryString}`}
+            disabled={isButtonDisabled}
+            className={
+              isButtonDisabled
+                ? "bg-[#B8CFF3] text-[#FAFAFA] grid grid-cols-1 hover:text-stone-100 text-center py-3 px-[70px] rounded w-full font-bold"
+                : "bg-[#2B70DB] text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 px-[70px] rounded w-full font-bold"
+            }
+          >
+            Make payment now
+          </Link>
         </div>
+      </article>
     );
 };
 

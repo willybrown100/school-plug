@@ -8,7 +8,7 @@ export default function ProfileMobileView() {
   const navigate = useNavigate()
  const {data,isLoading}=useGetUser()
  const img =data?.user?.profilePhoto;
-console.log(data)
+
 useEffect(() => {
   if (data?.message === "Token has expired") {
     navigate("/signin");

@@ -13,13 +13,13 @@ import { sugDeletePost } from "../services/contactApi";
 import {timeStampAgo} from "../utils/timeStampAgo"
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { useWebSocket } from "../WebSocketProvider";
+import { processText2 } from "../utils/utils";
 
 export default function PerPost({ item, onClick, open }) {
   const {socket}=useWebSocket()
   const queryClient = useQueryClient();
   const { data } = useGetSugUser();
-  const name = data?.user?.name
-  console.log(name)
+  const name = data?.data?.user?.fullName;
   const { userId: sugId, token } = useSug();
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
@@ -242,8 +242,8 @@ export default function PerPost({ item, onClick, open }) {
 
       {/* Text Content */}
       <p className="text-stone-700 mt-4 break-words max-full">
-        {isExpanded ? text : text.slice(0, 50)}
-        {text.length > 50 && (
+        {isExpanded ? processText2(text) : processText2(text).slice(0, 50)}
+        {text?.length > 50 && (
           <span
             onClick={toggleText}
             className="text-stone-600 cursor-pointer ml-1"
@@ -315,7 +315,7 @@ export default function PerPost({ item, onClick, open }) {
 
       {/* Comment Modal */}
       {commentModalVisible && (
-        <div className="fixed inset-0 bg-black md:hidden  bg-opacity-50 z-50">
+        <div className="fixed bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
           <div className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full h-[95vh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold">Comments</h2>

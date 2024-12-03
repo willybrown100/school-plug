@@ -9,8 +9,10 @@ import toast from "react-hot-toast";
 import useGetUser from "../hooks/useGetUser";
 
 import BlueMiniLoader from "../ui/BlueMiniLoader";
-import { timeStampAgo } from "../utils/timeStampAgo";
+import { timeAgo, timeStampAgo } from "../utils/timeStampAgo";
 import { useWebSocket } from "../WebSocketProvider";
+import { processText } from "../utils/utils";
+
 
 
 export default function StudentPerPost({ item }) {
@@ -41,8 +43,8 @@ const postId =_id
    const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  const { socket, notifications } = useWebSocket();
-console.log(socket, notifications);
+  const { socket } = useWebSocket();
+
   const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
 
@@ -69,7 +71,7 @@ console.log(socket, notifications);
 
 
 
-console.log(datas)
+
   const closeImageModal = () => setSelectedImageIndex(null);
 
   const showNextImage = () =>
@@ -79,44 +81,7 @@ console.log(datas)
       prev === 0 ? images.length - 1 : prev - 1
     );
 
-  const timeAgo = (createdAt) => {
-    const now = new Date();
-    const createdDate = new Date(createdAt);
-    const differenceInSeconds = Math.floor((now - createdDate) / 1000);
-
-    const isYesterday =
-      differenceInSeconds >= 86400 && differenceInSeconds < 172800;
-    if (isYesterday) {
-      return "Yesterday";
-    }
-
-    if (differenceInSeconds < 60) {
-      return `${differenceInSeconds} second${
-        differenceInSeconds !== 1 ? "s" : ""
-      } ago`;
-    } else if (differenceInSeconds < 3600) {
-      const minutes = Math.floor(differenceInSeconds / 60);
-      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
-    } else if (differenceInSeconds < 86400) {
-      const hours = Math.floor(differenceInSeconds / 3600);
-      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
-    } else if (differenceInSeconds < 604800) {
-      // less than a week
-      const days = Math.floor(differenceInSeconds / 86400);
-      return `${days} day${days !== 1 ? "s" : ""} ago`;
-    } else if (differenceInSeconds < 2419200) {
-      // less than a month
-      const weeks = Math.floor(differenceInSeconds / 604800);
-      return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-    } else if (differenceInSeconds < 29030400) {
-      // less than a year
-      const months = Math.floor(differenceInSeconds / 2419200);
-      return `${months} month${months !== 1 ? "s" : ""} ago`;
-    } else {
-      const years = Math.floor(differenceInSeconds / 29030400);
-      return `${years} year${years !== 1 ? "s" : ""} ago`;
-    }
-  };
+  
   const { mutate, isLoading: isLiking } = useMutation({
     mutationFn: studentLikePost,
     onSuccess: () => {
@@ -143,13 +108,6 @@ const handleLike = () => {
      likerId: studentId,
      likerName: name,
    });
-
-console.log("post_liked", {
-  type: "like",
-  postId,
-  likerId: studentId,
-  likerName: name,
-});
 
 
 };
@@ -224,9 +182,8 @@ console.log("post_liked", {
         </div>
       </div>
 
-      {/* Text Content */}
       <p className="text-stone-700 mt-4 break-words max-full">
-        {isExpanded ? text : text.slice(0, 50)}
+        {isExpanded ? processText(text) : processText(text).slice(0, 50)}
         {text?.length > 50 && (
           <span
             onClick={toggleText}
@@ -258,7 +215,6 @@ console.log("post_liked", {
           </div>
         ))}
       </div>
-
       {/* Like, Comment, Share Buttons */}
       <div className="mt-4">
         <p className="mb-0 text-secondary600">{likes.length} likes</p>
@@ -296,87 +252,10 @@ console.log("post_liked", {
           </button>
         </div>
       </div>
-
       {/* Comment Modal */}
       {commentModalVisible && (
-   
-        // <form
-        //   onSubmit={handleSubmit(onSubmit)}
-        //   className="fixed rounded-tl-[1rem] md:hidden rounded-tr-[1rem] grid grid-rows-[auto,1fr,auto] inset-0 z-50 bg-stone-100 w-full  p-4 h-full  overflow-y-scroll animate-slideUp"
-        // >
-        //   <div className="flex justify-between items-center">
-        //     <h2 className="text-lg font-semibold">Comments</h2>
-        //     <button
-        //       onClick={handleCloseCommentModal}
-        //       className="text-xl font-semibold"
-        //     >
-        //       &times;
-        //     </button>
-        //   </div>
-
-        //   <ul className="mt-4 overflow-y-auto">
-        //     {!datas && (
-        //       <div className="flex justify-center">
-        //         <p className="capitalize text-stone-700">no comment yet</p>
-        //       </div>
-        //     )}
-        //     {loading? (
-        //       <div className="flex justify-center">
-        //        <BlueMiniLoader/>
-        //       </div>
-        //     ) : (
-        //       datas?.map((item) => (
-        //         <li key={item?._id} className="mb-4">
-        //           <div className="flex items-center gap-x-3">
-        //             <img
-        //               src={
-        //                 item.user?.profilePicture
-        //                   ? item.user.profilePicture
-        //                   : "/images/profile-circle.svg"
-        //               }
-        //               alt="img"
-        //               className="h-[3rem] w-[3rem] rounded-full"
-        //             />
-        //             <div>
-        //               <p className="mb-0  flex gap-x-1 items-center">
-        //                 <span className="font-semibold">
-        //                   {" "}
-        //                   {item?.user?.fullName}
-        //                 </span>
-        //                 <span className="text-[0.7rem] text-stone-600">
-        //                   {timeStampAgo(item?.createdAt)}
-        //                 </span>
-        //               </p>
-        //               <p className="mb-0 font-medium capitalize text-stone-900">
-        //                 {item.text}
-        //               </p>
-        //             </div>
-        //           </div>
-        //         </li>
-        //       ))
-        //     )}
-        //   </ul>
-        //   <div className="flex items-center gap-x-2 mt-2">
-        //     <img
-        //       src={data?.user?.profilePhoto}
-        //       alt="aadmin"
-        //       className="w-8 h-8 rounded-full"
-        //     />
-        //     <input
-        //       type="text"
-        //       {...register("text")}
-        //       placeholder="Add Your Comment Here"
-        //       className="w-full  bg-stone-100 outline-none placeholder:text-sm rounded-md"
-        //     />
-        //     <button
-        //       disabled={isCommenting}
-        //       className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
-        //     >
-        //       &uarr;
-        //     </button>
-        //   </div>
-        // </form>
-        <div className="fixed inset-0 bg-black md:hidden  bg-opacity-50 z-50">
+       
+        <div className="fixed bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full h-[95vh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp"
@@ -444,7 +323,7 @@ console.log("post_liked", {
                 type="text"
                 {...register("text")}
                 placeholder="Add Your Comment Here"
-                className="w-full bg-stone-100 outline-none placeholder:text-sm rounded-md"
+                className="w-full bg-transparent outline-none placeholder:text-sm rounded-md"
               />
               <button
                 disabled={isCommenting}
@@ -455,10 +334,7 @@ console.log("post_liked", {
             </div>
           </form>
         </div>
-
-      
       )}
-
       {selectedImageIndex !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div className="relative max-w-3xl w-full p-4">
@@ -492,7 +368,6 @@ console.log("post_liked", {
           </div>
         </div>
       )}
-
       {activeTab === postId && (
         <div className="mt-3 hidden md:block overflow-y-auto">
           <ul className="mt-4 overflow-y-auto">
@@ -511,8 +386,8 @@ console.log("post_liked", {
                   <div className="flex items-center gap-x-3">
                     <img
                       src={
-                        item.user?.profilePhoto
-                          ? item.user.profilePhoto
+                        item.user?.profilePicture
+                          ? item.user.profilePicture
                           : "/images/profile-circle.svg"
                       }
                       alt="img"
@@ -558,4 +433,8 @@ console.log("post_liked", {
     </li>
   );
 }
+
+
+
+
 

@@ -251,11 +251,11 @@ export async function getAllComments(postId) {
 
 
 
-export async function getSugPosts(schoolInfoId) {
+export async function getSugPosts(schoolInfoId,page=1) {
   console.log(schoolInfoId);
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/school/${schoolInfoId}`
+      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`
     );
 
     // Check if the response status indicates a 404 error

@@ -105,6 +105,22 @@ export async function getStudentComments(postId) {
     throw error;
   }
 }
+export async function getTrends(schoolInfoId) {
+  console.log(schoolInfoId);
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/getting/trend?schoolInfoId=${schoolInfoId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 export async function sugDeletePost({ token, postId }) {
   console.log({ token, postId });
@@ -179,21 +195,26 @@ export async function getStudentComment(token) {
   }
 }
 
-export async function getParticularSchData(schoolInfoId) {
+export async function getParticularSchData(schoolInfoId, page = 1) {
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/school/${schoolInfoId}`
+      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`
     );
 
     const result = await response.json();
 
-    console.log(result);
+    console.log(result); // Debug the API response
     return result;
   } catch (error) {
-    console.log(error);
+    console.log(error); // Handle errors
     throw error;
   }
 }
+
+
+
+
+
 
 
 
@@ -648,3 +669,110 @@ export const userSignInWithGoogle = async () => {
     throw error;
   }
 };
+
+// payment==== section
+export async function studentPaymentDetails(data) {
+  console.log(data)
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/payment/add-details",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+   
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+  
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
+export async function studentAddCardDetails(data) {
+  console.log(data)
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/payment/tokenize-card",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+   
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+  if (result) {
+    localStorage.setItem("cardToken", JSON.stringify(result));
+  }
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function studentMakePayment(data) {
+  console.log(data)
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/payment/charge-card",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+   
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+  
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getCardDetails(email) {
+  console.log(email);
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/payment/card-details?email=${email}`
+    );
+
+ const result = await response.json();
+
+    console.log(result); 
+    return result;
+  } catch (error) {
+    console.log(error); // Handle errors
+    throw error;
+  }
+}

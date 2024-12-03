@@ -56,6 +56,47 @@ export const optionSplit = function (option) {
 
 
 
+export function formatNaira(amount) {
+  // Convert the number to a fixed decimal string
+  const formatted = parseFloat(amount)
+    .toFixed(2) // Ensure two decimal places
+    .toString()
+    .split("."); // Split into integer and decimal parts
+
+  // Add commas to the integer part
+  formatted[0] = formatted[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  // Join back the integer and decimal parts
+  return `₦${formatted.join(".")}`;
+}
+
+export function getBankLogo(bankName) {
+  switch (bankName?.toLowerCase()) {
+    case "access bank":
+      return "/logos/access-bank.png";
+    case "gtbank":
+      return "/logos/gtbank.png";
+    case "zenith bank":
+      return "/logos/zenith-bank.png";
+    case "uba":
+      return "/logos/uba.png";
+    case "first bank":
+      return "/images/First-Bank.png";
+    default:
+      return "/logos/default-bank.png"; // Default logo for unknown banks
+  }
+}
+
+// Example usage
+
+
+
+
+
+
+// Example usage:
+
+
 
 
 
