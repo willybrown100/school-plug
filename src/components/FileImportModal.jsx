@@ -89,7 +89,7 @@ console.log(selectedFile)
      
   return (
     <div
-      className="fixed  z-50  backdrop-blur-sm bg-opacity-70 inset-0 p-8"
+      className="fixed bg-black bg-opacity-50 z-50  backdrop-blur-sm inset-0 p-8"
       onClick={handleClose}
     >
       <div className="relative min-h-screen ">
@@ -106,7 +106,9 @@ console.log(selectedFile)
               <li
                 key={i}
                 className={`border relative flex-1 ${
-                  active === i ? "border border-secondary500" : "border-stone-100"
+                  active === i
+                    ? "border border-secondary500"
+                    : "border-stone-100"
                 } p-3  rounded-md`}
               >
                 <p className="capitalize mb-2 font-heading">{item.fileName}</p>

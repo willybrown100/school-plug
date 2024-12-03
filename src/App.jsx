@@ -45,6 +45,8 @@ import SugNotification from "./features/sug/SugNotification"
 import { WebSocketProvider } from "./WebSocketProvider";
 import SugTrends from "./features/sug/SugTrends";
 import Notification from "./features/Notification";
+import PageNotFound from "./components/PageNotFound";
+import PaymentReceipt from "./features/PaymentReceipt";
 
 
 
@@ -68,6 +70,7 @@ export default function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="signin" element={<SignIn />} />
               <Route path="signup" element={<SignUp />} />
+              <Route path="*" element={<PageNotFound />} />
               <Route path="sugsignup" element={<SugSignup />} />
               <Route path="sugforgotpassword" element={<SugForgotPassword />} />
               <Route path="sugsignin" element={<SugSignin />} />
@@ -113,6 +116,7 @@ export default function App() {
                 <Route path="notifications" element={<Notification />} />
                 <Route path="trends" element={<Trends />} />
                 <Route path="bills" element={<PayBills />} />
+                <Route path="receipt" element={<PaymentReceipt />} />
                 <Route path="payment-form" element={<PaymentForm />} />
                 <Route path="card-form" element={<CardForm />} />
               </Route>

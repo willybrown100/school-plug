@@ -9,7 +9,7 @@ export default function DesktopCreatingPostButton() {
      const { data } = useGetUser();
      const img = data?.user?.profilePhoto;
   
-     console.log(data);
+ 
   return (
     <div className="mt-6 hidden md:block">
       <div className="bg-white rounded-lg p-4 ">

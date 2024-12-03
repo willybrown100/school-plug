@@ -2,33 +2,45 @@ import React from 'react'
 import UserDetails from '../components/UserDetails';
 import Bills from '../components/Bills';
 import DesktopCreatingPostButton from '../components/DesktopCreatingPostButton';
+import useGetTrends from '../hooks/useGetTrends';
+import TrendPerPost from "../components/TrendPerPost"
+import BlueMiniLoader from '../ui/BlueMiniLoader';
+import useGetRegisteredSchools from '../hooks/useGetRegisteredSchools';
+
 
 
 
 export default function Trends() {
    const className = "md:max-w-[1250px]   md:w-[90vw]  m-auto";
 
+ const { data:schoolPosts,  } = useGetRegisteredSchools();
+   const { state, uniProfilePicture,university } = schoolPosts?.pages?.at(0).schoolInfo ||{};
+//  const {state,uniProfilePicture}=schoolPosts?.schoolInfo ||{}
+const {data,isLoading}=useGetTrends()
+const trend = data?.trendingPosts
 
  return (
-   <div className=" min-h-screen max-sm:mt-[6.5rem] md:mt-[9.4rem] lg:mt-[4.4rem]">
+   <div className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem]  pb-[8rem]">
      <div
        className={`${className} md:grid lg:grid-cols-[16rem,1fr,auto] md:grid-cols-[16rem,1fr] gap-x-3 `}
      >
        <UserDetails />
        <div className=" ">
-         {/* <div className={``}> */}
-
-         <div className=" p-4 bg-white rounded-lg flex flex-col gap-y-3">
+         <div className=" p-4 mb-2 bg-white rounded-lg flex flex-col gap-y-3">
            <div className="flex gap-x-3 items-center">
              <img
-               src="\images\yabatech.png"
+               src={
+                 uniProfilePicture
+                   ? uniProfilePicture
+                   : "/images/profile-circle.svg"
+               }
                alt="person"
-               className="rounded-full"
+               className="rounded-full w-[5rem] h-[5rem]"
              />
              <div>
-               <h4 className="uppercase mb-1">yaba tech</h4>
+               <h4 className="uppercase mb-1">{university}</h4>
                <h4 className="capitalize text-sm mb-0 text-stone-500 ">
-                 lagos nigeria
+                 {state} nigeria
                </h4>
              </div>
            </div>
@@ -43,9 +55,15 @@ export default function Trends() {
                trending post.
              </p>
            </div>
-           {/* </div> */}
          </div>
-       <DesktopCreatingPostButton/>
+         <DesktopCreatingPostButton />
+         {isLoading ? (
+           <div className="flex justify-center mt-3">
+             <BlueMiniLoader />
+           </div>
+         ) : (
+           trend?.map((item) => <TrendPerPost item={item} key={item.user} />)
+         )}
        </div>
 
        <Bills />
