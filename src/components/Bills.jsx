@@ -1,51 +1,74 @@
 import React, { useState } from "react";
+import img1 from "../../public/assets/bill.svg";
+import img2 from "../../public/assets/teacher.svg";
 
+import img3 from "../../public/assets/book.svg";
 import { Link } from "react-router-dom";
 
 export default function Bills() {
-  const [selectedOption, setSelectedOption] = useState("");
-  const [disable, setDisable] = useState(true);
-  const [active, setActive] = useState(null);
 
+   const [active, setActive] = useState(null);
+     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [selectedFee, setSelectedFee] = useState("");
 
-  const handleChange = function (e) {
-    setSelectedOption(e.target.value);
-   setDisable(false)
-  };
+    const [selectedContent, setSelectedContent] = useState("");
+ 
+ const handleChange = function (e) {
+   const selectedValue = e.target.value;
+
+   const selectedPayment = payment.find(
+     (item) => item.Element.props.value === selectedValue
+   );
+   if (selectedPayment) {
+     setSelectedFee(selectedValue);
+
+     setSelectedContent({ selectedValue, image: selectedPayment.image });
+   }
+   console.log(selectedPayment);
+
+   setIsButtonDisabled(false);
+ };
+ const queryString = encodeURIComponent(JSON.stringify(selectedContent));
+
   const handleClick = function (i) {
     setActive(i);
   };
   const payment = [
     {
+      image: img1,
       name: "sug fee",
       Element: (
         <input
           type="radio"
           onChange={handleChange}
           value="sugFee"
-          checked={selectedOption === "sugFee"}
+          checked={selectedFee === "sugFee"}
         />
       ),
     },
     {
+      image: img2,
       name: "departmental fee",
       Element: (
         <input
           type="radio"
+          disabled
           onChange={handleChange}
-          value="departmentalfee"
-          checked={selectedOption === "departmentalfee"}
+          value="departmentalFee"
+          checked={selectedFee === "departmentalfee"}
         />
       ),
     },
     {
+      image: img3,
       name: "faculty fee",
       Element: (
         <input
           type="radio"
+          disabled
           onChange={handleChange}
           value="facultyFee"
-          checked={selectedOption === "facultyFee"}
+          checked={selectedFee === "facultyFee"}
         />
       ),
     },
@@ -67,8 +90,11 @@ export default function Bills() {
                 active === i
                   ? "border border-secondary500"
                   : "border border-stone-600"
-              } flex p-3 justify-between gap-x-5 items-center rounded-lg`}
+              } flex p-3  gap-x-5 items-center rounded-lg`}
             >
+              <img src={item.image} alt="i" />
+              {/* <div className='flex justify-between items-center'> */}
+
               <span
                 className={`${
                   active === i ? " text-secondary600" : ""
@@ -76,29 +102,27 @@ export default function Bills() {
               >
                 {item.name}
               </span>
-              <div onClick={() => handleClick(i)}>{item.Element}</div>
+              <div className="ml-auto " onClick={() => handleClick(i)}>
+                {item.Element}
+              </div>
+              {/* </div> */}
             </li>
           ))}
         </ul>
+<div className="mt-[2rem] w-full">
+
         <Link
-          to={`/home/homePage/billz?option=${selectedOption}`}
-          className={`${
-            disable ? "bg-secondary400" : "bg-secondary600"
-          } w-full grid grid-cols-1 text-center   text-white hover:text-white rounded-md  font-heading capitalize font-semibold mt-3`}
-        >
-          {!disable ? (
-            <button className="bg-transparent p-2 capitalize">
-              make payment now
-            </button>
-          ) : (
-            <button
-              disabled={disable}
-              className="bg-transparent p-2 capitalize"
-            >
-              make payment now
-            </button>
-          )}
+          to={`/home/payment-form?option=${queryString}`}
+          disabled={isButtonDisabled}
+          className={
+            isButtonDisabled
+            ? "bg-[#B8CFF3] text-[#FAFAFA]  grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded  font-bold"
+            : "bg-[#2B70DB] text-white py-3  grid text-center grid-cols-1 hover:text-stone-100  rounded  font-bold"
+          }
+          >
+          Make payment now
         </Link>
+          </div>
       </div>
     </div>
   );

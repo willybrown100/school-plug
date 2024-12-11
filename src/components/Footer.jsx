@@ -1,8 +1,9 @@
 import  { useEffect, useRef } from 'react';
 import React, {  useState } from 'react'
 import NavLinks from './NavLinks';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GoPlus } from 'react-icons/go';
+import useGetUser from '../hooks/useGetUser';
 
 
 export default function Footer() {
@@ -10,7 +11,13 @@ export default function Footer() {
   //  
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollTop = useRef(0); // Use useRef to persist the value across renders
-
+    const navigate = useNavigate();
+    const { data } = useGetUser();
+    useEffect(() => {
+      if (data?.message === "Token has expired") {
+        navigate("/signin");
+      }
+    }, [data.message]);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -93,7 +100,8 @@ export default function Footer() {
           className={`lg:hidden ${
             pathname === "/home/bills" ||
             pathname === "/home/payment-form" ||
-            pathname === "/home/card-form"
+            pathname === "/home/card-form"  ||
+              pathname === "/home/receipt/"
               ? "text-secondary600"
               : "black"
           }`}
@@ -117,7 +125,9 @@ export default function Footer() {
             strokeWidth="1.5"
             strokeMiterlimit="10"
             className={`${
-              pathname === "/home/bills" || pathname === "/home/payment-form"
+              pathname === "/home/bills" ||
+              pathname === "/home/payment-form" ||
+              pathname === "/home/receipt/" || pathname === "/home/card-form"
                 ? "pz"
                 : "black"
             }`}
@@ -131,7 +141,8 @@ export default function Footer() {
             className={`${
               pathname === "/home/bills" ||
               pathname === "/home/payment-form" ||
-              pathname === "/home/card-form"
+              pathname === "/home/card-form" ||
+              pathname === "/home/receipt/"
                 ? "pz"
                 : "black"
             }`}
@@ -146,7 +157,8 @@ export default function Footer() {
             className={`${
               pathname === "/home/bills" ||
               pathname === "/home/payment-form" ||
-              pathname === "/home/card-form"
+              pathname === "/home/card-form" ||
+              pathname === "/home/receipt/"
                 ? "pz"
                 : "black"
             }`}
@@ -161,7 +173,8 @@ export default function Footer() {
             className={`${
               pathname === "/home/bills" ||
               pathname === "/home/payment-form" ||
-              pathname === "/home/card-form"
+              pathname === "/home/card-form" ||
+              pathname === "/home/receipt/"
                 ? "pz"
                 : "black"
             } `}

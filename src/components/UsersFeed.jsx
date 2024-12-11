@@ -76,10 +76,11 @@ useEffect(() => {
     return <div className="text-red-500">Error: {error.message}</div>;
 
   return (
-    <div className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] pb-[8rem]">
-      <div className="md:max-w-[1250px] md:w-[90vw] m-auto md:grid lg:grid-cols-[16rem,1fr,auto] md:grid-cols-[16rem,1fr] gap-x-3">
+    <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] pb-[8rem]">
+      <div className=" md:w-[90vw] mx-auto flex justify-center lg:grid-cols-[16rem,25rem,20rem] xl:grid-cols-[16rem,1fr,auto] md:grid grid-cols-[16rem,28rem]  gap-x-3">
         <UserDetails />
-        <div>
+
+        <div className="w-full">
           <DefaultSchool data={data} />
           <DesktopCreatingPostButton />
           <ul className="flex flex-col gap-y-2">
@@ -95,10 +96,8 @@ useEffect(() => {
             ))}
           </ul>
           {isFetchingNextPage && (
-            <div
-           className='flex justify-center items-center mt-4'
-            >
-              <BlueMiniLoader/>
+            <div className="flex justify-center items-center mt-4">
+              <BlueMiniLoader />
             </div>
           )}
           <div
@@ -108,6 +107,19 @@ useEffect(() => {
         </div>
         <Bills />
       </div>
-    </div>
+    </article>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

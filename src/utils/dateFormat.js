@@ -90,11 +90,37 @@ export function getBankLogo(bankName) {
 // Example usage
 
 
+export function formatDates(isoDate) {
+  const date = new Date(isoDate);
+
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'short' }); // Short month name
+  const year = date.getFullYear();
+  const hours = date.getHours() % 12 || 12; // Convert to 12-hour format
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Pad single digits
+  const ampm = date.getHours() >= 12 ? 'pm' : 'am';
+
+  // Adding the ordinal suffix to the day
+  const daySuffix = (d) => {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  };
+
+  return `${day}${daySuffix(day)} ${month}, ${year}, ${hours}:${minutes}${ampm}`;
+}
 
 
 
+export function formatText(text) {
+  return text.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
 
-// Example usage:
+
 
 
 

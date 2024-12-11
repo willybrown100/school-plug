@@ -79,38 +79,38 @@ socket?.on("post_unliked", (data) => {
       {pathn !== "sugprofile" &&
         pathname !== "/sughome/sugnotification" &&
         pathname !== "/sughome/sugpaybills" &&
-        pathname !==
-          "/sughome/sugtrends" &&(
-            <nav
-              className={`py-4 px-3 bg-white z-[1] fixed top-0 left-0 w-full transition-transform duration-300 ${
-                isVisible ? "translate-y-0" : "-translate-y-full"
-              }`}
-            >
-              <div className="flex items-center justify-between gap-x-2">
-                <div className="flex gap-x-4 items-center">
-                  <img
-                    src={sugImg ? sugImg : "/images/profile-circle.svg"}
-                    alt={fullName}
-                    className="rounded-full w-14 h-14"
-                  />
-                  <div className="flex flex-col gap-y-1">
-                    <p className="mb-0 capitalize font-heading">admin,</p>
-                    <h3 className="mb-0 capitalize font-semibold font-heading">
-                      {uni}
-                    </h3>
-                  </div>
+        pathname !== "/sughome/sugtrends" &&
+        pathname !== "/sughome/sugviewbills" && (
+          <nav
+            className={`py-4 px-3 bg-white z-[1] fixed top-0 left-0 w-full transition-transform duration-300 ${
+              isVisible ? "translate-y-0" : "-translate-y-full"
+            }`}
+          >
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex gap-x-4 items-center">
+                <img
+                  src={sugImg ? sugImg : "/images/profile-circle.svg"}
+                  alt={fullName}
+                  className="rounded-full w-14 h-14"
+                />
+                <div className="flex flex-col gap-y-1">
+                  <p className="mb-0 capitalize font-heading">admin,</p>
+                  <h3 className="mb-0 capitalize font-semibold font-heading">
+                    {uni}
+                  </h3>
                 </div>
-                <Link to="/sughome/sugnotification">
-                  <img
-                    src="/images/notification-bing.png"
-                    alt="Notification"
-                    loading="lazy"
-                    className="rounded-full p-2 border border-secondary400"
-                  />
-                </Link>
               </div>
-            </nav>
-          )}
+              <Link to="/sughome/sugnotification">
+                <img
+                  src="/images/notification-bing.png"
+                  alt="Notification"
+                  loading="lazy"
+                  className="rounded-full p-2 border border-secondary400"
+                />
+              </Link>
+            </div>
+          </nav>
+        )}
     </>
   );
 }

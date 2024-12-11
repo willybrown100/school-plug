@@ -7,6 +7,8 @@ import { io } from "socket.io-client";
 
 const WebSocketContext = createContext()
 export const WebSocketProvider = ({ children }) => {
+
+  
   const pathname = window.location.pathname;
   const { userId } = useUser();
   const { userId: adminId } = useSug();

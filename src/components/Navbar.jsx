@@ -336,7 +336,7 @@ const {socket}=useWebSocket()
 
   return (
     <>
-      {pathname !== "/home/notifications" && pathname !== "/home/receipt" && (
+      {pathname !== "/home/notifications"  && (
         <nav className="bg-white p-2 z-[1] fixed top-0 left-0 w-full">
           <article
             className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}
@@ -443,3 +443,4 @@ const {socket}=useWebSocket()
     </>
   );
 }
+

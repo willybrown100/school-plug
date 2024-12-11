@@ -1,13 +1,33 @@
+
+
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+
+import useGetPaymentStatus from '../../hooks/useGetPaymentStatus';
+
+import BlueMiniLoader from '../../ui/BlueMiniLoader';
 
 export default function SugPaybills() {
+   const { data, isLoading }=useGetPaymentStatus()
+ 
+ 
   const navigate = useNavigate()
   const handleClick = function(){
     navigate(-1);
   }
+  const handleClick2 = function(){
+    navigate("/sughome/sugviewbills");
+
+  }
+
+
+
+const { totalRegistrations, totalPaid, totalUnpaid,  } =
+  data?.data || {};
+
+
   return (
-    <article className="pb-[4rem] px-3">
+    <article className="pb-[9rem] px-3 py-4">
       <button className="flex gap-x-2 items-center" onClick={handleClick}>
         {" "}
         <img src="/assets/arrow-left.svg" alt="icon" />
@@ -35,24 +55,51 @@ export default function SugPaybills() {
           <div className="divive divide-y ">
             <div className="flex justify-between py-2">
               <p className="mb-0 text-stone-700">Total Reg. Number</p>
-              <p className="mb-0 text-stone-700">25,000</p>
+              <p className="mb-0 text-stone-700">
+                {isLoading ? <BlueMiniLoader /> : totalRegistrations}
+              </p>
             </div>
             <div className="flex justify-between py-2">
               <p className="mb-0 text-stone-700">Reg. Number Paid</p>
-              <p className="mb-0">25,000</p>
+              <p className="mb-0">
+                {isLoading ? <BlueMiniLoader /> : totalPaid}
+              </p>
             </div>
             <div className="flex justify-between py-2">
               <p className="mb-0 text-stone-700">Reg. Number Unpaid</p>
-              <p className="mb-0">25,000</p>
+              <p className="mb-0">
+                {isLoading ? <BlueMiniLoader /> : totalUnpaid}
+              </p>
             </div>
-            <div>
-
-          <button className='capitalize border bg-transparent mt-6 border-secondary600 p-2 rounded-md w-full text-center text-secondary600 font-semibold'>view more details</button>
+            <div className="mt-10 w-full">
+              <button
+                onClick={handleClick2}
+                className="capitalize border bg-transparent mt-6 border-secondary600 p-2 rounded-md w-full text-center text-secondary600 font-semibold"
+              >
+                view more details
+              </button>
             </div>
           </div>
-
         </div>
       </div>
     </article>
   );
 }
+
+
+
+
+
+// const fetchPaymentStatus = async (schoolInfoId, page) => {
+//   const response = await fetch(
+//     `https://student-plug.onrender.com/api/payment/payment-status/${schoolInfoId}?page=${page}&limit=1`
+//   );
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch payment status");
+//   }
+//   const result = await response.json();
+//   return result;
+// };
+
+
+

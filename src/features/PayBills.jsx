@@ -8,6 +8,7 @@ import img3 from '../../public/assets/book.svg';
 import { Link} from 'react-router-dom';
 
 
+
 const PayBills = () => {
   const [active,setActive]=useState(null)
     const [selectedFee, setSelectedFee] = useState("");
@@ -82,18 +83,17 @@ console.log(selectedPayment)
         setActive(i);
       };
 
-
     return (
-      <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] bg-white  pb-[6rem]">
-        <div className="font-Inter container mx-auto p-3 md:w-1/2  ">
-          <h3 className="mb-[3rem] font-semibold mt-[0.6rem] ">
+      <article className="min-h-screen w-full lg:hidden max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] bg-stone-50  pb-[6rem]">
+        <div className="font-Inter container   mx-auto p-3 w-full ">
+          <h3 className="mb-[3rem] md:hidden font-semibold mt-[0.6rem] ">
             <Link to="/">
               <HiArrowLeft className="inline mr-2 text-black" />
             </Link>
             Pay bills
           </h3>
-          <section className="mb-[3rem]">
-            <p className="text-[#0E2750] text-[14px]">
+          <section className="mb-[3rem] md:bg-white p-2">
+            <p className="text-[#0E2750] max-sm:text-[14px] md:text-[1.1rem]">
               Select a bill you want to pay then proceed to making payment
             </p>
             <ul className="flex flex-col gap-y-3">
@@ -103,7 +103,7 @@ console.log(selectedPayment)
                   className={`${
                     active === i
                       ? "border border-secondary500"
-                      : "border border-stone-600"
+                      : "max-md:border max-md:border-stone-600"
                   } flex p-3  gap-x-5 items-center rounded-lg`}
                 >
                   <img src={item.image} alt="i" />
@@ -124,17 +124,20 @@ console.log(selectedPayment)
               ))}
             </ul>
           </section>
+          <div className='md:flex md:justify-end'>
+
           <Link
             to={`/home/payment-form?option=${queryString}`}
             disabled={isButtonDisabled}
             className={
               isButtonDisabled
-                ? "bg-[#B8CFF3] text-[#FAFAFA] grid grid-cols-1 hover:text-stone-100 text-center py-3 px-[70px] rounded w-full font-bold"
-                : "bg-[#2B70DB] text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 px-[70px] rounded w-full font-bold"
+              ? "bg-[#B8CFF3] text-[#FAFAFA] max-md:grid grid-cols-1 hover:text-stone-100 text-center py-3 px-[70px] rounded  font-bold"
+              : "bg-[#2B70DB] text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 px-[70px] rounded  font-bold"
             }
-          >
+            >
             Make payment now
           </Link>
+            </div>
         </div>
       </article>
     );

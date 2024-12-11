@@ -16,11 +16,7 @@ export default function useGetSugPosts() {
 
  const schoolInfoId = schObj?._id;
  console.log(schoolInfoId);
-//  const { data = [], isLoading } = useQuery({
-//    queryFn: () => getSugPosts(schoolInfoId),
-//    queryKey: ["sugposts"],
-//    enabled: !!schoolInfoId,
-//  });
+
 
 const {
   data,

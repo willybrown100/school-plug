@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import useGetCardDetails from "../hooks/useGetCardDetails";
 import { getBankLogo } from "../utils/dateFormat";
 import Button from "../ui/Button";
@@ -8,7 +8,7 @@ import useGetUser from "../hooks/useGetUser";
 import useGetCardToken from "../hooks/useGetCardToken";
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { useMutation } from "@tanstack/react-query";
-import { studentMakePayment } from "../services/contactApi";
+import {  studentMakePayment1 } from "../services/contactApi";
 import MiniLoader from "../ui/MiniLoader";
 import toast from "react-hot-toast";
 
@@ -31,7 +31,7 @@ export default function ConfimPaymentModal({ selectedAmount, feeType }) {
     console.log(e, modalRef.current);
   };
 const { mutate,isLoading:isPaying } = useMutation({
-  mutationFn: studentMakePayment,
+  mutationFn: studentMakePayment1,
   onSuccess:()=>{
     navigate("/home/receipt/");
   },
@@ -66,13 +66,14 @@ console.log(paymentData)
           <>
             <div className="flex justify-between">
               <h4>student info.</h4>
-              <Link
-                to="/home/payment-form"
+              <button
+                type="b"
+                
                 className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center "
               >
                 <img src="\assets\edit2.svg" alt="edit" />
                 edit info
-              </Link>
+              </button>
             </div>
             <div className="flex items-center gap-x-3 border-b pb-2 border-stone-300 mb-4">
               <p className="text-sm mb-0 text-stone-700">
@@ -92,13 +93,13 @@ console.log(paymentData)
             </div>
             <div className=" flex justify-between  items-center">
               <h4 className="mb-0 font-semibold">debit card</h4>
-              <Link
-                to="/home/payment-form"
+              <button
+                
                 className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center "
               >
                 <img src="\assets\edit2.svg" alt="edit" />
                 edit info
-              </Link>
+              </button>
             </div>
             <div className="flex items-center gap-x-1 justify-between p-2 border border-stone-300 rounded-lg my-6">
               <input type="radio" checked readOnly />
@@ -111,7 +112,7 @@ console.log(paymentData)
               <span className="font-semibold capitalize">{card?.bankName}</span>
               <span className="capitalize">{card?.cardNumber}</span>
             </div>
-            <Button onClick={handleClick} className="w-full">
+            <Button onClick={handleClick} className="w-full" >
               {isPaying ? (
                 <div className="flex justify-center">
                   <MiniLoader />
