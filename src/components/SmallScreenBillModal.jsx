@@ -83,19 +83,19 @@ console.log(selectedOption, selectedContent);
         },
         {
           image: img2,
-          name: "departmental fee",
+          name: "dept. fee",
           Element: (
             <input
               type="radio"
               onChange={handleChange}
-              value="departmentalfee"
+              value="departmentalFee"
               checked={selectedFee === "departmentalfee"}
             />
           ),
         },
         {
           image: img3,
-          name: "faculty fee",
+          name: "fac. fee",
           Element: (
             <input
               type="radio"
@@ -120,7 +120,7 @@ console.log(selectedOption, selectedContent);
         <p className="text-sm text-stone-500">
           Select a bill you want to pay then proceed to making payment.
         </p>
-        <div className="flex justify-between gap-x-3">
+        {/* <div className="flex justify-between gap-x-3"> */}
           <ul className="flex justify-between gap-x-3">
             {payment.map((item, i) => (
               <li
@@ -148,7 +148,7 @@ console.log(selectedOption, selectedContent);
               </li>
             ))}
           </ul>
-        </div>
+        {/* </div> */}
         <button
           onClick={() => close()}
           className="bg-secondary600 p-2 rounded-md w-full text-white mt-6 capitalize font-semibold"

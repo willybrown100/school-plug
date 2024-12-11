@@ -120,74 +120,74 @@ export default function SugFooter() {
       ),
       path: "/sughome/sugpaybills",
     },
-    {
-      name: <span className="lg:hidden">pending post </span>,
-      icon: (
-        <svg
-          width="25"
-          height="24"
-          viewBox="0 0 25 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.83337 2V5"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M16.8334 2V5"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M21.8334 8.5V13.63C20.9434 12.92 19.8134 12.5 18.5834 12.5C17.3534 12.5 16.2034 12.93 15.3034 13.66C14.0934 14.61 13.3334 16.1 13.3334 17.75C13.3334 18.73 13.6134 19.67 14.0934 20.45C14.4634 21.06 14.9434 21.59 15.5134 22H8.83337C5.33337 22 3.83337 20 3.83337 17V8.5C3.83337 5.5 5.33337 3.5 8.83337 3.5H16.8334C20.3334 3.5 21.8334 5.5 21.8334 8.5Z"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M7.83337 11H13.8334"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M7.83337 16H10.4534"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M23.8334 17.75C23.8334 18.73 23.5534 19.67 23.0734 20.45C22.7934 20.93 22.4434 21.35 22.0334 21.69C21.1134 22.51 19.9134 23 18.5834 23C17.4334 23 16.3734 22.63 15.5134 22C14.9434 21.59 14.4634 21.06 14.0934 20.45C13.6134 19.67 13.3334 18.73 13.3334 17.75C13.3334 16.1 14.0934 14.61 15.3034 13.66C16.2034 12.93 17.3534 12.5 18.5834 12.5C19.8134 12.5 20.9434 12.92 21.8334 13.63C23.0534 14.59 23.8334 16.08 23.8334 17.75Z"
-            stroke="#565656"
-            strokeWidth="1.5"
-            strokeMiterlimit="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M18.5834 20.25C18.5834 18.87 19.7034 17.75 21.0834 17.75C19.7034 17.75 18.5834 16.63 18.5834 15.25C18.5834 16.63 17.4634 17.75 16.0834 17.75C17.4634 17.75 18.5834 18.87 18.5834 20.25Z"
-            stroke="#565656"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-      path: "/sughome/pendingpost",
-    },
+    // {
+    //   name: <span className="lg:hidden">pending post </span>,
+    //   icon: (
+    //     <svg
+    //       width="25"
+    //       height="24"
+    //       viewBox="0 0 25 24"
+    //       fill="none"
+    //       xmlns="http://www.w3.org/2000/svg"
+    //     >
+    //       <path
+    //         d="M8.83337 2V5"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M16.8334 2V5"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M21.8334 8.5V13.63C20.9434 12.92 19.8134 12.5 18.5834 12.5C17.3534 12.5 16.2034 12.93 15.3034 13.66C14.0934 14.61 13.3334 16.1 13.3334 17.75C13.3334 18.73 13.6134 19.67 14.0934 20.45C14.4634 21.06 14.9434 21.59 15.5134 22H8.83337C5.33337 22 3.83337 20 3.83337 17V8.5C3.83337 5.5 5.33337 3.5 8.83337 3.5H16.8334C20.3334 3.5 21.8334 5.5 21.8334 8.5Z"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M7.83337 11H13.8334"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M7.83337 16H10.4534"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M23.8334 17.75C23.8334 18.73 23.5534 19.67 23.0734 20.45C22.7934 20.93 22.4434 21.35 22.0334 21.69C21.1134 22.51 19.9134 23 18.5834 23C17.4334 23 16.3734 22.63 15.5134 22C14.9434 21.59 14.4634 21.06 14.0934 20.45C13.6134 19.67 13.3334 18.73 13.3334 17.75C13.3334 16.1 14.0934 14.61 15.3034 13.66C16.2034 12.93 17.3534 12.5 18.5834 12.5C19.8134 12.5 20.9434 12.92 21.8334 13.63C23.0534 14.59 23.8334 16.08 23.8334 17.75Z"
+    //         stroke="#565656"
+    //         strokeWidth="1.5"
+    //         strokeMiterlimit="10"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //       <path
+    //         d="M18.5834 20.25C18.5834 18.87 19.7034 17.75 21.0834 17.75C19.7034 17.75 18.5834 16.63 18.5834 15.25C18.5834 16.63 17.4634 17.75 16.0834 17.75C17.4634 17.75 18.5834 18.87 18.5834 20.25Z"
+    //         stroke="#565656"
+    //         strokeLinecap="round"
+    //         strokeLinejoin="round"
+    //       />
+    //     </svg>
+    //   ),
+    //   path: "/sughome/pendingpost",
+    // },
     {
       name: (
         <span
@@ -265,67 +265,74 @@ export default function SugFooter() {
   const handleClose = function () {
     setOpen(false);
   };
-  return (
-    <div className=" ">
-      {/* Bottom navigation */}
-      <div
-        className={` p-2 shadow-xl fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
-          isVisible ? "translate-y-0" : "translate-y-full"
-        } bg-white shadow-md md:hidden `}
-      >
-        <ul className="flex justify-between items-center gap-x-2">
-          {links.map((item) => (
-            <SugNavlinks item={item} key={item.path} />
-          ))}
-        </ul>
 
-        {/* Post button with the highest z-index */}
-        {isOpen ? (
-          <p></p>
-        ) : (
-          <>
-            {pathname === "/sughome/sugfeed" && (
-              <button
-                onClick={handleClick}
-                className={`bg-secondary600 ${
-                  isVisible ? "scale-1" : "scale-0"
-                } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
-              >
-                <GoPlus className={`text-3xl text-white`} />
-              </button>
-            )}
-          </>
-        )}
-      </div>
-      {/* Overlay should cover the entire screen */}
-      {isOpen && (
-        <div className="relative" onClick={handleClose}>
+  return (
+    <>
+      {pathname !== "/sughome/sugviewbills" && (
+        <div className=" ">
+          {/* Bottom navigation */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
-            style={{ height: "100vh", width: "100vw" }}
+            className={` p-2 shadow-xl fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
+              isVisible ? "translate-y-0" : "translate-y-full"
+            } bg-white shadow-md md:hidden `}
           >
-            <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
-              <div className="flex items-center gap-x-2">
-                <span className="text-white font-heading capitalize">
-                  events
-                </span>
-                <button className=" p-[0.65rem] rounded-full bg-[#dce7f9]">
-                  <img src="\images\calendar.svg" alt="img" />
-                </button>
-              </div>
-              <div className="flex items-center gap-x-2">
-                <span className="text-white font-heading capitalize">post</span>
-                <Link
-                  to="/sugpost"
-                  className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
-                >
-                  <GoPlus className={`text-3xl text-white`} />
-                </Link>
+            <ul className="flex justify-between items-center gap-x-2">
+              {links.map((item) => (
+                <SugNavlinks item={item} key={item.path} />
+              ))}
+            </ul>
+
+            {/* Post button with the highest z-index */}
+            {isOpen ? (
+              <p></p>
+            ) : (
+              <>
+                {pathname === "/sughome/sugfeed" && (
+                  <button
+                    onClick={handleClick}
+                    className={`bg-secondary600 ${
+                      isVisible ? "scale-1" : "scale-0"
+                    } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
+                  >
+                    <GoPlus className={`text-3xl text-white`} />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+          {/* Overlay should cover the entire screen */}
+          {isOpen && (
+            <div className="relative" onClick={handleClose}>
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
+                style={{ height: "100vh", width: "100vw" }}
+              >
+                <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
+                  <Link to="/sugevent" className="flex items-center gap-x-2">
+                    <button className="text-white bg-transparent font-heading capitalize">
+                      events
+                    </button>
+                    <button className=" p-[0.65rem] rounded-full bg-[#dce7f9]">
+                      <img src="\images\calendar.svg" alt="img" />
+                    </button>
+                  </Link>
+                  <div className="flex items-center gap-x-2">
+                    <span className="text-white font-heading capitalize">
+                      post
+                    </span>
+                    <Link
+                      to="/sugpost"
+                      className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
+                    >
+                      <GoPlus className={`text-3xl text-white`} />
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }

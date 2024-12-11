@@ -232,11 +232,28 @@ export async function getAuthSug(userId) {
 }
 
 
+
 export async function getAllComments(postId) {
   console.log(postId)
   try {
     const response = await fetch(
       `https://student-plug.onrender.com/api/add/posts/${postId}?postType=admin`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function getPaymentStatus(schoolInfoId,page) {
+  console.log(schoolInfoId)
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/payment/payment-status/${schoolInfoId}?page=${page}&limit=1`
     );
 
     const result = await response.json();

@@ -1,43 +1,52 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import Logo from "../components/Logo";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { HiOutlineEyeSlash } from "react-icons/hi2";
-import { IoIosEye } from "react-icons/io";
 import { useMutation } from "@tanstack/react-query";
-import {
-  forgetPassword,
-  newPassword,
-  verifyPasswordCode,
-} from "../services/contactApi";
+import Logo from "../../components/Logo.jsx";
+import { IoIosEye } from "react-icons/io";
+import { HiOutlineEyeSlash } from "react-icons/hi2";
 import toast from "react-hot-toast";
+import MiniLoader from "../../ui/MiniLoader.jsx";
+import { sugForgetPassword } from "../../services/sugApis.js";
+import { sugVerifyPasswordCode } from "../../services/sugApis.js";
+import { sugNewPassword } from "../../services/sugApis.js";
+import { useForm } from "react-hook-form";
 
-const ForgetPassword = () => {
+export default function SugForgotPassword() {
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordCode, setPasswordCode] = useState("");
   const initialStep = searchParams.get("step") || 1;
   const [step, setStep] = useState(Number(initialStep));
 
-  // const userId = localStorage.getItem("userId");
-  let userId = localStorage.getItem("userId");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
+
+  const validateConfirmPassword = (value) =>
+    value === getValues("password") || "Passwords do not match";
+
+  let userId = localStorage.getItem("sugId");
 
   // Check if it contains extra quotes and clean it up
   userId = userId.replace(/["]+/g, "");
 
-  console.log(step, password, confirmPassword);
-
-  const userEmail = email && localStorage.getItem("email");
+  const userEmail = localStorage.getItem("sugemail");
 
   console.log(userEmail, userId);
-  const ToggleOpen = () => setOpen(!open);
+
   const { mutate, isPending } = useMutation({
-    mutationFn: forgetPassword,
+    mutationFn: sugForgetPassword,
     onSuccess: () => {
       searchParams.set("step", 2);
       setSearchParams(searchParams);
@@ -47,7 +56,7 @@ const ForgetPassword = () => {
     },
   });
   const { mutate: passCode, isPending: loading } = useMutation({
-    mutationFn: verifyPasswordCode,
+    mutationFn: sugVerifyPasswordCode,
     onSuccess: () => {
       searchParams.set("step", 3);
       setSearchParams(searchParams);
@@ -57,33 +66,43 @@ const ForgetPassword = () => {
     },
   });
   const { mutate: newPass, isPending: isLoading } = useMutation({
-    mutationFn: newPassword,
+    mutationFn: sugNewPassword,
     onSuccess: () => {
       toast.success("password succesfully reset");
-      navigate("/signin");
+      navigate("/sugsignin");
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    mutate({ email });
-    localStorage.setItem("email", email);
-  };
+
   const handleCodeSubmit = async (e) => {
     e.preventDefault();
+    console.log({ code: passwordCode });
     passCode({ code: passwordCode });
   };
-  const handleNewPassword = async (e) => {
-    e.preventDefault();
-    newPass({ userId, password, confirmPassword });
+  const handleNewPassword = async (data) => {
+    console.log({
+      userId,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
+    newPass({
+      userId,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
   };
   const handleResend = async (e) => {
     e.preventDefault();
-    mutate({ email, resend: true });
+    mutate({ email: userEmail, resend: true });
   };
-
+  const handleEmailSubmit = function (e) {
+    e.preventDefault();
+    console.log({ email });
+    localStorage.setItem("sugemail", email);
+    mutate({ email });
+  };
   useEffect(() => {
     // When the component mounts, check if the step is in the URL
     // If so, set the step state accordingly
@@ -101,8 +120,8 @@ const ForgetPassword = () => {
             <Logo />
           </div>
 
-          <h2 className="text-2xl mb-4 text-center capitalize font-semibold font-fontHeading">
-            Enter Email or phone no.
+          <h2 className="text-2xl mb-4 text-center capitalize font-medium text-stone-600 font-fontHeading">
+            forget password
           </h2>
           <form
             onSubmit={handleEmailSubmit}
@@ -113,6 +132,7 @@ const ForgetPassword = () => {
               placeholder="enter Email or phone no"
               className="w-full px-4 md:py-2 py-3 border mt-12 placeholder:capitalize bg-transparent border-stone-400 md:mt-0 rounded mb-4"
               value={email}
+              disabled={isPending}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -121,9 +141,15 @@ const ForgetPassword = () => {
               <button
                 type="submit"
                 className=" bg-blue-500 hidden md:block w-full capitalize font-semibold text-white px-4 py-2 rounded"
-                disabled={loading}
+                disabled={isPending}
               >
-                {loading ? "Submitting..." : "continue"}
+                {isPending ? (
+                  <div className="flex justify-center items-center">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  "continue"
+                )}
               </button>
               <img
                 src="/images/indicator1.png"
@@ -135,7 +161,13 @@ const ForgetPassword = () => {
                 className=" bg-blue-500 md:hidden w-full capitalize font-semibold text-white px-4 py-2 rounded"
                 disabled={isPending}
               >
-                {isPending ? "Submitting..." : "continue"}
+                {isPending ? (
+                  <div className="flex justify-center items-center">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  "continue"
+                )}
               </button>
             </div>
           </form>
@@ -199,7 +231,13 @@ const ForgetPassword = () => {
                 disabled={loading}
                 className=" bg-blue-500 hidden md:block w-full capitalize font-semibold text-white px-4 py-2 rounded"
               >
-                {loading ? "wait..." : "verify now"}
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  "verify now"
+                )}
               </button>
               <img
                 src="/images/indicator2.png"
@@ -210,7 +248,13 @@ const ForgetPassword = () => {
                 disabled={loading}
                 className=" bg-blue-500 w-full md:hidden capitalize font-semibold text-white px-4 py-2 rounded"
               >
-                {loading ? "wait..." : "verify now"}
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  "verify now"
+                )}
               </button>
             </div>
           </form>
@@ -228,35 +272,48 @@ const ForgetPassword = () => {
               down and save password in notepad
             </p>
           </div>
-          <form onSubmit={handleNewPassword} className="flex flex-col gap-y-6">
-            {/* <input
-              type="password"
-              placeholder="create Password"
-              className="w-full px-4 placeholder:capitalize bg-transparent py-2 border rounded mb-4"
-              required
-            /> */}
-            <PasswordField
-              password={password}
-              setPassword={setPassword}
-              open={open}
-              ToggleOpen={ToggleOpen}
-              placeholder="create password"
+          <form
+            onSubmit={handleSubmit(handleNewPassword)}
+            className="flex flex-col gap-y-6"
+          >
+            <div>
+              <PasswordField1
+                open1={open1}
+                label="create new password"
+                ToggleOpen={() => setOpen1(!open1)}
+                placeholder="create password"
+                register={register}
+                errors={errors}
+              />
+              <p className="text-[0.8rem] text-stone-400">
+                Password should contain at least 8 characters including;
+                Capital, small letters, number and special characters
+              </p>
+            </div>
+            <ConfirmPasswordField
+              validateConfirmPassword={validateConfirmPassword}
+              register={register}
+              //   isPending={isPending}
+              label="confirm password"
+              errors={errors}
+              open2={open2}
+              ToggleOpen2={() => setOpen2(!open2)}
+              placeholder="confirm password"
             />
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
-              className="w-full px-4 py-2  placeholder:capitalize bg-transparent border rounded mb-4"
-              required
-            />
+
             <div className="flex mt-4 gap-x-4 items-center">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="  bg-secondary500 w-full capitlize text-white px-4 py-2 rounded"
+                className=" capitalize bg-secondary600 w-full capitlize text-white px-4 py-2 rounded"
               >
-                {isLoading ? "please wait..." : "create password"}
+                {isLoading ? (
+                  <div className="flex justify-center items-center">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  "create password"
+                )}
               </button>
               <img
                 src="/images/indicator3.png"
@@ -269,35 +326,35 @@ const ForgetPassword = () => {
       )}
     </article>
   );
-};
+}
 
-export default ForgetPassword;
-
-export const PasswordField = ({
-
+export const PasswordField1 = ({
+  label,
   placeholder,
-
-  error,
-  errorMessage,
-  open,
+  register,
+  errors,
+  open1,
   ToggleOpen,
-  password,
-  setPassword,
 }) => (
-  <div className="Input-Data ">
-    {/* <label className="text-[12px]">{label}</label> */}
+  <div className=" ">
+    <label className="capitalize text-stone-500">{label}</label>
     <div className="relative">
       <input
-        type={!open ? "password" : "text"}
+        type={!open1 ? "password" : "text"}
         id="password"
         className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
         placeholder={placeholder}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        {...register("password", {
+          required: "Password is required",
+          minLength: {
+            value: 8,
+            message: "Password must be at least 8 characters long",
+          },
+        })}
         autoComplete="current-password"
       />
-      <span className="absolute right-3 top-2 cursor-pointer">
-        {open ? (
+      <span className="absolute right-3 top-4 cursor-pointer">
+        {open1 ? (
           <IoIosEye
             className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
             onClick={ToggleOpen}
@@ -309,7 +366,52 @@ export const PasswordField = ({
           />
         )}
       </span>
-      {error && <span className="text-white">{errorMessage}</span>}
     </div>
+    {errors.password && (
+      <p className="text-red-500 mt-1">{errors.password.message}</p>
+    )}
+  </div>
+);
+
+export const ConfirmPasswordField = ({
+  label,
+  placeholder,
+  register,
+  errors,
+  open2,
+  ToggleOpen2,
+  validateConfirmPassword,
+}) => (
+  <div className=" ">
+    <label className="capitalize text-stone-500">{label}</label>
+    <div className="relative">
+      <input
+        type={!open2 ? "password" : "text"}
+        id="confirmPassword"
+        className="w-full md:p-2 border border-stone-700 p-3 rounded-md"
+        placeholder={placeholder}
+        {...register("confirmPassword", {
+          required: "Please confirm your password",
+          validate: validateConfirmPassword,
+        })}
+        autoComplete="current-password"
+      />
+      <span className="absolute right-3 top-4 cursor-pointer">
+        {open2 ? (
+          <IoIosEye
+            className="cursor-pointer text-stone-500 w-[2rem] h-[2rem] pb-[.8rem]"
+            onClick={ToggleOpen2}
+          />
+        ) : (
+          <HiOutlineEyeSlash
+            className="cursor-pointer w-[2rem] text-stone-500 h-[2rem] pb-[.8rem]"
+            onClick={ToggleOpen2}
+          />
+        )}
+      </span>
+    </div>
+    {errors.confirmPassword && (
+      <p className="text-red-500 mt-1">{errors.confirmPassword.message}</p>
+    )}
   </div>
 );

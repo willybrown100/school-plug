@@ -744,6 +744,8 @@ export async function studentMakePayment(data) {
         body: JSON.stringify(data),
       }
     );
+
+
    
     if (!response.ok) {
       const error = await response.json();
@@ -758,6 +760,8 @@ export async function studentMakePayment(data) {
     console.log(error);
     throw error;
   }
+
+
 }
 
 export async function getCardDetails(email) {
@@ -773,6 +777,148 @@ export async function getCardDetails(email) {
     return result;
   } catch (error) {
     console.log(error); // Handle errors
+    throw error;
+  }
+}
+export async function getReceipt(email) {
+  console.log(email);
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/payment/payments-details/${email}`
+    );
+
+ const result = await response.json();
+
+    console.log(result); 
+    return result;
+  } catch (error) {
+    console.log(error); // Handle errors
+    throw error;
+  }
+}
+
+
+
+// export async function studentMakePayment1(data) {
+//   try {
+//     // Step 1: Make the first API call
+//     const response1 = await fetch(
+//       "https://student-plug.onrender.com/api/payment/charge-card",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(data),
+//       }
+//     );
+
+//     if (!response1.ok) {
+//       const error = await response1.json();
+//       throw new Error(error.message);
+//     }
+
+//     const result1 = await response1.json();
+//     console.log("First API Response:", result1);
+// const { email, amount, feeType, } = data;
+// const data11 = {
+//   reference: result1.reference,
+//   email,
+//   amount,
+//   feeType,
+//   status: result1.status,
+//   gatewayResponse: result1.gateway_response,
+// };
+//     // Step 2: Proceed to the second API call if the first one is successful
+//     console.log(data11);
+//     const response2 = await fetch(
+//       "https://student-plug.onrender.com/api/payment/payment-record",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(data11),
+//       }
+//     );
+
+//     if (!response2.ok) {
+//       const error = await response2.json();
+//       throw new Error(error.message);
+//     }
+
+//     const result2 = await response2.json();
+//     console.log("Second API Response:", result2);
+
+//     // Return both results or only the one needed
+//     return { firstApiResult: result1, secondApiResult: result2 };
+//   } catch (error) {
+//     console.error("Error occurred:", error);
+//     throw error;
+//   }
+// }
+
+export async function studentMakePayment1(data) {
+  try {
+    if (!data.email || !data.amount || !data.feeType) {
+      throw new Error("Missing required fields: email, amount, or feeType");
+    }
+
+    console.log("Making First API Call with Data:", data);
+
+    const response1 = await fetch(
+      "https://student-plug.onrender.com/api/payment/charge-card",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response1.ok) {
+      console.error("First API Call Failed", await response1.json());
+      throw new Error("First API call failed");
+    }
+
+    const result1 = await response1.json();
+    console.log("First API Response Received:", result1);
+
+    const { email, amount, feeType } = data;
+    const data11 = {
+      reference: result1?.data?.reference,
+      email,
+      amount,
+      feeType,
+      status: result1?.data?.status,
+      gatewayResponse: result1?.data?.gateway_response,
+    };
+
+    console.log("Constructed Data for Second API Call:", data11);
+
+    const response2 = await fetch(
+      "https://student-plug.onrender.com/api/payment/payment-record",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data11),
+      }
+    );
+
+    if (!response2.ok) {
+      console.error("Second API Call Failed", await response2.json());
+      throw new Error("Second API call failed");
+    }
+
+    const result2 = await response2.json();
+    console.log("Second API Response Received:", result2);
+
+    return { firstApiResult: result1, secondApiResult: result2 };
+  } catch (error) {
+    console.error("Error occurred:", error);
     throw error;
   }
 }

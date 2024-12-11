@@ -3,16 +3,16 @@ import React from "react";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import SignIn from "./auth/SignIn";
-import ForgotPassword from "./auth/ForgotPassword";
+import SignIn from "./auth/signup/SignIn";
+import ForgotPassword from "../src/auth/signup/ForgotPassword";
 import SignUp from "./auth/signup/SignUp";
 
 import Loader from "./components/Loader";
 
-import UserProfile from "./auth/UserProfile";
+import UserProfile from "./auth/signup/UserProfile";
 import AppLayout from "./components/AppLayout";
 import HomePage from "./features/HomePage";
-import {  DateProvider } from "./DateContext";
+import { DateProvider } from "./DateContext";
 import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
 import Trends from "./features/Trends";
@@ -23,11 +23,10 @@ import CreatePost from "./features/CreatePost";
 import CardForm from "./components/CardForm";
 import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
-import BillInformation from "./components/BillInformation";
 import UsersFeed from "./components/UsersFeed";
-import SugSignup from "./auth/signup/SugSignup";
-import SugSignin from "./auth/SugSignin";
-import SugForgotPassword from "./auth/SugForgotPassword";
+import SugSignup from "./auth/sugSignupAndSignin/SugSignup";
+import SugSignin from "./auth/sugSignupAndSignin/SugSignin";
+import SugForgotPassword from "./auth/sugSignupAndSignin/SugForgotPassword";
 import SugAppLayout from "./components/SugAppLayout";
 import SugFeed from "./features/sug/SugFeed";
 import SugProfile from "./features/sug/SugProfile";
@@ -38,17 +37,22 @@ import SugAccountSetting from "./features/sug/SugAccountSetting";
 import SugChangePassword from "./features/sug/SugChangePassword";
 import SugImportedRegNums from "./features/sug/SugImportedRegNums";
 import SugSchoolFaculties from "./features/sug/SugSchoolFaculties";
-import SugCreatePost from "./features/SugCreatePost";
-import SugPaybills from "./features/SugPaybills";
+import SugCreatePost from "./features/sug/SugCreatePost";
+import SugPaybills from "./features/sug/SugPaybills";
 import SugPendingPost from "./features/SugPendingPost";
-import SugNotification from "./features/sug/SugNotification"
+import SugNotification from "./features/sug/SugNotification";
 import { WebSocketProvider } from "./WebSocketProvider";
 import SugTrends from "./features/sug/SugTrends";
 import Notification from "./features/Notification";
 import PageNotFound from "./components/PageNotFound";
 import PaymentReceipt from "./features/PaymentReceipt";
-
-
+import SugViewBills from "./features/sug/SugViewBills";
+import DepartmentalSignin from "./auth/departmentalSignupAndSignin/DepartmentalSignin";
+import DepartmentalSignUp from "./auth/departmentalSignupAndSignin/DepartmentalSignUp";
+import DepartmentalApplayout from "./components/DepartmentalApplayout";
+import DeptHome from "./features/departmental/DeptHome";
+import DeptEvent from "./features/departmental/DeptEvent";
+import SugEvents from "./features/sug/SugEvents";
 
 //once the component mount we connect to the servr immediately just once
 const queryClient = new QueryClient({
@@ -59,8 +63,6 @@ const queryClient = new QueryClient({
   },
 });
 export default function App() {
-
-
   return (
     <WebSocketProvider>
       <DateProvider>
@@ -69,12 +71,21 @@ export default function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="signin" element={<SignIn />} />
+              <Route
+                path="departmentalsignin"
+                element={<DepartmentalSignin />}
+              />
+              <Route
+                path="departmentalsignup"
+                element={<DepartmentalSignUp />}
+              />
               <Route path="signup" element={<SignUp />} />
               <Route path="*" element={<PageNotFound />} />
               <Route path="sugsignup" element={<SugSignup />} />
               <Route path="sugforgotpassword" element={<SugForgotPassword />} />
               <Route path="sugsignin" element={<SugSignin />} />
               <Route path="post" element={<CreatePost />} />
+              <Route path="sugevent" element={<SugEvents />} />
               <Route path="sugpost" element={<SugCreatePost />} />
               <Route path="loader" element={<Loader />} />
               <Route path="forgotPassword" element={<ForgotPassword />} />
@@ -83,6 +94,7 @@ export default function App() {
                 <Route index element={<Navigate to="sugfeed" />} />
                 <Route path="sugfeed" index element={<SugFeed />} />
                 <Route path="sugpaybills" element={<SugPaybills />} />
+                <Route path="sugviewbills" element={<SugViewBills />} />
                 <Route path="sugnotification" element={<SugNotification />} />
                 <Route path="sugtrends" element={<SugTrends />} />
                 <Route path="pendingpost" element={<SugPendingPost />} />
@@ -109,7 +121,6 @@ export default function App() {
                 <Route path="homePage" element={<HomePage />}>
                   <Route index element={<Navigate to="feed" />} />
                   <Route path="feed" element={<UsersFeed />} />
-                  <Route path="billz" element={<BillInformation />} />
                 </Route>
                 <Route path="events" element={<Events />} />
                 <Route path="material" element={<Materials />} />
@@ -119,6 +130,15 @@ export default function App() {
                 <Route path="receipt" element={<PaymentReceipt />} />
                 <Route path="payment-form" element={<PaymentForm />} />
                 <Route path="card-form" element={<CardForm />} />
+              </Route>
+
+              <Route
+                path="departmentalhome"
+                element={<DepartmentalApplayout />}
+              >
+                <Route index element={<Navigate to="depthome" />} />
+                <Route path="depthome" element={<DeptHome />} />
+                <Route path="deptevent" element={<DeptEvent />} />
               </Route>
             </Routes>
             <Toaster

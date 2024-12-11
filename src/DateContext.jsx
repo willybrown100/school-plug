@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useState } from "react";
 
+
 const DateContext = createContext();
 function DateProvider({ children }) {
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);

@@ -4,11 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { HiOutlineEyeSlash } from "react-icons/hi2";
 import { IoIosEye } from "react-icons/io";
-import { signIn, userSignInWithGoogle } from "../services/contactApi";
+import { signIn, userSignInWithGoogle } from "../../services/contactApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import MiniLoader from "../ui/MiniLoader";
+import MiniLoader from "../../ui/MiniLoader";
 
 export default function SignIn() {
   const queryClient = useQueryClient();
@@ -16,7 +16,7 @@ export default function SignIn() {
   const {
     handleSubmit,
     register,
-    
+
     // setError,
     // reset,
   } = useForm();
@@ -48,8 +48,8 @@ export default function SignIn() {
       toast.error(error.message);
     },
   });
-  const onSubmit = function (data,e) {
-    e.preventDefault()
+  const onSubmit = function (data, e) {
+    e.preventDefault();
     mutate(data);
     console.log(data);
   };
@@ -90,7 +90,7 @@ export default function SignIn() {
           </Link>
           <div className="md:grid mt-20 md:mt-6 gap-x-5 flex flex-col gap-y-2  md:grid-cols-2">
             <button
-            type="button"
+              type="button"
               onClick={goodleSignin}
               disabled={googleLoading}
               className="border flex justify-center gap-x-6 border-secondary600 items-center  rounded-md text-secondary600 p-1 capitalize bg-transparent"
@@ -101,7 +101,10 @@ export default function SignIn() {
                 <img src="/images/google-icon.png" alt="img" />
               </span>
             </button>
-            <button disabled={isLoading} className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize">
+            <button
+              disabled={isLoading}
+              className="bg-secondary500 p-3 rounded-md font-semibold  text-white capitalize"
+            >
               {isLoading ? (
                 <div className="flex justify-center">
                   <MiniLoader />{" "}

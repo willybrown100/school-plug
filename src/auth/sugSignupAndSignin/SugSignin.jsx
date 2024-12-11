@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { HiOutlineEyeSlash } from "react-icons/hi2";
 import { IoIosEye } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-import Button from "../ui/Button";
+import Button from "../../ui/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import MiniLoader from "../ui/MiniLoader";
+import MiniLoader from "../../ui/MiniLoader";
 import toast from "react-hot-toast";
-import { sugSignIn } from "../services/sugApis";
+import { sugSignIn } from "../../services/sugApis";
 
 export default function SugSignin() {
   const queryClient = useQueryClient();
@@ -19,7 +19,7 @@ export default function SugSignin() {
     handleSubmit,
 
     register,
- 
+
     // reset,
   } = useForm();
   const { mutate, isLoading } = useMutation({
@@ -112,7 +112,6 @@ export default function SugSignin() {
 }
 
 export const PasswordField = ({
-
   isPending,
   placeholder,
   register,
