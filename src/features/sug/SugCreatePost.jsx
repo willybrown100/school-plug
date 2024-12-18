@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import { HiXMark } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -8,22 +9,47 @@ import useSug from "../../hooks/useSug";
 import MiniLoader from "../../ui/MiniLoader";
 import useCreateSugPost from "../../hooks/useCreateSugPost";
 import useSchool from "../../hooks/useSchool";
+import { useMutation } from "@tanstack/react-query";
+import { sugCreateEvent, sugCreatePaidEvent } from "../../services/sugApis";
+import toast from "react-hot-toast";
+import Modals from "../../components/Modals";
+import SugEventTicketModal from "../../components/SugEventTicketModal";
 
 export default function SugCreatePost() {
   const { userId } = useSug();
   const { id } = useSchool();
+  const [price, setPrice] = useState("");
 
-  console.log(userId);
+  console.log(userId,price);
   const { data } = useGetSugUser();
   const uniProfilePicture = data?.data?.uniProfilePicture;
 
-  const { mutate, postLoading, selectedFee,  } =
-    useCreateSugPost();
-  console.log(postLoading);
+  const { mutate, postLoading, selectedFee } = useCreateSugPost();
+  console.log(selectedFee?.selectedValue);
+
+  const { mutate: createEvent, isLoading: creatingEvent } = useMutation({
+    mutationFn: sugCreateEvent,
+    onSuccess: () => {
+      navigate("/sughome/sugevents");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate: createPaidEvent, isLoading: creatingPaidEvent } = useMutation(
+    {
+      mutationFn: sugCreatePaidEvent,
+      onSuccess: () => {
+        navigate("/sughome/sugevents");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }
+  );
 
   const imageRef = useRef(null);
 
-  console.log(selectedFee)
   const inputRef = useRef(null);
   const [textContent, setTextContent] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
@@ -71,20 +97,32 @@ export default function SugCreatePost() {
 
   const handleSubmit = function (e) {
     e.preventDefault();
-    console.log({
-      adminId: userId,
-      image: selectedImage,
-      text: textContent,
-      schoolInfoId: id,
-    });
-    mutate({
-      adminId: userId,
-      image: selectedImage,
-      text: textContent,
-      schoolInfoId: id,
-    });
-    //  navigate("/sughome");
+
+    if (selectedFee?.selectedValue ==="unpaidevent") {
+      createEvent({
+        title: textContent,
+        image: selectedImage,
+        schoolInfoId: id,
+        adminId: userId,
+      });
+    } else if (selectedFee?.selectedValue === "paidevent") {
+      createPaidEvent({
+        adminId: userId,
+        image: selectedImage,
+        title: textContent,
+        schoolInfoId: id,
+        price:Number(price)
+      });
+    } else {
+      mutate({
+        adminId: userId,
+        image: selectedImage,
+        text: textContent,
+        schoolInfoId: id,
+      });
+    }
   };
+
   const handleChange = function (event) {
     const textarea = event.target;
     textarea.style.height = "auto"; // Reset the height
@@ -101,8 +139,6 @@ export default function SugCreatePost() {
     inputRef.current.focus();
   }, []);
 
-  
-
   const handleRemoveImage = (indexToRemove) => {
     setImagePreview(
       (prevImages) => prevImages.filter((_, index) => index !== indexToRemove) // Remove image at the specified index
@@ -115,23 +151,38 @@ export default function SugCreatePost() {
     <div className="px-3 mt-4">
       <form className="px-4 " onSubmit={handleSubmit}>
         <div className="h-[70vh]  grid grid-rows-[auto,1fr]">
-          <div className="flex border-b-2 items-center justify-between mb-2">
+          <div className="flex border-b-2 items-center mb-2">
             <button
               onClick={handleClick}
               className="border mb-2 bg-transparent rounded-full  border-stone-400   p-1"
             >
               <HiXMark />
             </button>
-            <button
-              disabled={!textContent || postLoading}
-              className={` ${
-                !textContent ? "bg-secondary400" : "bg-secondary600 "
-              }
+            {selectedFee?.selectedValue === "paidevent" ? (
+              <OpenModal
+                price={price}
+                setPrice={setPrice}
+                textContent={textContent}
+                creatingPaidEvent={creatingPaidEvent}
+              />
+            ) : (
+              <button
+                disabled={!textContent || postLoading}
+                className={` ${
+                  !textContent ? "bg-secondary400" : "bg-secondary600 "
+                }
                  
- mb-2 px-6 capitalize py-1  text-white rounded-full font-heading`}
-            >
-              {postLoading ? <MiniLoader /> : selectedFee ? "publish" : "post"}
-            </button>
+ mb-2 px-6 capitalize py-1 ml-auto text-white rounded-full font-heading`}
+              >
+                {postLoading || creatingEvent || creatingPaidEvent ? (
+                  <MiniLoader />
+                ) : selectedFee?.selectedValue ? (
+                  "publish"
+                ) : (
+                  "post"
+                )}
+              </button>
+            )}
           </div>
 
           <div className="overflow-y-scroll overflow-x-hidden scroll">
@@ -174,6 +225,7 @@ export default function SugCreatePost() {
                       className="object-cover h-[10rem] p-2"
                     />
                     <button
+                      type="button"
                       onClick={() => handleRemoveImage(index)}
                       className="absolute top-[40%]  left-1/2 translate-x-[-50%] bg-transparent backdrop-blur-md rounded-full p-2 "
                     >
@@ -208,5 +260,35 @@ export default function SugCreatePost() {
         </button>
       </form>
     </div>
+  );
+}
+
+function OpenModal({ price, setPrice, textContent, creatingPaidEvent }) {
+  return (
+    <Modals>
+      <Modals.Open opens="openPrice">
+  
+<div className="ml-auto">
+
+        <button
+          type="button"
+          disabled={!textContent}
+          className={`${
+            !textContent ? "bg-secondary400" : "bg-secondary600 "
+          }  mb-2 px-4 py-1 rounded-full text-white capitalize  `}
+          >
+          publish
+        </button>
+            </div>
+       
+      </Modals.Open>
+      <Modals.Window name="openPrice">
+        <SugEventTicketModal
+          price={price}
+          setPrice={setPrice}
+          creatingPaidEvent={creatingPaidEvent}
+        />
+      </Modals.Window>
+    </Modals>
   );
 }

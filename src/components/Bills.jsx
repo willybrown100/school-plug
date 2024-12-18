@@ -40,6 +40,7 @@ export default function Bills() {
       Element: (
         <input
           type="radio"
+          
           onChange={handleChange}
           value="sugFee"
           checked={selectedFee === "sugFee"}

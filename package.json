@@ -12,6 +12,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@firebase/messaging": "^0.12.14",
     "@progress/kendo-react-dateinputs": "^8.1.1",
     "@progress/kendo-theme-default": "^8.2.0",
     "@syncfusion/ej2-react-calendars": "^26.1.41",

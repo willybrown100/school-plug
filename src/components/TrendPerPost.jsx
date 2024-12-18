@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import useUser from "../hooks/useUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useWebSocket } from "../WebSocketProvider";
+import { processText } from "../utils/utils";
 
 export default function TrendPerPost({ item }) {
     const { data } = useGetUser();
@@ -16,7 +17,14 @@ export default function TrendPerPost({ item }) {
   const { createdAt, text, poster, images, likes, postId,postType } = item;
   const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState();
+      const [isExpanded, setIsExpanded] = useState(false);
       const { userId: studentId } = useUser();
+
+ const handleToggle = () => {
+   setIsExpanded((prev) => !prev);
+ };
+
+ const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
 
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const {socket}=useWebSocket()
@@ -99,7 +107,6 @@ const { mutate, isLoading: isLiking } = useMutation({
           className="w-14 h-14 rounded-full"
         />
         <div className="flex flex-col">
-       
           <h4 className="mb-0 font-semibold">
             {postType === "admin" ? "admin" : poster?.name}
           </h4>
@@ -119,7 +126,40 @@ const { mutate, isLoading: isLiking } = useMutation({
       </div>
 
       <div>
-        <p className="mt-5">{text}</p>
+        {/* <p className="text-stone-700 mt-4 break-words max-full">
+          {isExpanded ? processText(text) : processText(text).slice(0, 50)}
+          {text?.length > 50 && (
+            <span
+              onClick={toggleText}
+              className="text-stone-600 cursor-pointer ml-1"
+            >
+              {isExpanded ? " less" : "...more"}
+            </span>
+          )}
+        </p> */}
+        <div>
+          <p>
+            {/* Display truncated or full text */}
+            {isExpanded ? processText(text) : processText(truncatedText)}
+            {!isExpanded && text.length > 100 && (
+              <span
+                className="text-blue-500 cursor-pointer ml-1"
+                onClick={handleToggle}
+              >
+                Show More
+              </span>
+            )}
+          </p>
+          {isExpanded && (
+            <button
+              onClick={handleToggle}
+              className="text-blue-500 underline mt-2"
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+
         <div
           className={`grid gap-x-2 mt-2 ${
             images?.length === 2

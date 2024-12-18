@@ -23,7 +23,7 @@ const { socket } = useWebSocket();
 
   const { pathname } = useLocation();
   const pathn = pathname.split("/").at(2)
-  
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -74,13 +74,24 @@ socket?.on("post_unliked", (data) => {
 });
  },[socket])
 
+const excludedRoutes = ["/sughome/sugevents/:id"];
+const shouldHideNavbar = excludedRoutes.some((route) => {
+  if (route.includes(":id")) {
+    // Handle dynamic route matching
+    const baseRoute = route.split("/:id")[0];
+    return pathname.startsWith(baseRoute) && pathname !== baseRoute;
+  }
+  return pathname === route;
+});
   return (
     <>
       {pathn !== "sugprofile" &&
         pathname !== "/sughome/sugnotification" &&
         pathname !== "/sughome/sugpaybills" &&
         pathname !== "/sughome/sugtrends" &&
-        pathname !== "/sughome/sugviewbills" && (
+        pathname !== "/sughome/sugviewbills" &&
+        !shouldHideNavbar &&
+        (
           <nav
             className={`py-4 px-3 bg-white z-[1] fixed top-0 left-0 w-full transition-transform duration-300 ${
               isVisible ? "translate-y-0" : "-translate-y-full"

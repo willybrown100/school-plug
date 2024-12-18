@@ -13,7 +13,7 @@ export default function useCreateSugPost() {
    mutationFn: createSugPost,
    onSuccess: () => {
      toast.success("post sucessfull,view");
-         navigate(`${selectedFee?"":"/sughome"}`);
+         navigate( "/sughome");
      queryClient.invalidateQueries("sugposts");
    },
    onError: (error) => {
