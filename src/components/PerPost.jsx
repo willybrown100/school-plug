@@ -13,7 +13,8 @@ import { sugDeletePost } from "../services/contactApi";
 import {timeStampAgo} from "../utils/timeStampAgo"
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { useWebSocket } from "../WebSocketProvider";
-import { processText2 } from "../utils/utils";
+import {  processTextSug } from "../utils/utils";
+import MiniLoader from "../ui/MiniLoader";
 
 export default function PerPost({ item, onClick, open }) {
   const {socket}=useWebSocket()
@@ -36,14 +37,20 @@ export default function PerPost({ item, onClick, open }) {
     postType,
   } = item;
   const { register, handleSubmit, reset } = useForm();
-  const [isExpanded, setIsExpanded] = useState(false);
   const [commentContents, setCommentContent] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
+   const [Alllikes, setAllLikes] = useState(likes.length);
+   const [hasLiked, setHasLiked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const postId = _id;
+  
+ const handleToggle = () => {
+   setIsExpanded((prev) => !prev);
+ };
 
-  const toggleText = () => setIsExpanded((prev) => !prev);
+ const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
   const openImageModal = (index) => setSelectedImageIndex(index);
 
   async function getAllComments() {
@@ -115,11 +122,21 @@ export default function PerPost({ item, onClick, open }) {
   const { mutate, isLoading: isLiking } = useMutation({
     mutationFn: sugLikPost,
     onSuccess: () => {
-      queryClient.invalidateQueries("sugposts");
-      toast.success("like successful");
+ 
+   queryClient.invalidateQueries(["sugposts", postId]);
+  
     },
     onError: (error) => {
       toast.error(error.message);
+          setHasLiked((prev) => {
+            setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+            return !prev;
+          });
+    },
+    onMutate: () => {
+      // Optimistic update
+      setHasLiked((prev) => !prev);
+      setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
     },
   });
 
@@ -241,17 +258,28 @@ export default function PerPost({ item, onClick, open }) {
       </div>
 
       {/* Text Content */}
-      <p className="text-stone-700 mt-4 break-words max-full">
-        {isExpanded ? processText2(text) : processText2(text).slice(0, 50)}
-        {text?.length > 50 && (
-          <span
-            onClick={toggleText}
-            className="text-stone-600 cursor-pointer ml-1"
+      <div>
+        <p className="break-words text-stone-500 mt-5">
+          {/* Display truncated or full text */}
+          {isExpanded ? processTextSug(text) : processTextSug(truncatedText)}
+          {!isExpanded && text.length > 100 && (
+            <span
+              className="text-stone-500 cursor-pointer ml-1"
+              onClick={handleToggle}
+            >
+              More
+            </span>
+          )}
+        </p>
+        {isExpanded && (
+          <button
+            onClick={handleToggle}
+            className="text-stone-500 bg-transparent  mt-2"
           >
-            {isExpanded ? " less" : "...more"}
-          </span>
+            Less
+          </button>
         )}
-      </p>
+      </div>
 
       <div
         className={`grid gap-x-2 mt-2 ${
@@ -277,7 +305,7 @@ export default function PerPost({ item, onClick, open }) {
 
       {/* Like, Comment, Share Buttons */}
       <div className="mt-4">
-        <p className="mb-0 text-secondary600">{likes.length} likes</p>
+        <p className="mb-0 text-secondary600">{Alllikes} likes</p>
         <div className="flex justify-between items-center">
           <button
             onClick={handleLike}
@@ -389,7 +417,7 @@ export default function PerPost({ item, onClick, open }) {
                 disabled={isCommenting}
                 className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
               >
-                &uarr;
+                {isCommenting ? <MiniLoader /> : <span>&uarr;</span>}
               </button>
             </form>
           </div>

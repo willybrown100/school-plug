@@ -3,12 +3,41 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import useUser from "./hooks/useUser";
 import useSug from "./hooks/useSug";
 import { io } from "socket.io-client";
+// import { getMessaging, getToken } from "firebase/messaging";
 
 
 const WebSocketContext = createContext()
 export const WebSocketProvider = ({ children }) => {
 
-  
+
+  // const messaging = getMessaging();
+
+  // async function requestNotificationPermission() {
+  //   try {
+  //     const permission = await Notification.requestPermission();
+  //     if (permission === "granted") {
+  //       console.log("Notification permission granted.");
+  //       const token = await getToken(messaging, {
+  //         vapidKey:
+  //           "BNKKIoMgttf2Vqkqui9YQWgatPkhRZuvCUj0RsMsUdh-_07oTR3lqzDJ8ao5_WcOW8m56FXefe8UJZzecBLwYCk",
+  //       });
+  //       console.log("FCM Token:", token);
+  //       // Send the token to your backend to associate it with the user
+  //       await fetch("/save-fcm-token", {
+  //         method: "POST",
+  //         body: JSON.stringify({ token }),
+  //         headers: { "Content-Type": "application/json" },
+  //       });
+  //     } else {
+  //       console.error("Notification permission denied.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error getting notification permission:", error);
+  //   }
+  // }
+
+  // requestNotificationPermission();
+
   const pathname = window.location.pathname;
   const { userId } = useUser();
   const { userId: adminId } = useSug();

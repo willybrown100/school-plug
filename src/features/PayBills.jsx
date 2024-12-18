@@ -38,23 +38,24 @@ console.log(selectedPayment)
  const queryString = encodeURIComponent(JSON.stringify(selectedContent));
     const payment = [
       {
-        image:img1,
+        image: img1,
         name: "sug fee",
         Element: (
           <input
-          type="radio"
-          onChange={handleChange}
-          value="sugFee"
-          checked={selectedFee === "sugFee"}
+            type="radio"
+            onChange={handleChange}
+            value="sugFee"
+            checked={selectedFee === "sugFee"}
           />
         ),
       },
       {
-        image:img2,
+        image: img2,
         name: "departmental fee",
         Element: (
           <input
             type="radio"
+            disabled
             onChange={handleChange}
             value="departmentalfee"
             checked={selectedFee === "departmentalfee"}
@@ -62,11 +63,12 @@ console.log(selectedPayment)
         ),
       },
       {
-        image:img3,
+        image: img3,
         name: "faculty fee",
         Element: (
           <input
             type="radio"
+            disabled
             onChange={handleChange}
             value="facultyFee"
             checked={selectedFee === "facultyFee"}

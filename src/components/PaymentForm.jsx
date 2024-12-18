@@ -11,7 +11,7 @@ import Modals from "./Modals";
 import SmallScreenBillModal from "./SmallScreenBillModal";
 import useGetUser from "../hooks/useGetUser";
 import { useMutation } from "@tanstack/react-query";
-import { studentPaymentDetails } from "../services/contactApi";
+import { studentPaymentDetails, studentTicketPurchase } from "../services/contactApi";
 import MiniLoader from "../ui/MiniLoader";
 import toast from "react-hot-toast";
 import { formatText } from "../utils/dateFormat";
@@ -40,7 +40,7 @@ const {userId} = useUser();
 const [amount,setAmount]=useState("")
   
 const [selectedFee, setSelectedFee] = useState({});
-
+console.log(selectedFee)
   useEffect(() => {
     // Parse the query string whenever the location changes
     const params = new URLSearchParams(location.search);
@@ -51,8 +51,6 @@ const [selectedFee, setSelectedFee] = useState({});
     setSelectedFee(selectedContent);
   }, [location.search]);
 
-const f =selectedFee?.selectedValue
-console.log(f)
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [department, setDepartment] = useState("");
@@ -80,12 +78,22 @@ console.log(f)
     );
   }, [firstName, lastName, department, regNo, selectedLevel]);
  const queryString = encodeURIComponent(JSON.stringify({...selectedFee,amount}));
+ const queryStrings = encodeURIComponent(JSON.stringify({selectedFee}));
  console.log(queryString)
   const { mutate, isLoading } = useMutation({
     mutationFn: studentPaymentDetails,
     onSuccess: () => {
       navigate(`/home/card-form?option=${queryString}`);
      
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate:ticketPurchase, isLoading:isPurchasing } = useMutation({
+    mutationFn: studentTicketPurchase,
+    onSuccess: () => {
+      navigate(`/home/card-form?option=${queryStrings}`);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -107,9 +115,12 @@ console.log(f)
       feeType: selectedFee?.selectedValue,
 
     };
-
-mutate(formData);
-    console.log("Form submitted:", formData);
+if (selectedFee?.selectedValue){
+ mutate(formData);
+}else if (selectedFee?.event ==="event"){
+ticketPurchase(formData);
+console.log("Form submitted:", formData);
+}
   };
 
 
@@ -123,12 +134,22 @@ mutate(formData);
         alt="img"
         className="mb-6 hidden md:block w-[90vw] m-auto lg:hidden md:px-2"
       />
-      <div className="  max-w-[1250px]   md:w-[90vw]   md:grid grid-cols-[auto,1fr] gap-x-4 md:px-2 m-auto">
-        <h3 className="mb-[2rem] font-semibold mt-[0.6rem] md:hidden ">
+      <div
+        className={` max-w-[1250px]   md:w-[90vw]   ${
+          selectedFee?.event === "event"
+            ? "w-full"
+            : "md:grid grid-cols-[auto,1fr] "
+        } gap-x-4 md:px-2 m-auto`}
+      >
+        <h3 className="mb-[2rem] font-semibold mt-[0.6rem] md:hidden flex items-center">
           <Link to="/home/bills">
             <HiArrowLeft className="inline mr-2 text-black" />
           </Link>
-          Pay bills
+          <span>
+            {selectedFee?.event === "event"
+              ? "Event ticket purchase"
+              : "pay bills"}
+          </span>
         </h3>
         <img
           src="\assets\progressbarsvg.svg"
@@ -136,7 +157,7 @@ mutate(formData);
           className="mb-3 md:hidden w-full"
         />
 
-        {selectedFee?.selectedValue ? (
+        {selectedFee?.selectedValue && (
           <div className="inline-block">
             <div className="md:flex hidden bg-white px-2  py-4 rounded-lg flex-col mb-4 gap-y-5 ">
               <p className="mb-0 border-b border-stone-300 capitalize font-semibold pb-2">
@@ -176,14 +197,16 @@ mutate(formData);
               />
             </div>
           </div>
-        ) : (
-          <p>No fee selected</p>
         )}
 
         <div>
-          <h2 className="text-[16px] mb-6">Student Information</h2>
+          <h2 className="text-[16px] lg:block hidden mb-2 capitalize text-secondary600 font-semibold">
+            {selectedFee?.event === "event" && "Event ticket purschase"}
+          </h2>
+          <h2 className="text-[16px] mb-6 capitalize font-medium">
+            Student Information
+          </h2>
           <div className="lg:grid mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
-
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
@@ -306,7 +329,7 @@ mutate(formData);
                     : "bg-secondary600 text-white py-3 px-[70px] rounded max-md:w-full font-bold"
                 }
               >
-                {isLoading ? (
+                {isLoading || isPurchasing ? (
                   <div className="flex justify-center">
                     <MiniLoader />
                   </div>
@@ -317,7 +340,7 @@ mutate(formData);
             </div>
           </div>
           {/* Selected Fee Section */}
-          {selectedFee?.selectedValue ? (
+          {selectedFee?.selectedValue && (
             <div className="md:hidden flex flex-col mb-4 gap-y-6 ">
               <div className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
                 <img
@@ -352,8 +375,6 @@ mutate(formData);
                 setSelectedFee={setSelectedFee}
               />
             </div>
-          ) : (
-            <p>No fee selected</p>
           )}
           <div className="md:flex md:justify-end lg:hidden">
             <button
@@ -365,7 +386,7 @@ mutate(formData);
                   : "bg-secondary600 text-white py-3 px-[70px] mt-10 rounded max-md:w-full font-bold"
               }
             >
-              {isLoading ? (
+              {isLoading || isPurchasing ? (
                 <div className="flex justify-center">
                   <MiniLoader />
                 </div>

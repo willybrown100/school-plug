@@ -39,7 +39,7 @@ export default function Footer() {
 
 
   const { pathname } = useLocation();
-
+const pathn = pathname.split("/").at(2);
 
   const links = [
     {
@@ -100,8 +100,8 @@ export default function Footer() {
           className={`lg:hidden ${
             pathname === "/home/bills" ||
             pathname === "/home/payment-form" ||
-            pathname === "/home/card-form"  ||
-              pathname === "/home/receipt/"
+            pathname === "/home/card-form" ||
+            pathname === "/home/receipt/"
               ? "text-secondary600"
               : "black"
           }`}
@@ -127,7 +127,8 @@ export default function Footer() {
             className={`${
               pathname === "/home/bills" ||
               pathname === "/home/payment-form" ||
-              pathname === "/home/receipt/" || pathname === "/home/card-form"
+              pathname === "/home/receipt/" ||
+              pathname === "/home/card-form"
                 ? "pz"
                 : "black"
             }`}
@@ -185,13 +186,21 @@ export default function Footer() {
     },
 
     {
-      name: "events",
+      // name: "events",
+          name:    <span className={`lg:hidden ${pathn === "events" ?"text-secondary600":""}`}>events </span>,
+
       icon: (
         <svg
           width="25"
           height="24"
           viewBox="0 0 25 24"
-          fill="none"
+          fill={`${
+            pathname === "/home/events"
+              ? "#2161c3"
+              : pathn === "events"
+              ? "#2161c3"
+              : "none"
+          }`}
           xmlns="http://www.w3.org/2000/svg"
           className=""
         >
@@ -203,87 +212,148 @@ export default function Footer() {
           />
           <path
             d="M8.5 2V5"
-            stroke="#565656"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="1.5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+     
           />
           <path
             d="M16.5 2V5"
-            stroke="#565656"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="1.5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+           
+       
           />
           <path
             d="M4 9.09009H21"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="1.5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+            
           />
           <path
             d="M21.5 8.5V17C21.5 20 20 22 16.5 22H8.5C5 22 3.5 20 3.5 17V8.5C3.5 5.5 5 3.5 8.5 3.5H16.5C20 3.5 21.5 5.5 21.5 8.5Z"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="1.5"
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+            
           />
           <path
             d="M16.1947 13.7H16.2037"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+          
           />
           <path
             d="M16.1947 16.7H16.2037"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+         
           />
           <path
             d="M12.4955 13.7H12.5045"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+      
           />
           <path
             d="M12.4955 16.7H12.5045"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+         
           />
           <path
             d="M8.79431 13.7H8.80329"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+       
           />
           <path
             d="M8.79431 16.7H8.80329"
-            stroke="#292D32"
+            stroke={`${
+              pathname === "/home/events"
+                ? "white"
+                : pathn === "events"
+                ? "white"
+                : "black"
+            }`}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`${pathname === "/home/events" ? "pz" : "black"}`}
+           
           />
         </svg>
       ),
@@ -429,14 +499,14 @@ export default function Footer() {
             style={{ height: "100vh", width: "100vw" }}
           >
             <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
-              <div className="flex items-center gap-x-2">
+              {/* <div className="flex items-center gap-x-2">
                 <span className="text-white font-heading capitalize">
                   events
                 </span>
                 <button className=" p-[0.65rem] rounded-full bg-[#dce7f9]">
                   <img src="\images\calendar.svg" alt="img" />
                 </button>
-              </div>
+              </div> */}
               <div className="flex items-center gap-x-2">
                 <span className="text-white font-heading capitalize">post</span>
                 <Link

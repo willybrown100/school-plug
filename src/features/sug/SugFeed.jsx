@@ -11,11 +11,12 @@ import PerPost from '../../components/PerPost';
 import PageLoader from '../../components/PageLoader';
 
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 import useGetSugTrends from '../../hooks/useGetSugTrends';
 import useGetSugPosts from '../../hooks/useGetSugPosts';
 import BlueMiniLoader from '../../ui/BlueMiniLoader';
+import useGetSugUser from '../../hooks/useGetSugUser';
 
 
 
@@ -24,6 +25,13 @@ export default function SugFeed() {
   const [open, setOpen] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const loadMoreRef = useRef(null);
+
+    const { data:dataz } = useGetSugUser();
+
+    
+    const sugImg = dataz?.data?.uniProfilePicture;
+   
+    
   const {
     data,
     isLoading,
@@ -117,29 +125,34 @@ export default function SugFeed() {
                     )}
                   </p>
                   <img
-                    src={item.images[0]}
+                    src={
+                      item.images[0]
+                        ? item.images[0]
+                        : sugImg
+                    }
                     alt={item.type}
-                    className="w-full h-full"
+                    className="w-full h-[10rem] object-cover"
                     loading="lazy"
                   />
                   <div className="flex justify-between mt-2">
                     <div className="flex gap-x-1 items-center">
                       <img src="\assets\like2.svg" />
-                      <p className="mb-0 text-sm">{item.likesCount}</p>
+                      <p className="mb-0 text-sm">{item.likes}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
                       <img src="\assets\message-3.svg" />
-                      <p className="mb-0 text-sm">{item.commentsCount}</p>
+                      <p className="mb-0 text-sm">{item.comments}</p>
                     </div>
                   </div>
                 </div>
               </SwiperSlide>
+              
             ))}
           </Swiper>
         </article>
       )}
       {posts?.length === 0 && (
-        <div className="flex justify-center items-center min-h-[calc(100vh-4.rem)">
+        <div className="flex justify-center items-center min-h-[calc(100vh-4.5rem)">
           <h4 className="capitalize text-stone-700">
             Nothind here yet, start by creating a post
           </h4>

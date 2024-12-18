@@ -12,6 +12,7 @@ import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeAgo, timeStampAgo } from "../utils/timeStampAgo";
 import { useWebSocket } from "../WebSocketProvider";
 import { processText } from "../utils/utils";
+// import { processText } from "../utils/utils";
 
 
 
@@ -32,45 +33,55 @@ export default function StudentPerPost({ item }) {
 
   const queryClient = useQueryClient();
   const { data } = useGetUser();
-  const name = data?.user?.name
+  const name = data?.user?.name;
   const { userId: studentId } = useUser();
-const postId =_id
-
-  const { register, handleSubmit,reset } = useForm();
+  const postId = _id;
+  const [Alllikes, setAllLikes] = useState(likes.length);
+  const [hasLiked, setHasLiked] = useState(false);
+  const { register, handleSubmit, reset } = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [datas,setDatas]=useState([])
-  const [loading,   setLoading]=useState()
-   const [activeTab, setActiveTab] = useState(0);
+
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState();
+  const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const { socket } = useWebSocket();
 
-  const toggleText = () => setIsExpanded((prev) => !prev);
+  // const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
 
 
- async function getStudentComments() {
-  setLoading(true)
-  try {
-    const response = await fetch(
-      `https://student-plug.onrender.com/api/add/posts/${postId}`
-    );
 
-    const result = await response.json();
 
-    console.log(result);
-    setDatas(result.comments);
-    return result;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  } finally {
-    setLoading(false); 
+  // Toggle between full and truncated text
+ const handleToggle = () => {
+   setIsExpanded((prev) => !prev);
+ };
+
+  const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
+
+
+
+  async function getStudentComments() {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://student-plug.onrender.com/api/add/posts/${postId}`
+      );
+
+      const result = await response.json();
+
+      console.log(result);
+      setDatas(result.comments);
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
-
-
 
   const closeImageModal = () => setSelectedImageIndex(null);
 
@@ -81,65 +92,66 @@ const postId =_id
       prev === 0 ? images.length - 1 : prev - 1
     );
 
-  
   const { mutate, isLoading: isLiking } = useMutation({
     mutationFn: studentLikePost,
     onSuccess: () => {
-      queryClient.invalidateQueries("schoolpost");
+      // Invalidate only the specific post
+      queryClient.invalidateQueries(["schoolpost", postId]);
+    },
+
+    onMutate: () => {
+      // Optimistic update
+      setHasLiked((prev) => !prev);
+      setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      setHasLiked((prev) => {
+        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+        return !prev;
+      });
+    },
+  });
+
+  const handleLike = () => {
+    mutate({
+      postId: _id,
+      ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
+      userId: studentId,
+    });
+
+    socket.emit("post_liked", {
+      type: "like",
+      postId,
+      likerId: studentId,
+      likerName: name,
+    });
+  };
+
+  const handleOpenCommentModal = function (index) {
+    getStudentComments();
+    setCommentModalVisible(true);
+    setActiveTab(index);
+  };
+  const handleCloseCommentModal = () => setCommentModalVisible(false);
+
+  const { mutate: comment, isLoading: isCommenting } = useMutation({
+    mutationFn: studentComment,
+    onSuccess: () => {
+      getStudentComments();
+      toast.success("succesfull");
+      reset();
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-
-
-
-const handleLike = () => {
-  mutate({
-    postId: _id,
-    ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
-    userId: studentId,
-  });
-
-   socket.emit("post_liked", {
-     type: "like",
-     postId,
-     likerId: studentId,
-     likerName: name,
-   });
-
-
-};
-
-
-
-  const handleOpenCommentModal = function(index) { 
-    getStudentComments()
-    setCommentModalVisible(true) 
- setActiveTab(index);
-
-  };
-  const handleCloseCommentModal = () => setCommentModalVisible(false);
-
-   const { mutate: comment, isLoading: isCommenting } = useMutation({
-     mutationFn: studentComment,
-     onSuccess: () => {
-   
-      getStudentComments()
-      toast.success("succesfull")
-      reset()
-     },
-     onError:(error)=>{
-      toast.error(error.message)
-     }
-   });
-
-  const onSubmit = function ({text}) {
-    comment({ text, isAdmin:false, userId: studentId, postId: _id });
+  const onSubmit = function ({ text }) {
+    comment({ text, isAdmin: false, userId: studentId, postId: _id });
     console.log({ text, isAdmin: false, userId: studentId, postId: _id });
   };
-  const onSubmitLargeScreen = function ({comments}) {
+  const onSubmitLargeScreen = function ({ comments }) {
     comment({
       text: comments,
       isAdmin: false,
@@ -182,17 +194,29 @@ const handleLike = () => {
         </div>
       </div>
 
-      <p className="text-stone-700 mt-4 break-words max-full">
-        {isExpanded ? processText(text) : processText(text).slice(0, 50)}
-        {text?.length > 50 && (
-          <span
-            onClick={toggleText}
-            className="text-stone-600 cursor-pointer ml-1"
+
+      <div>
+        <p className="break-words text-stone-500 mt-5">
+          {/* Display truncated or full text */}
+          {isExpanded ? processText(text) : processText(truncatedText)}
+          {!isExpanded && text.length > 100 && (
+            <span
+              className="text-stone-500 cursor-pointer ml-1"
+              onClick={handleToggle}
+            >
+               More
+            </span>
+          )}
+        </p>
+        {isExpanded && (
+          <button
+            onClick={handleToggle}
+            className="text-stone-500 bg-transparent  mt-2"
           >
-            {isExpanded ? " less" : "...more"}
-          </span>
+          Less
+          </button>
         )}
-      </p>
+      </div>
 
       <div
         className={`grid gap-x-2 mt-2 ${
@@ -217,7 +241,7 @@ const handleLike = () => {
       </div>
       {/* Like, Comment, Share Buttons */}
       <div className="mt-4">
-        <p className="mb-0 text-secondary600">{likes.length} likes</p>
+        <p className="mb-0 text-secondary600">{Alllikes} likes</p>
         <div className="flex justify-between items-center">
           <button
             onClick={handleLike}
@@ -254,7 +278,6 @@ const handleLike = () => {
       </div>
       {/* Comment Modal */}
       {commentModalVisible && (
-       
         <div className="fixed bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -438,3 +461,28 @@ const handleLike = () => {
 
 
 
+// const ExpandableText = ({ text }) => {
+//   const [isExpanded, setIsExpanded] = React.useState(false);
+
+//   const toggleText = () => setIsExpanded((prev) => !prev);
+
+//   // Ensure `text` is a valid string
+//   const wordsArray = typeof text === "string" ? text.split(" ") : [];
+
+//   // Decide what to display based on isExpanded
+//   const visibleWords = isExpanded ? wordsArray : wordsArray.slice(0, 50);
+
+//   return (
+//     <p className="text-stone-700 mt-4 break-words max-full">
+//       {processText(visibleWords)} {/* Pass only the visible words */}
+//       {wordsArray.length > 50 && (
+//         <span
+//           onClick={toggleText}
+//           className="text-stone-600 cursor-pointer ml-1"
+//         >
+//           {isExpanded ? " less" : "...more"}
+//         </span>
+//       )}
+//     </p>
+//   );
+// };

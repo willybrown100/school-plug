@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import BlueMiniLoader from "../../ui/BlueMiniLoader";
 import useGetSugUser from "../../hooks/useGetSugUser";
-import { processText } from "../../utils/utils";
+import { processTextSug } from "../../utils/utils";
 import { useWebSocket } from "../../WebSocketProvider";
 import { sugDeletePost } from "../../services/contactApi";
 // import { sugDeletePost } from "../../services/contactApi";
@@ -25,8 +25,12 @@ export default function SugPerTrends({ item,onClick,open }) {
     const [commentModalVisible, setCommentModalVisible] = useState(false);
     const { register, handleSubmit, reset } = useForm();
     const { images, likes, poster, createdAt, text, postId,postType} = item;
-      const toggleText = () => setIsExpanded((prev) => !prev);
+      const handleToggle = () => {
+        setIsExpanded((prev) => !prev);
+      };
 
+      const truncatedText =
+        text.length > 100 ? text.slice(0, 100) + "..." : text;
     const handleOpenCommentModal = function () {
       getAllComments();
       setCommentModalVisible(true);
@@ -160,17 +164,28 @@ export default function SugPerTrends({ item,onClick,open }) {
       </div>
 
       <div>
-        <p className="text-stone-700 mt-4 break-words max-full">
-          {isExpanded ? processText(text) : processText(text).slice(0, 50)}
-          {text?.length > 50 && (
-            <span
-              onClick={toggleText}
-              className="text-stone-600 cursor-pointer ml-1"
+        <div>
+          <p className="break-words text-stone-500 mt-5">
+            {/* Display truncated or full text */}
+            {isExpanded ? processTextSug(text) : processTextSug(truncatedText)}
+            {!isExpanded && text.length > 100 && (
+              <span
+                className="text-stone-500 cursor-pointer ml-1"
+                onClick={handleToggle}
+              >
+                More
+              </span>
+            )}
+          </p>
+          {isExpanded && (
+            <button
+              onClick={handleToggle}
+              className="text-stone-500 bg-transparent  mt-2"
             >
-              {isExpanded ? " less" : "...more"}
-            </span>
+              Less
+            </button>
           )}
-        </p>
+        </div>
         <div
           className={`grid gap-x-2 mt-2 ${
             images?.length === 2

@@ -249,6 +249,7 @@ export async function getAllComments(postId) {
     throw error;
   }
 }
+
 export async function getPaymentStatus(schoolInfoId,page) {
   console.log(schoolInfoId)
   try {
@@ -439,3 +440,152 @@ export const createSugPost = async ({ image, adminId, text ,schoolInfoId}) => {
     throw error;
   }
 };
+
+// ===================
+// sugcreateevent==
+// ==================
+
+export const sugCreateEvent = async ({ image, adminId, title, schoolInfoId }) => {
+  console.log({ image, adminId, title, schoolInfoId });
+  if ( !adminId) return;
+
+  const formData = new FormData();
+
+  if (Array.isArray(image)) {
+    image.forEach((img) => {
+      formData.append("image", img);
+    });
+  } else {
+    formData.append("image", image);
+  }
+  // Append the image file
+  // formData.append("image", image);
+
+  formData.append("adminId", adminId);
+  formData.append("schoolInfoId", schoolInfoId);
+  formData.append("title", title);
+
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:${value} `);
+  }
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/schoolEvent/create-unpaidevent",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+    const data = await response.json();
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};
+
+
+export const sugCreatePaidEvent = async ({ image, adminId, title, schoolInfoId,price }) => {
+  console.log({ image, adminId, title, schoolInfoId,price });
+  if ( !adminId) return;
+
+  const formData = new FormData();
+
+  if (Array.isArray(image)) {
+    image.forEach((img) => {
+      formData.append("image", img);
+    });
+  } else {
+    formData.append("image", image);
+  }
+  // Append the image file
+
+  formData.append("adminId", adminId);
+  formData.append("schoolInfoId", schoolInfoId);
+  formData.append("title", title);
+  formData.append("price", price);
+
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:${value} `);
+  }
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/schoolEvent/create-paidevent",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+  if (!response.ok) {
+    // Attempt to extract the error message from the response
+    let errorMessage = "Unknown error occurred"; // Default error message
+    try {
+      const errorData = await response.json(); // Parse the JSON response
+      errorMessage = errorData.message || errorData.error || errorMessage; // Extract message
+    } catch (parseError) {
+      console.error("Failed to parse error response:", parseError);
+    }
+
+    // Throw the extracted error message
+    throw new Error(errorMessage);
+  }
+
+    const data = await response.json();
+    console.log("Upload successful:", data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};
+
+
+export async function getEvents(schoolInfoId) {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/schoolEvent/get-events/${schoolInfoId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function getParticularAdminEvents(adminId) {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/schoolEvent/eventbyadmin/${adminId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function sugEventDetails(eventId) {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/schoolEvent/get-event/${eventId}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

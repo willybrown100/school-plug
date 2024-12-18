@@ -799,64 +799,7 @@ export async function getReceipt(email) {
 
 
 
-// export async function studentMakePayment1(data) {
-//   try {
-//     // Step 1: Make the first API call
-//     const response1 = await fetch(
-//       "https://student-plug.onrender.com/api/payment/charge-card",
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data),
-//       }
-//     );
 
-//     if (!response1.ok) {
-//       const error = await response1.json();
-//       throw new Error(error.message);
-//     }
-
-//     const result1 = await response1.json();
-//     console.log("First API Response:", result1);
-// const { email, amount, feeType, } = data;
-// const data11 = {
-//   reference: result1.reference,
-//   email,
-//   amount,
-//   feeType,
-//   status: result1.status,
-//   gatewayResponse: result1.gateway_response,
-// };
-//     // Step 2: Proceed to the second API call if the first one is successful
-//     console.log(data11);
-//     const response2 = await fetch(
-//       "https://student-plug.onrender.com/api/payment/payment-record",
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data11),
-//       }
-//     );
-
-//     if (!response2.ok) {
-//       const error = await response2.json();
-//       throw new Error(error.message);
-//     }
-
-//     const result2 = await response2.json();
-//     console.log("Second API Response:", result2);
-
-//     // Return both results or only the one needed
-//     return { firstApiResult: result1, secondApiResult: result2 };
-//   } catch (error) {
-//     console.error("Error occurred:", error);
-//     throw error;
-//   }
-// }
 
 export async function studentMakePayment1(data) {
   try {
@@ -919,6 +862,37 @@ export async function studentMakePayment1(data) {
     return { firstApiResult: result1, secondApiResult: result2 };
   } catch (error) {
     console.error("Error occurred:", error);
+    throw error;
+  }
+}
+
+// =========================
+// student buy evnt ticket====
+// ===================================
+export async function studentTicketPurchase(data) {
+  console.log(data);
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/schoolEvent/saveStudent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+
+    return result;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 }
