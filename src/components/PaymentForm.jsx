@@ -41,6 +41,8 @@ const [amount,setAmount]=useState("")
   
 const [selectedFee, setSelectedFee] = useState({});
 console.log(selectedFee)
+const eventId = selectedFee?.eventId ?  selectedFee?.eventId :"";
+console.log(eventId)
   useEffect(() => {
     // Parse the query string whenever the location changes
     const params = new URLSearchParams(location.search);
@@ -115,11 +117,22 @@ console.log(selectedFee)
       feeType: selectedFee?.selectedValue,
 
     };
+
+    const studentInfo = {
+      firstName,
+      lastName,
+      department,
+      regNo,
+      email,
+      userId,
+      academicLevel: selectedLevel,
+      eventId,
+    };
 if (selectedFee?.selectedValue){
  mutate(formData);
 }else if (selectedFee?.event ==="event"){
-ticketPurchase(formData);
-console.log("Form submitted:", formData);
+ticketPurchase(studentInfo);
+console.log("Form submitted:", studentInfo);
 }
   };
 

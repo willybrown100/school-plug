@@ -12,8 +12,7 @@ export default function ProtectedRoute({ children }) {
 
   const [load, setLoad] = useState(false);
   const session = token;
-  console.log(session);
-  console.log(load);
+
 
 //   if (user?.message === "Invalid Token"){
 //     navigate("/signin");

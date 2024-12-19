@@ -3,11 +3,13 @@ import React from 'react'
 import EventPerPost from "../components/EventPerPost"
 import UserDetails from '../components/UserDetails';
 import Bills from '../components/Bills';
-import useGetEvents from '../hooks/useGetEvents';
+
 import BlueMiniLoader from '../ui/BlueMiniLoader';
 import SchoolInfoEvents from '../components/SchoolInfoEvents';
+import useGetEventsStudents from '../hooks/useGetEventsStudents';
 export default function Events() {
-const { data, isLoading } = useGetEvents();
+const { data, isLoading } = useGetEventsStudents();
+
 const events = data?.events;
 
 
@@ -26,7 +28,7 @@ const events = data?.events;
             </div>
           ) : (
             <ul className="mt-6">
-              {events.map((item) => (
+              {events?.map((item) => (
                 <EventPerPost item={item} key={item._id} />
               ))}
             </ul>

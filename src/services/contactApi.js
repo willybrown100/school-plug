@@ -776,7 +776,7 @@ export async function getCardDetails(email) {
     console.log(result); 
     return result;
   } catch (error) {
-    console.log(error); // Handle errors
+    console.log(error);
     throw error;
   }
 }
@@ -867,7 +867,7 @@ export async function studentMakePayment1(data) {
 }
 
 // =========================
-// student buy evnt ticket====
+// student buy event ticket====
 // ===================================
 export async function studentTicketPurchase(data) {
   console.log(data);
@@ -893,6 +893,122 @@ export async function studentTicketPurchase(data) {
     return result;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+}
+
+
+export async function studentTicketCardDetails(data) {
+  console.log(data);
+  try {
+    const response = await fetch(
+      "https://student-plug.onrender.com/api/schoolEvent/card",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+    if (result) {
+      localStorage.setItem("eventCardToken", JSON.stringify(result));
+    }
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
+export async function getEventCardDetails(email) {
+
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/schoolEvent/fetch-details/${email}`
+    );
+
+    const result = await response.json();
+
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error); 
+    throw error;
+  }
+}
+
+
+export async function studentConfirmEventPayment(data) {
+  try {
+    if (!data.email || !data.amount ) {
+      throw new Error("Missing required fields: email, amount");
+    }
+
+    console.log("Making First API Call with Data:", data);
+
+    const response1 = await fetch(
+      "https://student-plug.onrender.com/api/schoolEvent/charging",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response1.ok) {
+      console.error("First API Call Failed", await response1.json());
+      throw new Error("First API call failed");
+    }
+
+    const result1 = await response1.json();
+    console.log("First API Response Received:", result1);
+
+    const { email, amount, feeType } = data;
+    const data11 = {
+      reference: result1?.data?.reference,
+      email,
+      amount,
+      feeType,
+      status: result1?.data?.status,
+      gatewayResponse: result1?.data?.gateway_response,
+    };
+
+    console.log("Constructed Data for Second API Call:", data11);
+
+    const response2 = await fetch(
+      "https://student-plug.onrender.com/api/payment/payment-record",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data11),
+      }
+    );
+
+    if (!response2.ok) {
+      console.error("Second API Call Failed", await response2.json());
+      throw new Error("Second API call failed");
+    }
+
+    const result2 = await response2.json();
+    console.log("Second API Response Received:", result2);
+
+    return { firstApiResult: result1, secondApiResult: result2 };
+  } catch (error) {
+    console.error("Error occurred:", error);
     throw error;
   }
 }

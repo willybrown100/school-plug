@@ -19,7 +19,7 @@ _id,
   price,
 } = item;
 
-const  selectedContent={price,event:"event"}
+const selectedContent = { price, event: "event", eventId: _id };
        const queryString = encodeURIComponent(JSON.stringify(selectedContent));
   return (
     <div className="bg-white p-4 mb-3  rounded-lg">
