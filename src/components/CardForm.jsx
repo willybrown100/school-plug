@@ -15,28 +15,29 @@ import MiniLoader from "../ui/MiniLoader"
 import { studentAddCardDetails } from "../services/contactApi";
 import toast from "react-hot-toast";
 import Modals from "./Modals";
+import {studentTicketCardDetails} from "../services/contactApi";
 import SmallScreenBillModal from "./SmallScreenBillModal";
 import { formatNaira } from "../utils/dateFormat";
+import ConfirmEventPaymentModal from "./ConfirmEventPaymentModal";
 
 const PaymentForm = () => {
   const location = useLocation();
 
-    const { data } = useGetUser();
-    const [isOpen,setisOpen]=useState(false)
-    const email = data?.user?.email
- 
-  
+  const { data } = useGetUser();
+  const [isOpen, setisOpen] = useState(false);
+  const email = data?.user?.email;
+
   const [bankName, setBankName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [cvv, setCvv] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cardPin, setCardPin] = useState("");
- 
+
   const [showPin, setShowPin] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [errors, setErrors] = useState({}); 
-const [selectedFee, setSelectedFee] = useState({});
-console.log(selectedFee);
+  const [errors, setErrors] = useState({});
+  const [selectedFee, setSelectedFee] = useState({});
+  console.log(selectedFee?.selectedFee?.price);
   const isBankNameFilled = bankName.length > 0;
   const isCardNumberFilled = cardNumber.length > 0;
   const isCvvFilled = cvv.length === 3; // Limit to exactly 3 digits
@@ -63,15 +64,24 @@ console.log(selectedFee);
     isBankNameFilled,
   ]);
 
-    const { mutate, isLoading } = useMutation({
-      mutationFn: studentAddCardDetails,
-      onSuccess: () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: studentAddCardDetails,
+    onSuccess: () => {
       setisOpen(true);
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate: buyTicket, isLoading: isBuying } = useMutation({
+    mutationFn: studentTicketCardDetails,
+    onSuccess: () => {
+      setisOpen(true);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -97,19 +107,30 @@ console.log(selectedFee);
 
     const formData = {
       bankName,
-      cardNumber: cardNumber.replace(/\s+/g, ""), 
+      cardNumber: cardNumber.replace(/\s+/g, ""),
       cvv,
       expiryDate,
- 
-      feeType:"sug",
-      email
-    };
 
+      feeType: "sug",
+      email,
+    };
+    const studentCard = {
+      bankName,
+      cardNumber: cardNumber.replace(/\s+/g, ""),
+      cvv,
+      expiryDate,
+
+      email,
+    };
     console.log(formData);
-mutate(formData)
+    if (selectedFee?.selectedValue) {
+      mutate(formData);
+    } else {
+      buyTicket(studentCard);
+      console.log(studentCard);
+    }
   };
 
-  
   useEffect(() => {
     // Parse the query string whenever the location changes
     const params = new URLSearchParams(location.search);
@@ -140,13 +161,19 @@ mutate(formData)
       setExpiryDate(`${input.slice(0, 2)}/${input.slice(2, 4)}`); // MM/YY
     }
   };
+  const amount =
+    selectedFee?.amount !== undefined
+      ? selectedFee.amount
+      : selectedFee?.selectedFee?.price !== undefined
+      ? selectedFee?.selectedFee?.price
+      : null; // Explicitly set null if no valid value is found
 
   return (
     <article className="max-md:bg-white bg-stone-50 p-4 rounded-lg pt-[8rem] min-h-screen  w-full max-sm:pt-[7.5rem] md:pt-[10.8rem] lg:pt-[5.4rem] shadow-md mx-auto  pb-[5rem]">
       <img
         src="\assets\progressbarsvg.svg"
         alt="img"
-        className="mb-6 hidden md:block w-[90vw] m-auto lg:hidden md:px-2"
+        className="mb-6 hidden md:block  m-auto lg:hidden md:px-2"
       />
       <h3 className="mb-[2rem] font-semibold mt-[0.6rem] md:hidden  ">
         <Link to="/home/bills">
@@ -157,10 +184,16 @@ mutate(formData)
       <img
         src="\images\progressbar2.png"
         alt="img"
-        className="mb-6 md:hidden"
+        className="mb-6 md:hidden w-full"
       />
-      <div className="max-w-[1250px]   md:w-[90vw]   md:grid grid-cols-[auto,1fr] gap-x-4 md:px-2 m-auto ">
-        {selectedFee?.selectedValue ? (
+      <div
+        className={`max-w-[1250px]   md:w-[90vw]  ${
+          selectedFee?.selectedFee
+            ? "md:grid grid-cols-[1fr]"
+            : "md:grid grid-cols-[auto,1fr]"
+        }  gap-x-4 md:px-2 m-auto `}
+      >
+        {selectedFee?.selectedValue && (
           <div className="md:flex hidden bg-whit flex-col mb-4 gap-y-6 ">
             <div className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
               <img
@@ -194,13 +227,16 @@ mutate(formData)
               setSelectedFee={setSelectedFee}
             />
           </div>
-        ) : (
-          <p>No fee selected</p>
         )}
         <form onSubmit={handleSubmit}>
+          {selectedFee?.selectedFee && (
+            <h2 className="text-[16px] font-semibold text-secondary600 mb-6">
+              Event ticket purschase
+            </h2>
+          )}
           <h2 className="text-[16px] mb-6">Add debit card</h2>
           {/* Bank Name Input */}
-          <div className="lg:grid lg:grid-cols-2 gap-x-2 bg-white p-2 rounded-lg">
+          <div className="lg:grid lg:grid-cols-2 gap-x-2 flex flex-col gap-y-3 md:bg-white p-2 rounded-lg">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
@@ -247,7 +283,7 @@ mutate(formData)
             </div>
           </div>
           {/* CVV Input */}
-          <div className="lg:grid lg:grid-cols-2 gap-x-2 bg-white p-2 rounded-lg mt-4">
+          <div className="lg:grid lg:grid-cols-2 gap-x-4 flex flex-col gap-y-7 md:bg-white p-2 rounded-lg mt-4">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
@@ -344,13 +380,13 @@ mutate(formData)
                     : "bg-[#2B70DB]  text-white py-3 px-[70px] rounded  font-bold"
                 }
               >
-                {isLoading ? (
+                {isLoading || isBuying ? (
                   <div className="flex justify-center">
                     <MiniLoader />
                   </div>
                 ) : !isButtonDisabled ? (
                   <span className="capitalize">
-                    pay {formatNaira(selectedFee.amount)} now
+                    {amount !== null ? <>pay {formatNaira(amount)} now</> : ""}
                   </span>
                 ) : (
                   "Continue"
@@ -359,7 +395,7 @@ mutate(formData)
             </div>
           </div>
           {/* Selected Fee Section */}
-          {selectedFee?.selectedValue ? (
+          {selectedFee?.selectedValue && (
             <div className="flex flex-col md:hidden mb-4 gap-y-6 ">
               <div className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
                 <img
@@ -383,7 +419,7 @@ mutate(formData)
               </div>
               <input
                 type="text"
-                value={selectedFee.amount}
+                value={selectedFee?.amount}
                 placeholder="enter amount"
                 className="w-full p-2 border border-stone-600 rounded-md"
                 disabled
@@ -393,8 +429,6 @@ mutate(formData)
                 setSelectedFee={setSelectedFee}
               />
             </div>
-          ) : (
-            <p>No fee selected</p>
           )}
 
           {/* Continue Button */}
@@ -407,26 +441,31 @@ mutate(formData)
                   : "bg-[#2B70DB] md:w-[70%] text-white py-3 px-[70px] rounded w-full font-bold"
               }
             >
-              {isLoading ? (
+              {isLoading || isBuying ? (
                 <div className="flex justify-center">
                   <MiniLoader />
                 </div>
               ) : !isButtonDisabled ? (
                 <span className="capitalize">
-                  pay {formatNaira(selectedFee.amount)} now
+                  pay {formatNaira(amount)} now
                 </span>
               ) : (
                 "Continue"
               )}
             </button>
           </div>
-          {isOpen && (
-            <ConfimPaymentModal
-              selectedAmount={selectedFee.amount}
-              feeType={selectedFee.selectedValue}
-            />
-          )}
         </form>
+          {isOpen &&
+            selectedFee?.amount && (
+              <ConfimPaymentModal
+                selectedFee={selectedFee}
+                selectedAmount={selectedFee.amount}
+                feeType={selectedFee.selectedValue}
+              />
+            )}
+        {isOpen && selectedFee?.selectedFee?.price && (
+          <ConfirmEventPaymentModal selectedFee={selectedFee} />
+        )}
       </div>
       <div className="bg-secondary600 hidden p-4 lg:flex absolute bottom-0 right-0 left-0 justify-center  ">
         <p className="text-white capitalize mb-0 font-heading font-semibold">
