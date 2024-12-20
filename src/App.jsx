@@ -15,13 +15,13 @@ import AppLayout from "./components/AppLayout";
 import { DateProvider } from "./DateContext";
 import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
-// import Trends from "./features/Trends";
-// import Events from "./features/Events";
+import Trends from "./features/Trends";
+import Events from "./features/Events";
 
 import PaymentForm from "./components/PaymentForm";
 import CreatePost from "./features/CreatePost";
 import CardForm from "./components/CardForm";
-// import PayBills from "./features/PayBills";
+import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
 import UsersFeed from "./components/UsersFeed";
 import SugSignup from "./auth/sugSignupAndSignin/SugSignup";
@@ -57,11 +57,12 @@ import SugEvent from "./features/sug/SugEvent";
 import SugEventDetails from "./features/sug/SugEventDetails";
 import SudentEventDetails from "./features/SudentEventDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PageLoader from "./components/PageLoader";
 // import PageLoader from "./components/PageLoader";
-const PayBills = lazy(() => import("./features/PayBills"));
-const Events = lazy(() => import("./features/Events"))
+// const PayBills = lazy(() => import("./features/PayBills"));
+// const Events = lazy(() => import("./features/Events"))
 const HomePage = lazy(() => import("./features/HomePage"));
-const Trends = lazy(() => import("./features/Trends"));
+// const Trends = lazy(() => import("./features/Trends"));
 //once the component mount we connect to the servr immediately just once
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -76,7 +77,7 @@ export default function App() {
       <DateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <Suspense fallback={<></>}>
+            <Suspense fallback={<PageLoader/>}>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="signin" element={<SignIn />} />
