@@ -219,7 +219,7 @@ console.log("Form submitted:", studentInfo);
           <h2 className="text-[16px] mb-6 capitalize font-medium">
             Student Information
           </h2>
-          <div className="lg:grid mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
+          <div className="lg:grid md:mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
@@ -263,7 +263,7 @@ console.log("Form submitted:", studentInfo);
             </div>
           </div>
           {/* Department Input  */}
-          <div className="lg:grid lg:grid-cols-2 mb-4 lg:gap-x-5 bg-white p-2 rounded-md">
+          <div className="lg:grid lg:grid-cols-2 md:mb-4 lg:gap-x-5 bg-white p-2 rounded-md">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
@@ -307,7 +307,7 @@ console.log("Form submitted:", studentInfo);
             </div>
           </div>
           {/* Level Selection */}
-          <div className="lg:grid mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
+          <div className="lg:grid md:mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img

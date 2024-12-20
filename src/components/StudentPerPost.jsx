@@ -194,7 +194,6 @@ export default function StudentPerPost({ item }) {
         </div>
       </div>
 
-
       <div>
         <p className="break-words text-stone-500 mt-5">
           {/* Display truncated or full text */}
@@ -204,7 +203,7 @@ export default function StudentPerPost({ item }) {
               className="text-stone-500 cursor-pointer ml-1"
               onClick={handleToggle}
             >
-               More
+              More
             </span>
           )}
         </p>
@@ -213,7 +212,7 @@ export default function StudentPerPost({ item }) {
             onClick={handleToggle}
             className="text-stone-500 bg-transparent  mt-2"
           >
-          Less
+            Less
           </button>
         )}
       </div>
@@ -281,13 +280,13 @@ export default function StudentPerPost({ item }) {
         <div className="fixed bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full h-[95vh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp"
+            className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full  h-[95dvh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp"
           >
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold">Comments</h2>
               <button
                 onClick={handleCloseCommentModal}
-                className="text-xl font-semibold"
+                className="text-xl font-semibold bg-transparent"
               >
                 &times;
               </button>
