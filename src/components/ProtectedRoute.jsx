@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }) {
   const { token } = useUser();
   const navigate = useNavigate();
   const [user,setUser]=useState(null)
-  console.log(user)
+ 
 
   const [load, setLoad] = useState(false);
   const session = token;
@@ -36,7 +36,7 @@ export default function ProtectedRoute({ children }) {
           );
 
           const result = await response.json();
-          console.log(result);
+       
           setUser(result);
           return result;
         } catch (error) {
