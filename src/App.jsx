@@ -58,6 +58,7 @@ import SugEventDetails from "./features/sug/SugEventDetails";
 import SudentEventDetails from "./features/SudentEventDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PageLoader from "./components/PageLoader";
+import EventPaymentReceipt from "./features/EventPaymentReceipt";
 // import PageLoader from "./components/PageLoader";
 // const PayBills = lazy(() => import("./features/PayBills"));
 // const Events = lazy(() => import("./features/Events"))
@@ -77,7 +78,7 @@ export default function App() {
       <DateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <Suspense fallback={<PageLoader/>}>
+            <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="signin" element={<SignIn />} />
@@ -154,6 +155,7 @@ export default function App() {
                   <Route path="trends" element={<Trends />} />
                   <Route path="bills" element={<PayBills />} />
                   <Route path="receipt" element={<PaymentReceipt />} />
+                  <Route path="eventreceipt" element={<EventPaymentReceipt />} />
                   <Route path="payment-form" element={<PaymentForm />} />
                   <Route path="card-form" element={<CardForm />} />
                 </Route>

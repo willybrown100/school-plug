@@ -14,7 +14,9 @@ import { processText } from "../utils/utils";
 export default function TrendPerPost({ item }) {
     const { data } = useGetUser();
     const uni=data.studentInfo.university
-  const { createdAt, text, poster, images, likes, postId,postType } = item;
+    const { createdAt, text, poster, images, likes, postId,postType } = item;
+    const [Alllikes, setAllLikes] = useState(likes);
+    const [hasLiked, setHasLiked] = useState(false);
   const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState();
       const [isExpanded, setIsExpanded] = useState(false);
@@ -69,11 +71,26 @@ const handleOpenCommentModal = function () {
 const { mutate, isLoading: isLiking } = useMutation({
   mutationFn: studentLikePost,
   onSuccess: () => {
-    queryClient.invalidateQueries("schoolpost");
+    // queryClient.invalidateQueries("schoolpost");
+        queryClient.invalidateQueries(["schoolpost", postId]);
   },
-  onError: (error) => {
-    toast.error(error.message);
-  },
+
+    onMutate: () => {
+      // Optimistic update
+      setHasLiked((prev) => !prev);
+      setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      setHasLiked((prev) => {
+        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+        return !prev;
+      });
+    },
+
+  // onError: (error) => {
+  //   toast.error(error.message);
+  // },
 });
    const handleLike = () => {
      mutate({
@@ -182,7 +199,7 @@ const { mutate, isLoading: isLiking } = useMutation({
         </div>
       </div>
       <div className="mt-4">
-        <p className="mb-0 text-secondary600">{likes} likes</p>
+        <p className="mb-0 text-secondary600">{Alllikes} likes</p>
         <div className="flex justify-between items-center">
           <button
             onClick={handleLike}

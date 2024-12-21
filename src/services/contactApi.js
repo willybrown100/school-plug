@@ -948,14 +948,81 @@ export async function getEventCardDetails(email) {
 }
 
 
+// export async function studentConfirmEventPayment(data) {
+//   try {
+//     if (!data.email || !data.amount ) {
+//       throw new Error("Missing required fields: email, amount");
+//     }
+
+//     console.log("Making First API Call with Data:", data);
+
+//     const response1 = await fetch(
+//       "https://student-plug.onrender.com/api/schoolEvent/charging",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(data),
+//       }
+//     );
+
+//     if (!response1.ok) {
+//       console.error("First API Call Failed", await response1.json());
+//       throw new Error("First API call failed");
+//     }
+
+//     const result1 = await response1.json();
+//     console.log("First API Response Received:", result1);
+
+
+
+//     const reference= result1?.reference
+//     const paystackUrl= result1?.paymentUrl
+//     console.log(reference);
+
+//   const paystackResponse = await fetch(`${paystackUrl}`);
+//      const paystackresult = await paystackResponse.json();
+//      console.log(paystackresult);
+//    if (!paystackResponse.ok) {
+//      console.error("Second API Call Failed", await paystackResponse.json());
+//      throw new Error("Second API call failed");
+//    }
+
+
+//   const response2 = await fetch(
+//     `https://student-plug.onrender.com/api/schoolEvent/verify/${reference}`
+    
+//   );
+
+
+//     if (!response2.ok) {
+//       console.error("third API Call Failed", await response2.json());
+//       throw new Error("third API call failed");
+//     }
+
+//     const result2 = await response2.json();
+//     console.log("third API Response Received:", result2);
+
+//     return { firstApiResult: result1, secondApiResult: result2 };
+//   } catch (error) {
+//     console.error("Error occurred:", error);
+//     throw error;
+//   }
+// }
+
+
 export async function studentConfirmEventPayment(data) {
   try {
-    if (!data.email || !data.amount ) {
-      throw new Error("Missing required fields: email, amount");
+    if (!data.email || !data.amount) {
+      throw new Error(
+        "Missing required fields: email and amount are required."
+      );
     }
 
     console.log("Making First API Call with Data:", data);
 
+ 
     const response1 = await fetch(
       "https://student-plug.onrender.com/api/schoolEvent/charging",
       {
@@ -968,47 +1035,30 @@ export async function studentConfirmEventPayment(data) {
     );
 
     if (!response1.ok) {
-      console.error("First API Call Failed", await response1.json());
-      throw new Error("First API call failed");
+      const errorResponse = await response1.json();
+      console.error("First API Call Failed", errorResponse);
+      throw new Error(errorResponse.message || "First API call failed");
     }
 
     const result1 = await response1.json();
     console.log("First API Response Received:", result1);
 
-    const { email, amount, feeType } = data;
-    const data11 = {
-      reference: result1?.data?.reference,
-      email,
-      amount,
-      feeType,
-      status: result1?.data?.status,
-      gatewayResponse: result1?.data?.gateway_response,
-    };
+    const { reference, paymentUrl } = result1;
 
-    console.log("Constructed Data for Second API Call:", data11);
-
-    const response2 = await fetch(
-      "https://student-plug.onrender.com/api/payment/payment-record",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data11),
-      }
-    );
-
-    if (!response2.ok) {
-      console.error("Second API Call Failed", await response2.json());
-      throw new Error("Second API call failed");
+    if (!paymentUrl || !reference) {
+      throw new Error("Invalid response: Payment URL or reference missing.");
     }
 
-    const result2 = await response2.json();
-    console.log("Second API Response Received:", result2);
+    console.log(`Reference: ${reference}, Payment URL: ${paymentUrl}`);
 
-    return { firstApiResult: result1, secondApiResult: result2 };
+ 
+    localStorage.setItem("payment_reference", reference);
+
+
+    window.location.href = paymentUrl;
   } catch (error) {
-    console.error("Error occurred:", error);
+    console.error("Error occurred:", error.message || error);
     throw error;
   }
 }
+

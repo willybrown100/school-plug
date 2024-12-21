@@ -9,16 +9,16 @@ import Button from "../ui/Button";
 import MiniLoader from "../ui/MiniLoader";
 import useGetEventCardToken from "../hooks/useGetEventCardToken";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 export default function ConfirmEventPaymentModal({ selectedFee }) {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
     const { data: datas } = useGetUser();
     const email = datas?.user?.email;
      const { cardToken } = useGetEventCardToken();
      console.log(cardToken)
   const selectedFeez = selectedFee?.selectedFee;
-  console.log(selectedFeez)
+  console.log(selectedFeez?.eventId)
   const { data: dataz, isLoading: isComing } = useQuery({
     queryFn: () => getEventCardDetails(email),
     queryKey: ["eventCardDetails"],
@@ -44,15 +44,22 @@ export default function ConfirmEventPaymentModal({ selectedFee }) {
  const { mutate, isLoading: isPaying } = useMutation({
    mutationFn: studentConfirmEventPayment,
    onSuccess: () => {
-     navigate("/home/receipt/");
+    //  navigate("/home/eventreceipt");
    },
+
    onError: (error) => {
      toast.error(error.message);
    },
  });
 
   const handleSubmit = function(){
-    const data = { email };
+    const data = {
+      email,
+      amount: selectedFeez?.price,
+      authorization_code: cardToken,
+      eventId: selectedFeez?.eventId,
+    };
+    console.log(data);
 mutate(data);
   }
 
@@ -77,11 +84,12 @@ mutate(data);
           <>
             {selectedFee && (
               <>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <h4>student info.</h4>
                   <button
                     type="b"
-                    className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center "
+                    disabled
+                    className="hover:text-stone-100 flex gap-x-2 mb-4 bg-secondary600 p-1 rounded-md text-white capitalize items-center "
                   >
                     <img src="\assets\edit2.svg" alt="edit" />
                     edit info
@@ -103,7 +111,7 @@ mutate(data);
                 </div>
                 <div className=" flex justify-between  items-center">
                   <h4 className="mb-0 font-semibold">debit card</h4>
-                  <button className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center ">
+                  <button disabled  className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center ">
                     <img src="\assets\edit2.svg" alt="edit" />
                     edit info
                   </button>
