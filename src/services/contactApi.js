@@ -1062,3 +1062,26 @@ export async function studentConfirmEventPayment(data) {
   }
 }
 
+
+ export async function verifyPayment(reference) {
+   try {
+     const response = await fetch(
+       `https://student-plug.onrender.com/api/schoolEvent/verify/${reference}`
+     );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+
+     const result = await response.json();
+     console.log("Payment Verified:", result);
+
+   
+   
+    //  localStorage.removeItem("payment_reference");
+   } catch (error) {
+     console.error("Error Verifying Payment:", error);
+      throw error;
+   }
+ }
