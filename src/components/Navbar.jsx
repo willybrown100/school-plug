@@ -1,18 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {  HiMagnifyingGlass } from "react-icons/hi2";
 import { Link,  useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
 
 import ProfileMobileView from "./ProfileMobileView";
-import { useWebSocket } from "../WebSocketProvider";
+
+
 
 export default function Navbar() {
+
   const { pathname } = useLocation();
-const {socket}=useWebSocket()
+
 
 
   const links = [
     {
+      id: 1,
       name: (
         <span
           className={`${
@@ -64,6 +67,7 @@ const {socket}=useWebSocket()
       path: "/home/homePage/feed",
     },
     {
+      id: 2,
       name: "events",
       icon: (
         <svg
@@ -216,6 +220,7 @@ const {socket}=useWebSocket()
     //   path: "/home/material",
     // },
     {
+      id: 3,
       name: "trends",
       icon: (
         <svg
@@ -260,6 +265,7 @@ const {socket}=useWebSocket()
       path: "/home/trends",
     },
     {
+      id: 4,
       name: <span className="lg:hidden">pay bills</span>,
       icon: (
         <svg
@@ -311,27 +317,7 @@ const {socket}=useWebSocket()
   ];
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
 
- useEffect(() => {
-   socket?.on("notification", (data) => {
-     console.log("Received notification:", data);
-   });
 
-   socket?.on("post_like_toggled", (data) => {
-     console.log("Post like toggled:", data);
-   });
-
-   socket?.on("post_likes_updated", (data) => {
-     console.log("Post likes updated:", data);
-   });
-
-   socket?.on("post_liked", (data) => {
-     console.log("Post liked:", data);
-   });
-
-   socket?.on("post_unliked", (data) => {
-     console.log("Post unliked:", data);
-   });
- }, [socket]);
   
 
   return (
@@ -377,8 +363,8 @@ const {socket}=useWebSocket()
             </div>
 
             <ul className="hidden md:flex items-center lg:hidden justify-between">
-              {links.map((item, i) => (
-                <NavLinks item={item} key={i} />
+              {links.map((item) => (
+                <NavLinks item={item} key={item.id} />
               ))}
             </ul>
 
@@ -407,7 +393,7 @@ const {socket}=useWebSocket()
             <div className="flex justify-between items-center">
               <ul className="hidden lg:flex items-center gap-x-6">
                 {links.map((item) => (
-                  <NavLinks item={item} key={item.name} />
+                  <NavLinks item={item} key={item.id} />
                 ))}
               </ul>
               <img

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useGetSugUser from '../hooks/useGetSugUser'
-import { useWebSocket } from '../WebSocketProvider';
+
 
 
 
@@ -14,7 +14,7 @@ export default function SugNavbar() {
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
   const { fullName } = data?.data?.user || {};
-const { socket } = useWebSocket();
+
   useEffect(() => {
     if (data?.message === "Invalid Token") {
       navigate("/sugsignin");
@@ -52,27 +52,7 @@ const { socket } = useWebSocket();
     };
   }, [lastScrollY]);
 
- useEffect(()=>{
-socket?.on("notification", (data) => {
-  console.log("Received notification:", data);
-});
 
-socket?.on("post_like_toggled", (data) => {
-  console.log("Post like toggled:", data);
-});
-
-socket?.on("post_likes_updated", (data) => {
-  console.log("Post likes updated:", data);
-});
-
-socket?.on("post_liked", (data) => {
-  console.log("Post liked:", data);
-});
-
-socket?.on("post_unliked", (data) => {
-  console.log("Post unliked:", data);
-});
- },[socket])
 
 const excludedRoutes = ["/sughome/sugevents/:id"];
 const shouldHideNavbar = excludedRoutes.some((route) => {

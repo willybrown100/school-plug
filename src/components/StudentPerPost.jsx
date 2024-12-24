@@ -10,7 +10,7 @@ import useGetUser from "../hooks/useGetUser";
 
 import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeAgo, timeStampAgo } from "../utils/timeStampAgo";
-import { useWebSocket } from "../WebSocketProvider";
+
 import { processText } from "../utils/utils";
 // import { processText } from "../utils/utils";
 
@@ -33,7 +33,7 @@ export default function StudentPerPost({ item }) {
 
   const queryClient = useQueryClient();
   const { data } = useGetUser();
-  const name = data?.user?.name;
+  // const name = data?.user?.name;
   const { userId: studentId } = useUser();
   const postId = _id;
   const [Alllikes, setAllLikes] = useState(likes.length);
@@ -46,7 +46,7 @@ export default function StudentPerPost({ item }) {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  const { socket } = useWebSocket();
+
 
   // const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
@@ -120,12 +120,7 @@ export default function StudentPerPost({ item }) {
       userId: studentId,
     });
 
-    socket.emit("post_liked", {
-      type: "like",
-      postId,
-      likerId: studentId,
-      likerName: name,
-    });
+ 
   };
 
   const handleOpenCommentModal = function (index) {

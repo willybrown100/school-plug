@@ -43,21 +43,35 @@ export default function PostModal() {
       },
     });
 
-  const handleImageChange = (event) => {
-    const file = Array.from(event.target.files);
-    if (file.length) {
-      setselectedImage((prevImg) => [...prevImg, file]);
+  // const handleImageChange = (event) => {
+  //   const file = Array.from(event.target.files);
+  //     // const file = event.target.files[0];
+  //   if (file.length) {
+  //     setselectedImage((prevImg) => [...prevImg, file]);
 
-      file.forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview((prevImages) => [...prevImages, reader.result]); 
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+  //     file.forEach((file) => {
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => {
+  //         setImagePreview((prevImages) => [...prevImages, reader.result]); 
+  //       };
+  //       reader.readAsDataURL(file);
+  //     });
+  //   }
 
-  };
+  // };
+
+   const handleImageChange = (event) => {
+     const file = event.target.files[0];
+     if (file) {
+       setselectedImage((prevImg) => [...prevImg, file]);
+
+       const reader = new FileReader();
+       reader.onloadend = () => {
+         setImagePreview((prevImages) => [...prevImages, reader.result]);
+       };
+       reader.readAsDataURL(file);
+     }
+   };
 
   const handleSubmit = function (e) {
     e.preventDefault();
@@ -160,7 +174,7 @@ export default function PostModal() {
               )}
             </div>
             <div className="flex justify-between items-center">
-              <button onClick={handleClick} disabled={disable}>
+              <button onClick={handleClick} disabled={disable} type='button'>
                 <img
                   src="\images\camera.svg"
                   alt="icon "

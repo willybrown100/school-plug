@@ -35,7 +35,7 @@ const {userId} = useUser();
    const sch = schools?.filter((item) => item.university === uni);
    const schObj = sch?.at(0);
    const schoolInfoId = schObj?._id;
-   console.log(schoolInfoId, schObj);
+   
   
 const [amount,setAmount]=useState("")
   

@@ -12,15 +12,15 @@ import { useForm } from "react-hook-form";
 import { sugDeletePost } from "../services/contactApi";
 import {timeStampAgo} from "../utils/timeStampAgo"
 import BlueMiniLoader from "../ui/BlueMiniLoader";
-import { useWebSocket } from "../WebSocketProvider";
+
 import {  processTextSug } from "../utils/utils";
 import MiniLoader from "../ui/MiniLoader";
 
 export default function PerPost({ item, onClick, open }) {
-  const {socket}=useWebSocket()
+  
   const queryClient = useQueryClient();
   const { data } = useGetSugUser();
-  const name = data?.data?.user?.fullName;
+
   const { userId: sugId, token } = useSug();
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
@@ -164,12 +164,7 @@ export default function PerPost({ item, onClick, open }) {
   });
 
   const handleLike = () => {
-    socket.emit("post_like_toggled", {
-      type: "like",
-      postId,
-      likerId: sugId,
-      likerName: name,
-    });
+
     mutate({ postId: _id, userId: sugId });
     console.log({ postId: _id, userId: sugId });
 

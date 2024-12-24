@@ -19,7 +19,7 @@ export default function CreatePost() {
   const [textContent, setTextContent] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [selectedImage, setselectedImage] = useState([]);
-
+console.log(selectedImage);
   const disable = imagePreview.length === 3;
   const queryClient = useQueryClient();
   const { userId } = useUser();
