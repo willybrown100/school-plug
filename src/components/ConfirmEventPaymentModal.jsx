@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useRef } from "react";
 import { getEventCardDetails, studentConfirmEventPayment } from "../services/contactApi";
 import useGetUser from "../hooks/useGetUser";
@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
 
 export default function ConfirmEventPaymentModal({ selectedFee }) {
+  const queryClient = useQueryClient()
   // const navigate = useNavigate()
     const { data: datas } = useGetUser();
     const email = datas?.user?.email;
@@ -44,7 +45,7 @@ export default function ConfirmEventPaymentModal({ selectedFee }) {
  const { mutate, isLoading: isPaying } = useMutation({
    mutationFn: studentConfirmEventPayment,
    onSuccess: () => {
-    //  navigate("/home/eventreceipt");
+    queryClient.invalidateQueries("verifyPayment");
    },
 
    onError: (error) => {

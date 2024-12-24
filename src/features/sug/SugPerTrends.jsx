@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import BlueMiniLoader from "../../ui/BlueMiniLoader";
 import useGetSugUser from "../../hooks/useGetSugUser";
 import { processTextSug } from "../../utils/utils";
-import { useWebSocket } from "../../WebSocketProvider";
+
 import { sugDeletePost } from "../../services/contactApi";
 // import { sugDeletePost } from "../../services/contactApi";
 
@@ -19,7 +19,7 @@ export default function SugPerTrends({ item,onClick,open }) {
     const { data } = useGetSugUser();
     const uni =data.data.university
   const queryClient =useQueryClient()
-  const {socket}=useWebSocket()
+
       const [isExpanded, setIsExpanded] = useState(false);
    const [commentContents, setCommentContent] = useState([]);
     const [commentModalVisible, setCommentModalVisible] = useState(false);
@@ -95,12 +95,7 @@ export default function SugPerTrends({ item,onClick,open }) {
    },
  });
   const handleLike = () => {
-    socket.emit("post_like_toggled", {
-      type: "like",
-      postId,
-      likerId: sugId,
-      likerName: name,
-    });
+  
     mutate({ postId, userId: sugId });
    
   };

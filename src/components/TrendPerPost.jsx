@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useUser from "../hooks/useUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useWebSocket } from "../WebSocketProvider";
+
 import { processText } from "../utils/utils";
 
 export default function TrendPerPost({ item }) {
@@ -28,8 +28,7 @@ export default function TrendPerPost({ item }) {
 
  const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
 
-  const [commentModalVisible, setCommentModalVisible] = useState(false);
-  const {socket}=useWebSocket()
+  const [commentModalVisible, setCommentModalVisible] = useState(false)
   const { register, handleSubmit, reset } = useForm();
   const queryClient = useQueryClient()
 const handleOpenCommentModal = function () {
@@ -99,12 +98,7 @@ const { mutate, isLoading: isLiking } = useMutation({
        userId: studentId,
      });
 
-     socket.emit("post_liked", {
-       type: "like",
-       postId,
-       likerId: studentId,
-       likerName: name,
-     });
+
    };
 
  const onSubmit = function ({ text }) {

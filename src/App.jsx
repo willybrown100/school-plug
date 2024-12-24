@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense,  } from "react";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
@@ -41,7 +41,7 @@ import SugCreatePost from "./features/sug/SugCreatePost";
 import SugPaybills from "./features/sug/SugPaybills";
 
 import SugNotification from "./features/sug/SugNotification";
-import { WebSocketProvider } from "./WebSocketProvider";
+
 import SugTrends from "./features/sug/SugTrends";
 import Notification from "./features/Notification";
 import PageNotFound from "./components/PageNotFound";
@@ -59,12 +59,11 @@ import SudentEventDetails from "./features/SudentEventDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PageLoader from "./components/PageLoader";
 import EventPaymentReceipt from "./features/EventPaymentReceipt";
-// import PageLoader from "./components/PageLoader";
-// const PayBills = lazy(() => import("./features/PayBills"));
-// const Events = lazy(() => import("./features/Events"))
+
+
+
 const HomePage = lazy(() => import("./features/HomePage"));
-// const Trends = lazy(() => import("./features/Trends"));
-//once the component mount we connect to the servr immediately just once
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -72,9 +71,17 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+
+
 export default function App() {
+
+
+
+
+
   return (
-    <WebSocketProvider>
+   
       <DateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -155,7 +162,10 @@ export default function App() {
                   <Route path="trends" element={<Trends />} />
                   <Route path="bills" element={<PayBills />} />
                   <Route path="receipt" element={<PaymentReceipt />} />
-                  <Route path="eventreceipt" element={<EventPaymentReceipt />} />
+                  <Route
+                    path="eventreceipt"
+                    element={<EventPaymentReceipt />}
+                  />
                   <Route path="payment-form" element={<PaymentForm />} />
                   <Route path="card-form" element={<CardForm />} />
                 </Route>
@@ -190,6 +200,6 @@ export default function App() {
           </BrowserRouter>
         </QueryClientProvider>
       </DateProvider>
-    </WebSocketProvider>
+ 
   );
 }

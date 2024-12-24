@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import img1 from "../../public/assets/bill.svg";
-import img2 from "../../public/assets/teacher.svg";
-
-import img3 from "../../public/assets/book.svg";
+import img1 from "../img/bill.svg";
+import img2 from "../img/teacher.svg";
+import img3 from "../img/book.svg";
 import { Link } from "react-router-dom";
 
 export default function Bills() {
@@ -110,20 +109,39 @@ export default function Bills() {
             </li>
           ))}
         </ul>
-<div className="mt-[2rem] w-full">
-
-        <Link
-          to={`/home/payment-form?option=${queryString}`}
-          disabled={isButtonDisabled}
-          className={
-            isButtonDisabled
-            ? "bg-[#B8CFF3] text-[#FAFAFA]  grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded  font-bold"
-            : "bg-[#2B70DB] text-white py-3  grid text-center grid-cols-1 hover:text-stone-100  rounded  font-bold"
-          }
+        <div className="mt-[2rem] w-full">
+          {/* <Link
+            to={`/home/payment-form?option=${queryString}`}
+            aria-disabled={isButtonDisabled}
+            className={
+              isButtonDisabled
+                ? "bg-[#B8CFF3] text-[#FAFAFA]  grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded  font-bold"
+                : "bg-[#2B70DB] text-white py-3  grid text-center grid-cols-1 hover:text-stone-100  rounded  font-bold"
+            }
           >
-          Make payment now
-        </Link>
-          </div>
+            Make payment now
+          </Link> */}
+          <Link
+            to={
+              isButtonDisabled
+                ? "#"
+                : `/home/payment-form?option=${queryString}`
+            }
+            onClick={(e) => {
+              if (isButtonDisabled) {
+                e.preventDefault(); 
+              }
+            }}
+            className={
+              isButtonDisabled
+                ? "bg-[#B8CFF3] text-[#FAFAFA] grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded font-bold cursor-not-allowed"
+                : "bg-[#2B70DB] text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 rounded font-bold"
+            }
+            aria-disabled={isButtonDisabled}
+          >
+            Make payment now
+          </Link>
+        </div>
       </div>
     </div>
   );
