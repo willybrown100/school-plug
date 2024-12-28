@@ -11,42 +11,31 @@ export const formatDate = (date) => {
   }
 
   const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed) and pad
-  const year = date.getFullYear(); // Get full year
+  const month = String(date.getMonth() + 1).padStart(2, "0"); 
+  const year = date.getFullYear(); 
 
-  return `${day}/${month}/${year}`; // Format as dd/mm/yyyy
+  return `${day}/${month}/${year}`; 
 };
 
-// export const formatDate = (date) => {
-//   const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero if needed
-//   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed) and pad
-//   const year = date.getFullYear(); // Get full year
-
-//   return `${day}/${month}/${year}`; // Format as dd/mm/yyyy
-// };
 
 
 export const convertDateToDDMMYYYY = (dateString) => {
-  const date = new Date(dateString); // Convert string to Date object
+  const date = new Date(dateString); 
 
-  const day = String(date.getDate()).padStart(2, '0'); // Get day and pad with leading zero if needed
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed) and pad
-  const year = date.getFullYear(); // Get full year
+  const day = String(date.getDate()).padStart(2, '0'); 
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const year = date.getFullYear(); 
 
-  return `${day}/${month}/${year}`; // Format as dd/mm/yyyy
+  return `${day}/${month}/${year}`; 
 };
 
-// Example usage
-const inputDate = 'Thu Jul 11 2024 00:00:00 GMT+0100 (West Africa Standard Time)';
-const formattedDate = convertDateToDDMMYYYY(inputDate);
-console.log(formattedDate); // Output: "11/07/2024"
 
 
 
 
 export const getYearFromISODate = (dateString) => {
-  const date = new Date(dateString); // Convert the ISO string to a Date object
-  return date.getFullYear(); // Extract the year
+  const date = new Date(dateString); 
+  return date.getFullYear(); 
 };
 
 export const optionSplit = function (option) {
@@ -74,6 +63,22 @@ export function getBankLogo(bankName) {
   switch (bankName?.toLowerCase()) {
     case "access bank":
       return "/logos/access-bank.png";
+    case "gtbank":
+      return "/logos/gtbank.png";
+    case "zenith bank":
+      return "/logos/zenith-bank.png";
+    case "uba":
+      return "/logos/uba.png";
+    case "first bank":
+      return "/images/First-Bank.png";
+    default:
+      return "/logos/default-bank.png"; // Default logo for unknown banks
+  }
+}
+export function notificationType(title) {
+  switch (title) {
+    case "Your post was liked!":
+      return "/assets/like2.svg";
     case "gtbank":
       return "/logos/gtbank.png";
     case "zenith bank":

@@ -12,6 +12,9 @@ import BlueMiniLoader from "../ui/BlueMiniLoader";
 import { timeAgo, timeStampAgo } from "../utils/timeStampAgo";
 
 import { processText } from "../utils/utils";
+// import useWebSocket from "../hooks/useWebSocket";
+import EmojiPicker from "emoji-picker-react";
+import { useSocket } from "./SocketProvider";
 // import { processText } from "../utils/utils";
 
 
@@ -36,22 +39,23 @@ export default function StudentPerPost({ item }) {
   // const name = data?.user?.name;
   const { userId: studentId } = useUser();
   const postId = _id;
+
   const [Alllikes, setAllLikes] = useState(likes.length);
   const [hasLiked, setHasLiked] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues, setValue} = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState();
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-
-
   // const toggleText = () => setIsExpanded((prev) => !prev);
   const openImageModal = (index) => setSelectedImageIndex(index);
-
-
+  
+  // const socket=useWebSocket()
+const {socket }=useSocket()
 
 
   // Toggle between full and truncated text
@@ -60,8 +64,6 @@ export default function StudentPerPost({ item }) {
  };
 
   const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
-
-
 
   async function getStudentComments() {
     setLoading(true);
@@ -82,6 +84,17 @@ export default function StudentPerPost({ item }) {
       setLoading(false);
     }
   }
+
+    const handleEmojiClick = (emojiData) => {
+      const emoji = emojiData.emoji; // Extract emoji
+      const currentText = getValues("comments"); // Get the current input value
+      setValue("comments", currentText + emoji); // Append emoji to input value
+    };
+      const handleEmojiClick2 = (emojiData) => {
+        const emoji = emojiData.emoji; // Extract emoji
+        const currentText = getValues("text"); // Get the current input value
+        setValue("text", currentText + emoji); 
+      };
 
   const closeImageModal = () => setSelectedImageIndex(null);
 
@@ -107,21 +120,35 @@ export default function StudentPerPost({ item }) {
     onError: (error) => {
       toast.error(error.message);
       setHasLiked((prev) => {
-        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
         return !prev;
       });
     },
   });
 
-  const handleLike = () => {
-    mutate({
-      postId: _id,
-      ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
-      userId: studentId,
-    });
 
- 
+
+const handleLike = () => {
+  const likeData = {
+    postId: _id,
+    ...(postType === "admin" && { isAdminPost: true }),
+    userId: studentId,
   };
+
+  // Send the API request
+  mutate(likeData);
+
+  // Send the same data to WebSocket if it's open
+  if (socket && socket?.readyState === WebSocket.OPEN) {
+    socket?.send(
+      JSON.stringify({
+        type: "like-post",
+        ...likeData, // Spread the same data here to send it to the socket
+      })
+    );
+  }
+};
+
 
   const handleOpenCommentModal = function (index) {
     getStudentComments();
@@ -134,11 +161,15 @@ export default function StudentPerPost({ item }) {
     mutationFn: studentComment,
     onSuccess: () => {
       getStudentComments();
-      toast.success("succesfull");
+      toast.success("comment sent");
+      setShowEmojiPicker(false);
       reset();
     },
     onError: (error) => {
       toast.error(error.message);
+    },
+    onSettled: () => {
+      reset({ comments: "" });
     },
   });
 
@@ -156,7 +187,7 @@ export default function StudentPerPost({ item }) {
   };
 
   return (
-    <li className="bg-white w-full p-3">
+    <li className="bg-white w-full p-3 relative">
       {/* Post Content */}
       <div className="flex justify-between relative">
         <div className="flex gap-x-2 items-center">
@@ -343,12 +374,24 @@ export default function StudentPerPost({ item }) {
                 className="w-full bg-transparent outline-none placeholder:text-sm rounded-md"
               />
               <button
+                type="button"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                className="text-xl"
+              >
+                😊
+              </button>
+              <button
                 disabled={isCommenting}
                 className="bg-secondary600 px-3 p-[1px] rounded-xl text-white"
               >
                 &uarr;
               </button>
             </div>
+            {showEmojiPicker && (
+              <div className="absolute right-3 top-2 z-40 max-h-[20rem] overflow-y-auto">
+                <EmojiPicker onEmojiClick={handleEmojiClick2} />
+              </div>
+            )}
           </form>
         </div>
       )}
@@ -439,12 +482,24 @@ export default function StudentPerPost({ item }) {
               className="border w-full border-stone-600 p-1 placeholder:text-stone-600 placeholder:text-sm pl-2  rounded-2xl"
             />
             <button
+              type="button"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+              className="text-xl"
+            >
+              😊
+            </button>
+            <button
               disabled={isCommenting}
               className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
             >
               &uarr;
             </button>
           </form>
+          {showEmojiPicker && (
+            <div className="absolute right-3 top-2 z-40">
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
         </div>
       )}
     </li>

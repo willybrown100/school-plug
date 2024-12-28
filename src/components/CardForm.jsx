@@ -144,13 +144,24 @@ const PaymentForm = () => {
   }, [location.search]);
 
   // Format card number in groups of 4 digits
-  const handleCardNumberChange = (e) => {
-    const formattedNumber = e.target.value
-      .replace(/\D+/g, "")
-      .slice(0, 16)
-      .replace(/(\d{4})(?=\d)/g, "$1 ");
-    setCardNumber(formattedNumber);
-  };
+  // const handleCardNumberChange = (e) => {
+  //   const formattedNumber = e.target.value
+  //     .replace(/\D+/g, "")
+  //     .slice(0, 16)
+  //     .replace(/(\d{4})(?=\d)/g, "$1 ");
+  //   setCardNumber(formattedNumber);
+  // };
+const handleCardNumberChange = (e) => {
+  const input = e.target.value.replace(/\D+/g, ""); // Remove non-digit characters
+  const isValidLength = input.length <= 19; // Allow up to 19 digits
+  if (!isValidLength) return; // Ignore further input if it exceeds 19 digits
+
+  const formattedNumber = input
+    .slice(0, 19) // Limit to a maximum of 19 digits
+    .replace(/(\d{4})(?=\d)/g, "$1 "); // Add a space after every 4 digits
+
+  setCardNumber(formattedNumber);
+};
 
   // Auto-add slash in MM/YY for expiry date
   const handleExpiryDateChange = (e) => {

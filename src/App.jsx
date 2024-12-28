@@ -59,6 +59,8 @@ import SudentEventDetails from "./features/SudentEventDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PageLoader from "./components/PageLoader";
 import EventPaymentReceipt from "./features/EventPaymentReceipt";
+import { SocketProvider } from "./components/SocketProvider";
+// import SocketProvider from "./components/SocketProvider";
 
 
 
@@ -81,7 +83,7 @@ export default function App() {
 
 
   return (
-   
+    <SocketProvider>
       <DateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -200,6 +202,6 @@ export default function App() {
           </BrowserRouter>
         </QueryClientProvider>
       </DateProvider>
- 
+    </SocketProvider>
   );
 }

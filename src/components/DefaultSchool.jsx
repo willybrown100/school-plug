@@ -2,7 +2,7 @@
 import React from "react";
 
 export default function DefaultSchool({ data }) {
-  const schoolInfo = data.pages.at(0).schoolInfo;
+  const schoolInfo = data?.pages?.at(0).schoolInfo;
   const { aboutUniversity, state, university, uniProfilePicture } =
     schoolInfo || {};
   return (

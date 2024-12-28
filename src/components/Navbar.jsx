@@ -6,12 +6,16 @@ import NavLinks from "./NavLinks";
 import ProfileMobileView from "./ProfileMobileView";
 
 
-
+import { useSocket } from "./SocketProvider";
+import useFetchNotification from "../hooks/useFetchNotification";
+// import useFetchNotification from "../hooks/useFetchNotification";
 export default function Navbar() {
 
   const { pathname } = useLocation();
-
-
+const {isLoading}=useFetchNotification()
+console.log(isLoading);
+// const {isLoading}=useFetchNotification()
+const {notification}=useSocket()
 
   const links = [
     {
@@ -322,7 +326,7 @@ export default function Navbar() {
 
   return (
     <>
-      {pathname !== "/home/notifications"  && (
+      {pathname !== "/home/notifications" && (
         <nav className="bg-white p-2 z-[1] fixed top-0 left-0 w-full">
           <article
             className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}
@@ -381,13 +385,22 @@ export default function Navbar() {
                   </div>
                 </form>
               </div>
-              <Link to="/home/notifications">
-                <img
-                  src="/images/notification-bing.png"
-                  alt="img"
-                  className="rounded-full p-2 border border-secondary400"
-                />
-              </Link>
+              <div className="relative">
+                <Link to="/home/notifications">
+                  <img
+                    src="/images/notification-bing.png"
+                    alt="img"
+                    className="rounded-full p-2 border border-secondary400"
+                  />
+                </Link>
+                {notification && (
+                  <div className="bg-red-500 right-0 rounded-full w-5 h-5 grid place-items-center absolute top-[-0.7rem]">
+                    <span className="text-white text-xs leading-none">
+                      {notification.length}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-between items-center">
