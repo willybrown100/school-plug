@@ -1085,3 +1085,22 @@ export async function studentConfirmEventPayment(data) {
       throw error;
    }
  }
+
+//  =============================
+// fetch notification==
+// ================================
+export async function getUserNotification(userId) {
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/plug/notifications/${userId}`
+    );
+
+    const result = await response.json();
+    console.log(result);
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

@@ -8,6 +8,7 @@ import useGetSugUser from '../hooks/useGetSugUser'
 
 
 
+
 export default function SugNavbar() {
   const { data } = useGetSugUser();
   const navigate = useNavigate()

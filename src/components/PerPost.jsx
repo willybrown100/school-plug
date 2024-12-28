@@ -15,6 +15,7 @@ import BlueMiniLoader from "../ui/BlueMiniLoader";
 
 import {  processTextSug } from "../utils/utils";
 import MiniLoader from "../ui/MiniLoader";
+import EmojiPicker from "emoji-picker-react";
 
 export default function PerPost({ item, onClick, open }) {
   
@@ -36,9 +37,11 @@ export default function PerPost({ item, onClick, open }) {
     department,
     postType,
   } = item;
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues, setValue} = useForm();
   const [commentContents, setCommentContent] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  
    const [Alllikes, setAllLikes] = useState(likes.length);
    const [hasLiked, setHasLiked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,6 +52,17 @@ export default function PerPost({ item, onClick, open }) {
  const handleToggle = () => {
    setIsExpanded((prev) => !prev);
  };
+
+    // const handleEmojiClick = (emojiData) => {
+    //   const emoji = emojiData.emoji; // Extract emoji
+    //   const currentText = getValues("comments"); // Get the current input value
+    //   setValue("comments", currentText + emoji); // Append emoji to input value
+    // };
+    const handleEmojiClick2 = (emojiData) => {
+      const emoji = emojiData.emoji; // Extract emoji
+      const currentText = getValues("text"); // Get the current input value
+      setValue("text", currentText + emoji); // Append emoji to input value
+    };
 
  const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
   const openImageModal = (index) => setSelectedImageIndex(index);
@@ -155,7 +169,8 @@ export default function PerPost({ item, onClick, open }) {
     mutationFn: sugCommentPost,
     onSuccess: () => {
       getAllComments();
-      toast.success("comment successful");
+         toast.success("comment sent");
+         setShowEmojiPicker(false);
       reset();
     },
     onError: (error) => {
@@ -408,12 +423,25 @@ export default function PerPost({ item, onClick, open }) {
                 placeholder="Add Your Comment Here"
                 className="w-full  bg-transparent outline-none placeholder:text-sm rounded-md"
               />
+
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                className="text-xl"
+              >
+                😊
+              </button>
               <button
                 disabled={isCommenting}
                 className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
               >
                 {isCommenting ? <MiniLoader /> : <span>&uarr;</span>}
               </button>
+               {showEmojiPicker && (
+                            <div className="absolute right-3 top-2 z-40">
+                              <EmojiPicker onEmojiClick={handleEmojiClick2} />
+                            </div>
+                          )}
             </form>
           </div>
         </div>

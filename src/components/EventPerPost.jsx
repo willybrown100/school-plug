@@ -71,9 +71,9 @@ const selectedContent = { price, event: "event", eventId: _id };
         ))}
       </div>
       {isPaid == true && (
-        <div className="grid grid-cols-2 gap-x-2 mt-4">
+        <div className="grid grid-cols-2 gap-x-2 mt-4 items-center">
           <button className="border border-stone-600 text-stone-600 capitalize rounded-md bg-transparent px-3 py-3">
-            event fee ({formatNaira(price)})
+            evt fee ({formatNaira(price)})
           </button>
           <Link
             to={`/home/payment-form?option=${queryString} `}

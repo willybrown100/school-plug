@@ -10,13 +10,17 @@ import useUser from "../hooks/useUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { processText } from "../utils/utils";
+import EmojiPicker from "emoji-picker-react";
 
 export default function TrendPerPost({ item }) {
     const { data } = useGetUser();
     const uni=data.studentInfo.university
     const { createdAt, text, poster, images, likes, postId,postType } = item;
     const [Alllikes, setAllLikes] = useState(likes);
+
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [hasLiked, setHasLiked] = useState(false);
+     const [activeTab, setActiveTab] = useState(0);
   const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState();
       const [isExpanded, setIsExpanded] = useState(false);
@@ -26,16 +30,28 @@ export default function TrendPerPost({ item }) {
    setIsExpanded((prev) => !prev);
  };
 
+  const handleEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji; 
+    const currentText = getValues("comments");
+    setValue("comments", currentText + emoji);
+  };
+  const handleEmojiClick2 = (emojiData) => {
+    const emoji = emojiData.emoji; 
+    const currentText = getValues("text");
+    setValue("text", currentText + emoji); 
+  };
+
  const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
 
   const [commentModalVisible, setCommentModalVisible] = useState(false)
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue, getValues } = useForm();
   const queryClient = useQueryClient()
-const handleOpenCommentModal = function () {
+const handleOpenCommentModal = function (index) {
   getStudentComments();
   setCommentModalVisible(true);
-  // setActiveTab(index);
+  setActiveTab(index);
 };
+
  const handleCloseCommentModal = () => setCommentModalVisible(false);
  async function getStudentComments() {
    setLoading(true);
@@ -60,12 +76,16 @@ const handleOpenCommentModal = function () {
      mutationFn: studentComment,
      onSuccess: () => {
        getStudentComments();
-       toast.success("succesfull");
-       reset();
+       toast.success("comment sent");
+       setShowEmojiPicker(false)
+      reset()
      },
      onError: (error) => {
        toast.error(error.message);
      },
+     onSettled:()=>{
+        reset({ comments: "" });
+     }
    });
 const { mutate, isLoading: isLiking } = useMutation({
   mutationFn: studentLikePost,
@@ -75,26 +95,23 @@ const { mutate, isLoading: isLiking } = useMutation({
   },
 
     onMutate: () => {
-      // Optimistic update
       setHasLiked((prev) => !prev);
       setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
     },
     onError: (error) => {
       toast.error(error.message);
       setHasLiked((prev) => {
-        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
         return !prev;
       });
     },
 
-  // onError: (error) => {
-  //   toast.error(error.message);
-  // },
+
 });
    const handleLike = () => {
      mutate({
        postId,
-       ...(postType === "admin" && { isAdminPost: true }), // Include `isAdminPost: true` only if condition is met
+       ...(postType === "admin" && { isAdminPost: true }),  
        userId: studentId,
      });
 
@@ -105,8 +122,16 @@ const { mutate, isLoading: isLiking } = useMutation({
    comment({ text, isAdmin: false, userId: studentId, postId });
    console.log({ text, isAdmin: false, userId: studentId, postId });
  };
+   const onSubmitLargeScreen = function ({ comments }) {
+     comment({
+       text: comments,
+       isAdmin: false,
+       userId: studentId,
+       postId,
+     });
+   };
   return (
-    <div className="bg-white p-3 mb-3 rounded-lg ">
+    <div className="bg-white p-3 mb-3 rounded-lg relative">
       <div className="flex gap-x-2 items-center">
         <img
           src={
@@ -300,15 +325,112 @@ const { mutate, isLoading: isLiking } = useMutation({
                 className="w-full bg-transparent outline-none placeholder:text-sm rounded-md"
               />
               <button
+                type="button"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                className="text-xl"
+              >
+                😊
+              </button>
+              <button
                 disabled={isCommenting}
                 className="bg-secondary600 px-3 p-[1px] rounded-xl text-white"
               >
                 &uarr;
               </button>
             </div>
+            {showEmojiPicker && (
+              <div className="absolute right-3 top-2 z-40">
+                <EmojiPicker onEmojiClick={handleEmojiClick2} />
+              </div>
+            )}
+          </form>
+        </div>
+      )}
+
+      {activeTab === postId && (
+        <div className="mt-3 hidden md:block overflow-y-auto ">
+          <ul className="mt-4 overflow-y-auto">
+            {loading && (
+              <div className="flex justify-center">
+                <BlueMiniLoader />
+              </div>
+            )}
+            {!datas?.length ? (
+              <div className="flex justify-center">
+                <p className="capitalize text-stone-700">no comment yet</p>
+              </div>
+            ) : (
+              datas?.map((item) => (
+                <li key={item?._id} className="mb-4">
+                  <div className="flex items-center gap-x-3">
+                    <img
+                      src={
+                        item.user?.profilePicture
+                          ? item.user.profilePicture
+                          : "/images/profile-circle.svg"
+                      }
+                      alt="img"
+                      className="h-[3rem] w-[3rem] rounded-full"
+                    />
+                    <div>
+                      <p className="mb-0 font-semibold">
+                        {item?.user?.fullName}
+                      </p>
+                      <p className="mb-0 font-medium capitalize text-stone-900">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
+          <form
+            className="flex items-center gap-x-3 "
+            onSubmit={handleSubmit(onSubmitLargeScreen)}
+          >
+            <img
+              src={data?.user?.profilePhoto}
+              alt="img"
+              className="w-8 h-8 rounded-full"
+            />
+            <input
+              type="text"
+              {...register("comments")}
+              placeholder="Add Your Comment Here"
+              className="border w-full border-stone-600 p-1 placeholder:text-stone-600 placeholder:text-sm pl-2  rounded-2xl"
+            />
+            <button
+              type="button"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+              className="text-xl"
+            >
+              😊
+            </button>
+            <button
+              disabled={isCommenting}
+              className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
+            >
+              &uarr;
+            </button>
+
+            {showEmojiPicker && (
+              <div className="absolute right-3 top-2 z-40">
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+              </div>
+            )}
           </form>
         </div>
       )}
     </div>
   );
 }
+
+
+
+
+
+
+
+
+

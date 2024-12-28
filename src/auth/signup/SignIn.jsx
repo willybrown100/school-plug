@@ -29,7 +29,8 @@ export default function SignIn() {
     mutationFn: signIn,
     onSuccess: () => {
       navigate("/home/homePage");
-      queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries(["user", "notification"]);
+      // queryClient.invalidateQueries("notification");
     },
     onError: (error) => {
       console.log(error);
@@ -42,6 +43,7 @@ export default function SignIn() {
     onSuccess: () => {
       navigate("/home/homePage");
       queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries("notification");
     },
     onError: (error) => {
       console.log(error);

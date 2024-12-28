@@ -176,7 +176,7 @@ console.log("Form submitted:", studentInfo);
               <p className="mb-0 border-b border-stone-300 capitalize font-semibold pb-2">
                 bill type
               </p>
-              <form className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
+              <div className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
                 <img
                   src={selectedFee.image}
                   alt={formatText(selectedFee.selectedValue)}
@@ -195,7 +195,7 @@ console.log("Form submitted:", studentInfo);
                   readOnly
                   className="ml-auto"
                 />
-              </form>
+              </div>
               <input
                 type="text"
                 value={amount}
@@ -299,9 +299,10 @@ console.log("Form submitted:", studentInfo);
               <input
                 type="text"
                 id="regNo"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-4"
+                className="border border-gray-300 p-3 placeholder:capitalize rounded-lg w-full mb-4"
                 placeholder="Enter your registration number"
-                value={regNo}
+                // value={regNo.slice()}
+                value={`${regNo.slice(0, 2).toUpperCase()}${regNo.slice(2)}`}
                 onChange={(e) => setRegNo(e.target.value)}
               />
             </div>
