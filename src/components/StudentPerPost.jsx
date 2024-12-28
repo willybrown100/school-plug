@@ -142,7 +142,7 @@ const handleLike = () => {
   if (socket && socket?.readyState === WebSocket.OPEN) {
     socket?.send(
       JSON.stringify({
-        type: "like-post",
+        // type: "like-post",
         ...likeData, // Spread the same data here to send it to the socket
       })
     );
