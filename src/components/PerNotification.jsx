@@ -16,7 +16,7 @@ export default function PerNotification({ item }) {
         {likersPhotos?.map((img) => (
           <div key={img} className="flex items-center gap-x-2">
             <img src={img} alt="img" className="w-8 rounded-full h-8" />
-            {likersPhotos.length >= 2 && (
+            {likersPhotos?.length >= 2 && (
               <span className="border border-stone-600 rounded-full p-2 font-semibold">
                 +{likersCount - 2}
               </span>
@@ -38,7 +38,7 @@ export default function PerNotification({ item }) {
         </div>
       </div>
       <p className="font-medium capitalize ">
-        {body}: <span className="text-stone-600 font-normal">{text.length>50 ?`${text}.....`:text}</span>
+        {body}: <span className="text-stone-600 font-normal">{text?.length>50 ?`${text}.....`:text}</span>
       </p>
 
       {commentModalVisible && (

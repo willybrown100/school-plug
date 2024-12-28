@@ -28,7 +28,9 @@ export default function StudentPerPost({ item }) {
     department,
     _id,
     user,
-    likes,
+   
+    likeCount,
+
     userId,
     postType,
     university,
@@ -40,7 +42,7 @@ export default function StudentPerPost({ item }) {
   const { userId: studentId } = useUser();
   const postId = _id;
 
-  const [Alllikes, setAllLikes] = useState(likes.length);
+  const [Alllikes, setAllLikes] = useState(likeCount);
   const [hasLiked, setHasLiked] = useState(false);
   const { register, handleSubmit, reset, getValues, setValue} = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -105,49 +107,115 @@ const {socket }=useSocket()
       prev === 0 ? images.length - 1 : prev - 1
     );
 
-  const { mutate, isLoading: isLiking } = useMutation({
-    mutationFn: studentLikePost,
-    onSuccess: () => {
-      // Invalidate only the specific post
-      queryClient.invalidateQueries(["schoolpost", postId]);
-    },
+  // const { mutate, isLoading: isLiking } = useMutation({
+  //   mutationFn: studentLikePost,
+  //   onSuccess: () => {
+  //     // Invalidate only the specific post
+  //     queryClient.invalidateQueries(["schoolpost", postId]);
+  //   },
 
-    onMutate: () => {
-      // Optimistic update
-      setHasLiked((prev) => !prev);
-      setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
-    },
-    onError: (error) => {
-      toast.error(error.message);
-      setHasLiked((prev) => {
-        setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
-        return !prev;
-      });
-    },
-  });
+  //   onMutate: () => {
+  //     // Optimistic update
+  //     setHasLiked((prev) => !prev);
+  //     setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message);
+  //     setHasLiked((prev) => {
+  //       setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
+  //       return !prev;
+  //     });
+  //   },
+  // });
 
+
+// const handleLike = () => {
+//   const likeData = {
+//     postId: _id,
+//     ...(postType === "admin" && { isAdminPost: true }),
+//     userId: studentId,
+//   };
+
+//   // Send the API request
+//   mutate(likeData);
+
+//   // Send the same data to WebSocket if it's open
+//   if (socket && socket?.readyState === WebSocket.OPEN) {
+//     socket?.send(
+//       JSON.stringify({
+//         // type: "like-post",
+//         ...likeData, // Spread the same data here to send it to the socket
+//       })
+//     );
+//   }
+// };
+
+
+const { mutate, isLoading: isLiking } = useMutation({
+  mutationFn: studentLikePost,
+  onMutate: async () => {
+    // Cancel any outgoing queries for the post to avoid data overwrite
+    await queryClient.cancelQueries(["schoolpost", postId]);
+
+    // Get the previous like state and ensure the post data exists
+    const previousPostData = queryClient.getQueryData(["schoolpost", postId]);
+
+    if (!previousPostData) return; // Return early if there's no post data
+
+    // Optimistically update the like count and status
+    queryClient.setQueryData(["schoolpost", postId], (oldData) => ({
+      ...oldData,
+      likeCount: hasLiked ? oldData.likeCount - 1 : oldData.likeCount + 1,
+    }));
+
+    setHasLiked((prev) => !prev); // Toggle the like status
+    setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
+
+    // Return the previous state in case of rollback
+    return { previousPostData };
+  },
+  onError: (error, likeData, context) => {
+    // Revert the changes using the previous state
+    queryClient.setQueryData(["schoolpost", postId], context.previousPostData);
+
+    // Reset UI state
+    setHasLiked((prev) => !prev); // Revert like status
+    setAllLikes((prev) => (hasLiked ? prev + 1 : prev - 1)); // Revert all likes count
+
+    // Show error notification
+    toast.error(error.message);
+  },
+  onSuccess: () => {
+    // Invalidate the specific post query to refetch the updated data
+    queryClient.invalidateQueries(["schoolpost", postId]);
+  },
+});
 
 
 const handleLike = () => {
   const likeData = {
     postId: _id,
-    ...(postType === "admin" && { isAdminPost: true }),
     userId: studentId,
+    ...(postType === "admin" && { isAdminPost: true }),
   };
+
+  // Optimistic update
+  setHasLiked((prev) => !prev); // Toggle the like status
+  setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
 
   // Send the API request
   mutate(likeData);
 
   // Send the same data to WebSocket if it's open
   if (socket && socket?.readyState === WebSocket.OPEN) {
-    socket?.send(
-      JSON.stringify({
-        // type: "like-post",
-        ...likeData, // Spread the same data here to send it to the socket
-      })
-    );
+    socket.send(JSON.stringify({ ...likeData }));
   }
 };
+
+
+
+
+
 
 
   const handleOpenCommentModal = function (index) {
@@ -510,28 +578,7 @@ const handleLike = () => {
 
 
 
-// const ExpandableText = ({ text }) => {
-//   const [isExpanded, setIsExpanded] = React.useState(false);
 
-//   const toggleText = () => setIsExpanded((prev) => !prev);
 
-//   // Ensure `text` is a valid string
-//   const wordsArray = typeof text === "string" ? text.split(" ") : [];
 
-//   // Decide what to display based on isExpanded
-//   const visibleWords = isExpanded ? wordsArray : wordsArray.slice(0, 50);
 
-//   return (
-//     <p className="text-stone-700 mt-4 break-words max-full">
-//       {processText(visibleWords)} {/* Pass only the visible words */}
-//       {wordsArray.length > 50 && (
-//         <span
-//           onClick={toggleText}
-//           className="text-stone-600 cursor-pointer ml-1"
-//         >
-//           {isExpanded ? " less" : "...more"}
-//         </span>
-//       )}
-//     </p>
-//   );
-// };
