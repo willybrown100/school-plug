@@ -31,7 +31,7 @@ console.log(notification);
   }, [pathname, studentId, adminId]);
 
   // Memoize the WebSocket URL
-  const url = useMemo(() => "https://student-plug.onrender.com", []); // to   secure WebSocket connection
+  const url = useMemo(() => "wss://student-plug.onrender.com", []); // to   secure WebSocket connection
 
   useEffect(() => {
     // Create a WebSocket instance only when the component mounts
