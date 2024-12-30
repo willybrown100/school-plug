@@ -8,8 +8,37 @@ export const SocketProvider = ({ children }) => {
 const [notification,setNotification]=useState([])
 const [socket,setSocket]=useState(null)
 
+const messageQueue = [];
+
+const sendMessage = (message) => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(message));
+    console.log("Message sent:", message);
+  } else {
+    console.warn("WebSocket not ready. Queuing message:", message);
+    messageQueue.push(message);
+  }
+};
+
+const flushMessageQueue = () => {
+  while (messageQueue.length > 0 && socket.readyState === WebSocket.OPEN) {
+    const message = messageQueue.shift();
+    socket.send(JSON.stringify(message));
+    console.log("Flushed message from queue:", message);
+  }
+};
+
   return (
-    <SocketContext.Provider value={{ notification,socket,setSocket, setNotification }}>
+    <SocketContext.Provider
+      value={{
+        notification,
+        socket,
+        setSocket,
+        sendMessage,
+        flushMessageQueue,
+        setNotification,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );
