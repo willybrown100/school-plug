@@ -58,7 +58,7 @@ export default function StudentPerPost({ item }) {
   
   // const socket=useWebSocket()
 const { socket } = useSocket();
-console.log(socket)
+
 
   // Toggle between full and truncated text
  const handleToggle = () => {
