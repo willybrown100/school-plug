@@ -4,7 +4,7 @@ import { notificationType } from "../utils/dateFormat";
 
 export default function PerNotification({ item }) {
   const [commentModalVisible, setCommentModalVisible] = useState(false)
-  const { body, title, likersPhotos, likersCount,text } = item;
+  const {  title, likersPhotos, likersCount,text,message } = item;
    const handleOpenCommentModal = function () {
 
      setCommentModalVisible(true);
@@ -38,7 +38,7 @@ export default function PerNotification({ item }) {
         </div>
       </div>
       <p className="font-medium capitalize ">
-        {body}: <span className="text-stone-600 font-normal">{text?.length>50 ?`${text}.....`:text}</span>
+        {message}: <span className="text-stone-600 font-normal">{text?.length>50 ?`${text}.....`:text}</span>
       </p>
 
       {commentModalVisible && (
