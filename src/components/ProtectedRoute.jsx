@@ -167,17 +167,6 @@ export default function ProtectedRoute({ children }) {
     return;
   }
 
-    // const startPing = () => {
-    //   const pingInterval = setInterval(() => {
-    //     if (ws.readyState === WebSocket.OPEN) {
-    //       console.log("Sending ping to server...");
-    //       ws.send(JSON.stringify({ type: "ping" }));
-    //     }
-    //   }, 25000);
-
-    //   return () => clearInterval(pingInterval);
-    // };
-
 
 ws.onopen = () => {
   if (userId && userToken) {

@@ -219,6 +219,8 @@ const { mutate, isLoading: isLiking } = useMutation({
 //   console.error("WebSocket is not open. Cannot send like data.");
 // }
 // };
+
+
 const handleLike = () => {
   const likeData = {
     postId: _id,
@@ -233,9 +235,9 @@ const handleLike = () => {
   // Send the API request
   mutate(likeData);
 
-  // Function to reconnect if socket is closed
+  // Function to reconnect if socket is closed, and reconnect only for the current user
   const reconnectSocket = () => {
-    if (socket.readyState === WebSocket.CLOSED) {
+    if (socket && socket.readyState === WebSocket.CLOSED) {
       console.log("WebSocket is closed, reconnecting...");
       const newSocket = new WebSocket(socket.url); // Assuming socket.url holds the WebSocket URL
       setSocket(newSocket); // Update the socket in your context
@@ -248,9 +250,9 @@ const handleLike = () => {
     socket.send(JSON.stringify({ ...likeData }));
   } else {
     reconnectSocket(); // Try reconnecting before sending data
-    // console.error("WebSocket is not open. Attempting to reconnect...");
   }
 };
+
 
 
 
