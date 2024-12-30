@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserNotification } from "../services/contactApi";
 import useUser from "./useUser";
 import { useSocket } from "../components/SocketProvider";
@@ -18,9 +18,9 @@ import { useSocket } from "../components/SocketProvider";
 
 
 import { useEffect } from "react";
-
 export default function useFetchNotification() {
-  const { setNotification } = useSocket(); // Assuming setNotification is from context
+  const queryClient = useQueryClient();
+  const { setNotification } = useSocket();
   const { userId } = useUser();
 
   const { data = [], isLoading } = useQuery({
@@ -30,9 +30,29 @@ export default function useFetchNotification() {
 
   useEffect(() => {
     if (data.length > 0) {
-      setNotification(data); // Update the notification state only when the data changes
+      setNotification(data);
     }
-  }, [data, setNotification]); // This effect depends on `data` to run only when it changes
+  }, [data, setNotification]);
 
-  return { data, isLoading };
+  const refetchNotifications = () =>
+    queryClient.invalidateQueries("notification");
+
+  return { data, isLoading, refetchNotifications };
 }
+// export default function useFetchNotification() {
+//   const { setNotification } = useSocket(); // Assuming setNotification is from context
+//   const { userId } = useUser();
+
+//   const { data = [], isLoading } = useQuery({
+//     queryFn: () => getUserNotification(userId),
+//     queryKey: ["notification"],
+//   });
+
+//   useEffect(() => {
+//     if (data.length > 0) {
+//       setNotification(data); // Update the notification state only when the data changes
+//     }
+//   }, [data, setNotification]); // This effect depends on `data` to run only when it changes
+
+//   return { data, isLoading };
+// }
