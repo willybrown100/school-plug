@@ -14,7 +14,6 @@ import { timeAgo, timeStampAgo } from "../utils/timeStampAgo";
 import { processText } from "../utils/utils";
 // import useWebSocket from "../hooks/useWebSocket";
 import EmojiPicker from "emoji-picker-react";
-import { useSocket } from "./SocketProvider";
 // import { processText } from "../utils/utils";
 
 
@@ -57,7 +56,7 @@ export default function StudentPerPost({ item }) {
   const openImageModal = (index) => setSelectedImageIndex(index);
   
   // const socket=useWebSocket()
-const {  sendMessage } = useSocket();
+// const { sendMessage,  } = useSocket();
 
 
   // Toggle between full and truncated text
@@ -192,6 +191,28 @@ const { mutate, isLoading: isLiking } = useMutation({
   },
 });
 
+const handleLike = () => {
+  const likeData = {
+    postId: _id,
+    userId: studentId,
+    ...(postType === "admin" && { isAdminPost: true }),
+  };
+                       
+  // Optimistic update
+  setHasLiked((prev) => !prev); // Toggle the like status
+  setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
+
+  // Send the API request
+  mutate(likeData);
+
+
+
+  // socket.send(JSON.stringify({ ...likeData }));
+  // sendMessage(likeData);
+};
+
+
+
 // const handleLike = () => {
 //   const likeData = {
 //     postId: _id,
@@ -199,36 +220,11 @@ const { mutate, isLoading: isLiking } = useMutation({
 //     ...(postType === "admin" && { isAdminPost: true }),
 //   };
 
-//   // Optimistic update
-//   setHasLiked((prev) => !prev); // Toggle the like status
-//   setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
-
-//   // Send the API request
-//   mutate(likeData);
-
-//   // Send the same data to WebSocket if it's open
-// if (socket && socket.readyState === WebSocket.OPEN) {
-//   socket.send(JSON.stringify({ ...likeData }));
-// } else {
-//   // reconnectSocket(); // Attempt to reconnect if the socket is closed
-//   console.error("WebSocket is not open. Cannot send like data.");
-// }
+//   setHasLiked((prev) => !prev);
+//   setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
+// mutate(likeData);
+//   sendMessage(likeData);
 // };
-
-
-
-const handleLike = () => {
-  const likeData = {
-    postId: _id,
-    userId: studentId,
-    ...(postType === "admin" && { isAdminPost: true }),
-  };
-
-  setHasLiked((prev) => !prev);
-  setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
-mutate(likeData);
-  sendMessage(likeData);
-};
 
 
 

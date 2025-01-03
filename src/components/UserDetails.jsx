@@ -8,8 +8,7 @@ export default function UserDetails() {
 const {data,isLoading}=useGetUser()
 const {studentInfo,user}=data
 const img = user?.profilePhoto
-const department = studentInfo?.department.toLowerCase()
-console.log(department);
+// const department = studentInfo?.department.toLowerCase()
   return (
     <div className="hidden md:block sticky md:top-[9.9rem] lg:top-[5rem]  max-h-screen overflow-y-auto">
       <div className=" p-6 bg-white rounded-lg ">
