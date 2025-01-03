@@ -62,7 +62,7 @@ const trend = data?.trendingPosts
              <BlueMiniLoader />
            </div>
          ) : (
-           trend?.map((item) => <TrendPerPost item={item} key={item.user} />)
+           trend?.map((item) => <TrendPerPost item={item} key={item.postId} />)
          )}
        </div>
 

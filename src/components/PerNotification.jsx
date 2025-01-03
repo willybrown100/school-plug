@@ -4,7 +4,7 @@ import { notificationType } from "../utils/dateFormat";
 
 export default function PerNotification({ item }) {
   const [commentModalVisible, setCommentModalVisible] = useState(false)
-  const {  title, likersPhotos, likersCount,text,message } = item;
+  const { title, likersPhotos, likersCount,text, message } = item;
    const handleOpenCommentModal = function () {
 
      setCommentModalVisible(true);
@@ -12,18 +12,21 @@ export default function PerNotification({ item }) {
    };
   return (
     <article className="p-2 bg-stone-100 hover:bg-stone-200 transition-all duration-300">
-      <div className="flex justify-between items-center">
-        {likersPhotos?.map((img) => (
-          <div key={img} className="flex items-center gap-x-2">
-            <img src={img} alt="img" className="w-8 rounded-full h-8" />
-            {likersPhotos?.length >= 2 && (
-              <span className="border border-stone-600 rounded-full p-2 font-semibold">
-                +{likersCount - 2}
-              </span>
-            )}
-          </div>
-        ))}
-        <div className="flex gap-x-2 items-center">
+      <div className="flex  items-center ">
+        <div className="flex items-center gap-x-2">
+          {likersPhotos?.map((img) => (
+            <div key={img} className="flex items-center gap-x-4">
+              <img src={img} alt="img" className="w-8 rounded-full h-8" />
+            </div>
+          ))}
+          {likersPhotos?.length >= 3 && (
+            <span className="border border-stone-600 rounded-full p-2 font-semibold">
+              +{likersCount - 2}
+            </span>
+          )}
+        </div>
+
+        <div className="flex gap-x-2 ml-auto items-center">
           <img
             src={notificationType(title)}
             alt="img"
@@ -38,7 +41,10 @@ export default function PerNotification({ item }) {
         </div>
       </div>
       <p className="font-medium capitalize ">
-        {message}: <span className="text-stone-600 font-normal">{text?.length>50 ?`${text}.....`:text}</span>
+        {message}:{" "}
+        <span className="text-stone-600 font-normal">
+          {text?.length > 50 ? `${text}.....` : text}
+        </span>
       </p>
 
       {commentModalVisible && (

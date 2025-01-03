@@ -10,6 +10,8 @@ import StudentPerPost from './StudentPerPost';
 
 import PageLoader from './PageLoader';
 import BlueMiniLoader from '../ui/BlueMiniLoader';
+import { useSocket } from './SocketProvider';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 
@@ -17,7 +19,9 @@ import BlueMiniLoader from '../ui/BlueMiniLoader';
 export default function UsersFeed() {
   const [open, setOpen] = useState(null);
   const loadMoreRef = useRef(null);
+    const {  newPost,setNewPost} = useSocket();
 
+const queryClient = useQueryClient()
   const {
     data,
     isLoading,
@@ -28,7 +32,11 @@ export default function UsersFeed() {
     isFetchingNextPage,
     prefetchNextPage,
   } = useGetRegisteredSchools();
-
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+queryClient.invalidateQueries("schoolpost");
+setNewPost(false)
+  };
 
   const posts = data?.pages.flatMap((page) => page.posts) || [];
  
@@ -79,7 +87,14 @@ useEffect(() => {
     <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] pb-[15rem]">
       <div className=" md:w-[90vw] mx-auto flex justify-center lg:grid-cols-[16rem,25rem,20rem] xl:grid-cols-[16rem,1fr,auto] md:grid grid-cols-[16rem,28rem]  gap-x-3">
         <UserDetails />
-
+        {newPost && (
+          <button
+            onClick={handleScrollToTop}
+            className="fixed bg-white p-2 font-medium shadow-lg rounded-xl capitalize top-40 z-10 "
+          >
+            new post
+          </button>
+        )}
         <div className="w-full">
           <DefaultSchool data={data} />
           <DesktopCreatingPostButton />
@@ -105,7 +120,7 @@ useEffect(() => {
             style={{ height: "1px", background: "transparent" }}
           ></div>
         </div>
-        
+
         <Bills />
       </div>
     </article>
@@ -113,6 +128,24 @@ useEffect(() => {
 }
 
 
+
+
+
+
+
+//   const handleScrollToTop = () => {
+//     window.scrollTo({ top: 0, behavior: 'smooth' });
+//   };
+
+//   return (
+//     <button 
+//       onClick={handleScrollToTop} 
+//       style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+//     >
+//       Scroll to Top
+//     </button>
+//   );
+// };
 
 
 

@@ -6,7 +6,7 @@ import useUser from '../hooks/useUser';
 import MiniLoader from "../ui/MiniLoader"
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 export default function PostModal() {
   const { close } = useContext(ModalContext)
@@ -19,7 +19,7 @@ export default function PostModal() {
   const { user, studentInfo } = data
   const img = data?.user?.profilePhoto;
   const queryClient =useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   console.log( selectedImage);
   const disable =
     imagePreview.length === 3 || selectedImage.length === 3;
@@ -111,7 +111,7 @@ export default function PostModal() {
           close();
         }
       } else {
-        navigate(-1);
+        close();
       }
     };
   return (

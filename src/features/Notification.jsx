@@ -19,6 +19,8 @@ export default function Notification() {
       const handleClickBtn = function(name){
     setActive(name);
       }
+
+
 const {isLoading}=useFetchNotification()
 const {notification}=useSocket()
 console.log(notification,isLoading);
@@ -47,7 +49,7 @@ console.log(notification,isLoading);
           </li>
         ))}
       </ul>
-      {notification.length===0&& <p className='m-auto capitalize text-stone-600 text-center mt-3'>no notification yet </p>}
+      {notification.length===0 && <p className='m-auto capitalize text-stone-600 text-center mt-3'>no notification yet </p>}
       {isLoading ? (
         <ul className="flex flex-col pt-4 divide-y-2  divide-secondary600">
           {Array.from({ length: 8 }).map((_, index) => (
