@@ -85,16 +85,17 @@ useEffect(() => {
 
   return (
     <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem] pb-[15rem]">
+      {newPost && (
+        <button
+          onClick={handleScrollToTop}
+          className="fixed bg-white left-1/2  translate-x-[-50%] p-2 font-medium shadow-lg rounded-xl capitalize top-40 z-10 "
+        >
+          new post
+        </button>
+      )}
       <div className=" md:w-[90vw] mx-auto flex justify-center lg:grid-cols-[16rem,25rem,20rem] xl:grid-cols-[16rem,1fr,auto] md:grid grid-cols-[16rem,28rem]  gap-x-3">
         <UserDetails />
-        {newPost && (
-          <button
-            onClick={handleScrollToTop}
-            className="fixed bg-white p-2 font-medium shadow-lg rounded-xl capitalize top-40 z-10 "
-          >
-            new post
-          </button>
-        )}
+
         <div className="w-full">
           <DefaultSchool data={data} />
           <DesktopCreatingPostButton />
