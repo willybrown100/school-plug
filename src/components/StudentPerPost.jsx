@@ -405,8 +405,8 @@ const handleLike = () => {
                     <div className="flex items-center gap-x-3">
                       <img
                         src={
-                          item.user?.profilePicture
-                            ? item.user.profilePicture
+                          item.user?.profilePhoto
+                            ? item.user.profilePhoto
                             : "/images/profile-circle.svg"
                         }
                         alt="img"
