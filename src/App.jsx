@@ -60,6 +60,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PageLoader from "./components/PageLoader";
 import EventPaymentReceipt from "./features/EventPaymentReceipt";
 import { SocketProvider } from "./components/SocketProvider";
+import SugProtectedRoute from "./components/SugProtectedRoute";
 // import SocketProvider from "./components/SocketProvider";
 
 
@@ -113,7 +114,14 @@ export default function App() {
                 <Route path="loader" element={<Loader />} />
                 <Route path="forgotPassword" element={<ForgotPassword />} />
                 <Route path="profilepic" element={<UserProfile />} />
-                <Route path="sughome" element={<SugAppLayout />}>
+                <Route
+                  path="sughome"
+                  element={
+                    <SugProtectedRoute>
+                      <SugAppLayout />
+                    </SugProtectedRoute>
+                  }
+                >
                   <Route index element={<Navigate to="sugfeed" />} />
                   <Route path="sugfeed" index element={<SugFeed />} />
                   <Route path="sugpaybills" element={<SugPaybills />} />

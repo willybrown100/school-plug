@@ -151,8 +151,8 @@ console.log(selectedPayment)
               }}
               className={
                 isButtonDisabled
-                  ? "bg-[#B8CFF3] text-[#FAFAFA] grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded font-bold cursor-not-allowed"
-                  : "bg-[#2B70DB] text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 rounded font-bold"
+                  ? "bg-[#B8CFF3] px-2 text-[#FAFAFA] grid grid-cols-1 hover:text-stone-100 text-center py-3 rounded font-bold cursor-not-allowed"
+                  : "bg-[#2B70DB] px-2 text-white py-3 grid text-center grid-cols-1 hover:text-stone-100 rounded font-bold"
               }
               aria-disabled={isButtonDisabled}
             >

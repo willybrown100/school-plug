@@ -30,6 +30,7 @@ export default function PerPost({ item, onClick, open }) {
     images,
     createdAt,
     _id,
+    isLike,
     likes,
     user,
     userId,
@@ -43,7 +44,7 @@ export default function PerPost({ item, onClick, open }) {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   
    const [Alllikes, setAllLikes] = useState(likes.length);
-   const [hasLiked, setHasLiked] = useState(false);
+   const [hasLiked, setHasLiked] = useState(isLike);
   const [loading, setLoading] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
@@ -53,11 +54,7 @@ export default function PerPost({ item, onClick, open }) {
    setIsExpanded((prev) => !prev);
  };
 
-    // const handleEmojiClick = (emojiData) => {
-    //   const emoji = emojiData.emoji; // Extract emoji
-    //   const currentText = getValues("comments"); // Get the current input value
-    //   setValue("comments", currentText + emoji); // Append emoji to input value
-    // };
+
     const handleEmojiClick2 = (emojiData) => {
       const emoji = emojiData.emoji; // Extract emoji
       const currentText = getValues("text"); // Get the current input value
@@ -180,7 +177,7 @@ export default function PerPost({ item, onClick, open }) {
 
   const handleLike = () => {
 
-    mutate({ postId: _id, userId: sugId });
+    mutate({ postId: _id, userId: sugId ,...(postType === "admin" && { isAdminPost: true }),});
     console.log({ postId: _id, userId: sugId });
 
   };
@@ -200,8 +197,20 @@ export default function PerPost({ item, onClick, open }) {
   };
 
   const onSubmit = function ({ text }) {
-    console.log({ isAdmin: true, userId: sugId, text, postId: _id });
-    isComment({ isAdmin: true, userId: sugId, text, postId: _id });
+    console.log({
+      // isAdmin: false,
+      ...(postType === "admin" ? { isAdmin: false }:{ isAdmin: true }),
+      userId: sugId,
+      text,
+      postId: _id,
+    });
+    isComment({
+      // isAdmin: false,
+      ...(postType === "admin" ? { isAdmin: true } : { isAdmin: false }),
+      userId: sugId,
+      text,
+      postId: _id,
+    });
   };
   return (
     <li className="bg-white w-full p-3">
@@ -381,8 +390,8 @@ export default function PerPost({ item, onClick, open }) {
                     <div className="flex items-center gap-x-3">
                       <img
                         src={
-                          item.user?.profilePicture
-                            ? item.user.profilePicture
+                          item.user?.profilePhoto
+                            ? item.user.profilePhoto
                             : "/images/profile-circle.svg"
                         }
                         alt="img"
@@ -437,11 +446,11 @@ export default function PerPost({ item, onClick, open }) {
               >
                 {isCommenting ? <MiniLoader /> : <span>&uarr;</span>}
               </button>
-               {showEmojiPicker && (
-                            <div className="absolute right-3 top-2 z-40">
-                              <EmojiPicker onEmojiClick={handleEmojiClick2} />
-                            </div>
-                          )}
+              {showEmojiPicker && (
+                <div className="absolute right-3 top-2 z-40">
+                  <EmojiPicker onEmojiClick={handleEmojiClick2} />
+                </div>
+              )}
             </form>
           </div>
         </div>

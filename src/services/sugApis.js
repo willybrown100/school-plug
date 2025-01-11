@@ -155,17 +155,17 @@ export async function sugNewPassword(data) {
 
 
 
-export async function sugLikPost({ postId, userId }) {
+export async function sugLikPost({ postId, userId,isAdminPost }) {
   console.log({ postId, userId });
   try {
     const response = await fetch(
-     ` https://student-plug.onrender.com/api/sugPost/${postId}/like`,
+      ` https://student-plug.onrender.com/api/students/likepost/${postId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId }),    
+        body: JSON.stringify({ userId, isAdminPost }),
       }
     );
 
@@ -269,11 +269,16 @@ export async function getPaymentStatus(schoolInfoId,page) {
 
 
 
-export async function getSugPosts(schoolInfoId,page=1) {
+export async function getSugPosts(schoolInfoId,page=1,token) {
   console.log(schoolInfoId);
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`
+      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     // Check if the response status indicates a 404 error

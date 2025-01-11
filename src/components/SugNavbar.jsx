@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useGetSugUser from '../hooks/useGetSugUser'
+import useSugFetchNotification from '../hooks/useSugFetchNotification';
+import { useSocket } from './SocketProvider';
 
 
 
@@ -15,7 +17,9 @@ export default function SugNavbar() {
   const sugImg = data?.data?.uniProfilePicture;
   const uni = data?.data?.university;
   const { fullName } = data?.data?.user || {};
-
+  const { isLoading } = useSugFetchNotification();
+   const { sugNotification } = useSocket();
+  console.log(isLoading)
   useEffect(() => {
     if (data?.message === "Invalid Token") {
       navigate("/sugsignin");
@@ -27,7 +31,10 @@ export default function SugNavbar() {
 
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+const notLenght = sugNotification.filter(
+  (notification) => notification.isRead === false
+);
+const uniqueLength = notLenght.length;
   
   useEffect(() => {
     const handleScroll = () => {
@@ -71,8 +78,7 @@ const shouldHideNavbar = excludedRoutes.some((route) => {
         pathname !== "/sughome/sugpaybills" &&
         pathname !== "/sughome/sugtrends" &&
         pathname !== "/sughome/sugviewbills" &&
-        !shouldHideNavbar &&
-        (
+        !shouldHideNavbar && (
           <nav
             className={`py-4 px-3 bg-white z-[1] fixed top-0 left-0 w-full transition-transform duration-300 ${
               isVisible ? "translate-y-0" : "-translate-y-full"
@@ -92,14 +98,23 @@ const shouldHideNavbar = excludedRoutes.some((route) => {
                   </h3>
                 </div>
               </div>
-              <Link to="/sughome/sugnotification">
-                <img
-                  src="/images/notification-bing.png"
-                  alt="Notification"
-                  loading="lazy"
-                  className="rounded-full p-2 border border-secondary400"
-                />
-              </Link>
+              <div className="relative">
+                <Link to="/sughome/sugnotification">
+                  <img
+                    src="/images/notification-bing.png"
+                    alt="Notification"
+                    loading="lazy"
+                    className="rounded-full p-2 border border-secondary400"
+                  />
+                </Link>
+                {sugNotification && (
+                  <div className="bg-red-500 right-0 rounded-full w-5 h-5 grid place-items-center absolute top-[-0.7rem]">
+                    <span className="text-white text-xs leading-none">
+                      {uniqueLength}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </nav>
         )}

@@ -11,7 +11,7 @@ export default function DesktopCreatingPostButton() {
   
  
   return (
-    <div className="mt-6 hidden md:block">
+    <div className="my-3 hidden md:block">
       <div className="bg-white rounded-lg p-4 ">
         <div className="grid grid-cols-[auto,1fr] gap-x-2 ">
           <div className=" rounded-full">

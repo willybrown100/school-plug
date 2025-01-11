@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useSugFetchNotification from '../../hooks/useSugFetchNotification'
+import { useSocket } from '../../components/SocketProvider'
+import PerNotification from '../../components/PerNotification'
+import { NotificationSkeleton } from '../../components/NotificationSkeleton'
 
 export default function SugNotification() {
   const navigate = useNavigate()
@@ -12,8 +16,13 @@ setActive(name);
   }
   console.log(active)
   const btns = [{ name: "all" }, { name: "mentions" }, { name: "   new post" }];
+
+  const {isLoading}=useSugFetchNotification()
+  console.log(isLoading)
+  const {sugNotification}= useSocket()
+  console.log(sugNotification)
   return (
-    <div className="px-3 ">
+    <div className="p-3 ">
       <div className="flex items-center gap-x-3">
         <button onClick={handleClick}>
           <img src="/assets/arrow-left.svg" alt="img" />
@@ -37,16 +46,27 @@ setActive(name);
           </li>
         ))}
       </ul>
+
+      {sugNotification.length === 0 && (
+        <p className="m-auto capitalize text-stone-600 text-center mt-3">
+          no notification yet{" "}
+        </p>
+      )}
+      {isLoading ? (
+        <ul className="flex flex-col pt-4 divide-y-2  divide-secondary600">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <NotificationSkeleton key={index} />
+          ))}
+        </ul>
+      ) : (
+        <ul className="flex flex-col pt-4 divide-y-2  divide-secondary600">
+          {sugNotification?.map((item) => (
+            <PerNotification key={item.postId} item={item} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
-        // <button className="capitalize border border-stone-700 rounded-full px-3 py-[0.1rem]">
-        //   all
-        // </button>
-        // <button className="capitalize border border-stone-700 rounded-full px-3 py-[0.1rem]">
-        //   mentions
-        // </button>
-        // <button className="capitalize border border-stone-700 rounded-full px-3 py-[0.1rem]">
-        //   new post
-        // </button>
+        

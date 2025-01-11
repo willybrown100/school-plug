@@ -112,7 +112,7 @@ export default function SignIn() {
                   <MiniLoader />{" "}
                 </div>
               ) : (
-                "  continue to signin"
+                "  continue to sign in"
               )}
             </button>
           </div>

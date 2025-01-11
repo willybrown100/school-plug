@@ -6,6 +6,7 @@ const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
 const [notification,setNotification]=useState([])
+const [sugNotification,setSugNotification]=useState([])
 const [newPost,setNewPost]=useState(null)
 const [socket,setSocket]=useState(null)
 
@@ -56,6 +57,8 @@ const sendMessage = (message) => {
         notification,
         socket,
         setSocket,
+        sugNotification,
+        setSugNotification,
         sendMessage,
         messageBuffer,
         setNotification,
