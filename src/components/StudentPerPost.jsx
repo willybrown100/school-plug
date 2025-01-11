@@ -27,9 +27,9 @@ export default function StudentPerPost({ item }) {
     department,
     _id,
     user,
-   
-    likeCount,
 
+    isLike,
+     likes,
     userId,
     postType,
     university,
@@ -41,8 +41,10 @@ export default function StudentPerPost({ item }) {
   const { userId: studentId } = useUser();
   const postId = _id;
 
-  const [Alllikes, setAllLikes] = useState(likeCount);
-  const [hasLiked, setHasLiked] = useState(false);
+  const [Alllikes, setAllLikes] = useState(likes.length);
+  const [hasLiked, setHasLiked] = useState(
+isLike
+);
   const { register, handleSubmit, reset, getValues, setValue} = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -64,7 +66,7 @@ export default function StudentPerPost({ item }) {
    setIsExpanded((prev) => !prev);
  };
 
-  const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
+  const truncatedText = text.length > 50 ? text.slice(0, 50) + "..." : text;
 
   async function getStudentComments() {
     setLoading(true);
@@ -128,26 +130,6 @@ export default function StudentPerPost({ item }) {
   // });
 
 
-// const handleLike = () => {
-//   const likeData = {
-//     postId: _id,
-//     ...(postType === "admin" && { isAdminPost: true }),
-//     userId: studentId,
-//   };
-
-//   // Send the API request
-//   mutate(likeData);
-
-//   // Send the same data to WebSocket if it's open
-//   if (socket && socket?.readyState === WebSocket.OPEN) {
-//     socket?.send(
-//       JSON.stringify({
-//         // type: "like-post",
-//         ...likeData, // Spread the same data here to send it to the socket
-//       })
-//     );
-//   }
-// };
 
 
 const { mutate, isLoading: isLiking } = useMutation({
@@ -190,6 +172,7 @@ const { mutate, isLoading: isLiking } = useMutation({
  
   },
 });
+
 
 const handleLike = () => {
   const likeData = {
@@ -256,13 +239,19 @@ const handleLike = () => {
   });
 
   const onSubmit = function ({ text }) {
-    comment({ text, isAdmin: false, userId: studentId, postId: _id });
+    comment({
+      text,
+      // isAdmin: false,
+      ...(postType === "admin" && { isAdmin: true }),
+      userId: studentId,
+      postId: _id,
+    });
     console.log({ text, isAdmin: false, userId: studentId, postId: _id });
   };
   const onSubmitLargeScreen = function ({ comments }) {
     comment({
       text: comments,
-      isAdmin: false,
+      ...(postType === "admin" && { isAdmin: true }),
       userId: studentId,
       postId: _id,
     });
@@ -306,7 +295,7 @@ const handleLike = () => {
         <p className="break-words text-stone-500 mt-5">
           {/* Display truncated or full text */}
           {isExpanded ? processText(text) : processText(truncatedText)}
-          {!isExpanded && text.length > 100 && (
+          {!isExpanded && text.length > 50 && (
             <span
               className="text-stone-500 cursor-pointer ml-1"
               onClick={handleToggle}

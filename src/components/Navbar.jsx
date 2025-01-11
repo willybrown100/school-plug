@@ -1,22 +1,31 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import {  HiMagnifyingGlass } from "react-icons/hi2";
-import { Link,  useLocation } from "react-router-dom";
+import { HiMagnifyingGlass } from "react-icons/hi2";
+import { Link, useLocation } from "react-router-dom";
 import NavLinks from "./NavLinks";
 
 import ProfileMobileView from "./ProfileMobileView";
 
-
 import { useSocket } from "./SocketProvider";
 import useFetchNotification from "../hooks/useFetchNotification";
+import Modals from "./Modals";
+import NotificationModal from "./NotificationModal";
 // import useFetchNotification from "../hooks/useFetchNotification";
 export default function Navbar() {
-
   const { pathname } = useLocation();
-const {isLoading}=useFetchNotification()
-console.log(isLoading);
-// const {isLoading}=useFetchNotification()
-const {notification}=useSocket()
+  const { isLoading } = useFetchNotification();
+  console.log(isLoading);
+  // const {isLoading}=useFetchNotification()
+  const { notification } = useSocket();
+// const uniqueNotifications = notification.filter(
 
+//   (notification, index, self) =>
+//     index === self.findIndex((n) => n.postId === notification.postId)
+// );
+
+const notLenght = notification.filter((notification)=>notification.isRead===false)
+const uniqueLength = notLenght.length;
+console.log(uniqueLength)
   const links = [
     {
       id: 1,
@@ -321,30 +330,106 @@ const {notification}=useSocket()
   ];
   const className = "max-w-[1250px]   w-[90vw]  m-auto";
 
-
-  
-
   return (
     <>
-      {pathname !== "/home/notifications" && (
-        <nav className="bg-white p-2 z-[1] fixed top-0 left-0 w-full">
-          <article
-            className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}
-          >
-            <div className="flex justify-between gap-x-6 items-center">
-              <Link to="/">
+      <nav
+        className={` ${
+          pathname === "/home/notifications" ? "hidden md:block" : "block"
+        } bg-white  p-2 z-[1] fixed top-0 left-0 w-full`}
+      >
+        <article
+          className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}
+        >
+          <div className="flex justify-between gap-x-6 items-center">
+            <Link to="/">
+              <img src="/assets/schLogo.svg" alt="img" className="md:hidden" />
+            </Link>
+            <img
+              src="/images/smLogo.png"
+              alt="img"
+              className="hidden lg:hidden md:block"
+            />
+            <form className="hidden md:block lg:hidden px-16 w-full">
+              <div className="flex items-center gap-x-2 p-3 bg-stone-100 rounded-md">
+                <button>
+                  <HiMagnifyingGlass className="text-xl" />
+                </button>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="bg-transparent outline-none rounded-md w-full placeholder:capitalize"
+                />
+              </div>
+            </form>
+            <div className="hidden relative md:flex lg:hidden gap-2 items-center w-16 h-16">
+              <Link to="/home/notifications ">
                 <img
-                  src="/assets/schLogo.svg"
+                  src="/images/notification-bing.png"
                   alt="img"
-                  className="md:hidden"
+                  loading="lazy"
+                  className="rounded-full p-2  border border-secondary400"
                 />
               </Link>
-              <img
-                src="/images/smLogo.png"
-                alt="img"
-                className="hidden lg:hidden md:block"
-              />
-              <form className="hidden md:block lg:hidden px-16 w-full">
+              {notification && (
+                <div className="bg-red-500 right-2 rounded-full w-5 h-5 grid place-items-center absolute top-[-0.2rem]">
+                  <span className="text-white text-xs leading-none">
+                    {uniqueLength}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <ul className="hidden md:flex items-center lg:hidden justify-between">
+            {links.map((item) => (
+              <NavLinks item={item} key={item.id} />
+            ))}
+          </ul>
+
+          <div className="md:hidden grid grid-cols-[auto,1fr,auto] items-center gap-x-4">
+            <ProfileMobileView />
+            <div className="flex mt-2 items-center">
+              <form className="w-full">
+                <div className="border rounded-[0.6rem] flex relative p-1 border-secondary400">
+                  <HiMagnifyingGlass className="text-2xl md:hidden mr-1 text-secondary400" />
+                  <input
+                    type="text"
+                    className="w-full border-none outline-none"
+                  />
+                </div>
+              </form>
+            </div>
+            <div className="relative">
+              <Link to="/home/notifications ">
+                <img
+                  src="/images/notification-bing.png"
+                  alt="img"
+                  className="rounded-full p-2 border border-secondary400"
+                />
+              </Link>
+              {notification && (
+                <div className="bg-red-500 right-0 rounded-full w-5 h-5 grid place-items-center absolute top-[-0.7rem]">
+                  <span className="text-white text-xs leading-none">
+                    {uniqueLength}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <ul className="hidden lg:flex items-center gap-x-6">
+              {links.map((item) => (
+                <NavLinks item={item} key={item.id} />
+              ))}
+            </ul>
+            <img
+              src="/images/smLogo.png"
+              alt="img"
+              className="hidden lg:block"
+            />
+            <div className="flex items-center gap-x-5">
+              <form className="hidden lg:block w-full">
                 <div className="flex items-center gap-x-2 p-3 bg-stone-100 rounded-md">
                   <button>
                     <HiMagnifyingGlass className="text-xl" />
@@ -352,94 +437,43 @@ const {notification}=useSocket()
                   <input
                     type="text"
                     placeholder="Search"
-                    className="bg-transparent outline-none rounded-md w-full placeholder:capitalize"
+                    className="bg-stone-100 outline-none rounded-md w-full placeholder:capitalize"
                   />
                 </div>
               </form>
-              <div className="hidden md:flex lg:hidden gap-2 items-center">
-                <img
-                  src="/images/notification-bing.png"
-                  alt="img"
-                  loading="lazy"
-                  className="rounded-full p-2 border border-secondary400"
-                />
-              </div>
+              <OpenModal notification={uniqueLength} />
             </div>
-
-            <ul className="hidden md:flex items-center lg:hidden justify-between">
-              {links.map((item) => (
-                <NavLinks item={item} key={item.id} />
-              ))}
-            </ul>
-
-            <div className="md:hidden grid grid-cols-[auto,1fr,auto] items-center gap-x-4">
-              <ProfileMobileView />
-              <div className="flex mt-2 items-center">
-                <form className="w-full">
-                  <div className="border rounded-[0.6rem] flex relative p-1 border-secondary400">
-                    <HiMagnifyingGlass className="text-2xl md:hidden mr-1 text-secondary400" />
-                    <input
-                      type="text"
-                      className="w-full border-none outline-none"
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="relative">
-                <Link to="/home/notifications">
-                  <img
-                    src="/images/notification-bing.png"
-                    alt="img"
-                    className="rounded-full p-2 border border-secondary400"
-                  />
-                </Link>
-                {notification && (
-                  <div className="bg-red-500 right-0 rounded-full w-5 h-5 grid place-items-center absolute top-[-0.7rem]">
-                    <span className="text-white text-xs leading-none">
-                      {notification.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <ul className="hidden lg:flex items-center gap-x-6">
-                {links.map((item) => (
-                  <NavLinks item={item} key={item.id} />
-                ))}
-              </ul>
-              <img
-                src="/images/smLogo.png"
-                alt="img"
-                className="hidden lg:block"
-              />
-              <div className="flex items-center gap-x-5">
-                <form className="hidden lg:block w-full">
-                  <div className="flex items-center gap-x-2 p-3 bg-stone-100 rounded-md">
-                    <button>
-                      <HiMagnifyingGlass className="text-xl" />
-                    </button>
-                    <input
-                      type="text"
-                      placeholder="Search"
-                      className="bg-stone-100 outline-none rounded-md w-full placeholder:capitalize"
-                    />
-                  </div>
-                </form>
-                <div className="lg:flex gap-2 hidden items-center">
-                  <img
-                    src="/images/notification-bing.png"
-                    alt="img"
-                    className="rounded-full p-2 border border-secondary400"
-                  />
-                </div>
-              </div>
-            </div>
-          </article>
-        </nav>
-      )}
+          </div>
+        </article>
+      </nav>
     </>
   );
 }
 
+function OpenModal({ notification }) {
+  return (
+    <Modals>
+      <Modals.Open opens="notificationModal">
+        <div className="relative hidden lg:block">
+          <button className="lg:flex gap-2 bg-transparent w-16 h-16 hidden items-center">
+            <img
+              src="/images/notification-bing.png"
+              alt="img"
+              className="rounded-full p-2 border border-secondary400"
+            />
+          </button>
+          {notification && (
+            <div className="bg-red-500 right-4 rounded-full w-5 h-5 grid place-items-center absolute top-[0]">
+              <span className="text-white text-xs leading-none">
+                {notification}
+              </span>
+            </div>
+          )}
+        </div>
+      </Modals.Open>
+      <Modals.Window name="notificationModal">
+        <NotificationModal />
+      </Modals.Window>
+    </Modals>
+  );
+}

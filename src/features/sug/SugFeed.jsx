@@ -17,6 +17,8 @@ import useGetSugTrends from '../../hooks/useGetSugTrends';
 import useGetSugPosts from '../../hooks/useGetSugPosts';
 import BlueMiniLoader from '../../ui/BlueMiniLoader';
 import useGetSugUser from '../../hooks/useGetSugUser';
+import { useSocket } from '../../components/SocketProvider';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 
@@ -25,10 +27,10 @@ export default function SugFeed() {
   const [open, setOpen] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const loadMoreRef = useRef(null);
-
+   const {  newPost,setNewPost} = useSocket();
     const { data:dataz } = useGetSugUser();
 
-    
+    const queryClient=useQueryClient()
     const sugImg = dataz?.data?.uniProfilePicture;
    
     
@@ -83,13 +85,26 @@ export default function SugFeed() {
   const toggleText = () => setIsExpanded((prev) => !prev);
   const { data: trendz } = useGetSugTrends();
   const trends = trendz?.trendingPosts;
-  console.log(trends);
-
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    queryClient.invalidateQueries("schoolpost");
+    setNewPost(false);
+  };
+console.log(trends)
   if (isLoading) return <PageLoader />;
     if (isError)
       return <div className="text-red-500">Error: {error.message}</div>;
+
   return (
-    <section className="pt-[6.2rem] bg-stone-100 min-h-screen pb-[15rem]">
+    <section className="pt-[6.2rem] bg-stone-100 min-h-[100dvh] py-[25rem]">
+      {newPost && (
+        <button
+          onClick={handleScrollToTop}
+          className="fixed bg-white left-1/2  translate-x-[-50%] p-2 font-medium shadow-lg rounded-xl capitalize top-20 z-10 "
+        >
+          new post
+        </button>
+      )}
       {trends?.length >= 1 && (
         <article className="px-4 pb-2 z-[-1]">
           <div className="flex justify-between ">
@@ -110,7 +125,7 @@ export default function SugFeed() {
             pagination={false}
           >
             {trends.map((item) => (
-              <SwiperSlide key={item._id}>
+              <SwiperSlide key={item.postId}>
                 <div className="border bg-white border-stone-300 p-1 overflow-hidden rounded-md h-[42vh] grid grid-rows-[auto,auto,1fr,auto]">
                   <p className="mb-0 text-stone-700">post:</p>
                   <p className="  break-words max-full text-sm ">
@@ -125,11 +140,7 @@ export default function SugFeed() {
                     )}
                   </p>
                   <img
-                    src={
-                      item.images[0]
-                        ? item.images[0]
-                        : sugImg
-                    }
+                    src={item.images[0] ? item.images[0] : sugImg}
                     alt={item.type}
                     className="w-full h-[10rem] object-cover"
                     loading="lazy"
@@ -146,7 +157,6 @@ export default function SugFeed() {
                   </div>
                 </div>
               </SwiperSlide>
-              
             ))}
           </Swiper>
         </article>

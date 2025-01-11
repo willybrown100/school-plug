@@ -164,7 +164,6 @@ export async function getAuthUser(token) {
     );
 
     const result = await response.json();
-    console.log(result);
 
     return result;
   } catch (error) {
@@ -195,15 +194,20 @@ export async function getStudentComment(token) {
   }
 }
 
-export async function getParticularSchData(schoolInfoId, page = 1) {
+export async function getParticularSchData(schoolInfoId, page = 1,token) {
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`
+      `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     const result = await response.json();
 
-    console.log(result); // Debug the API response
+    console.log(result); 
     return result;
   } catch (error) {
     console.log(error); // Handle errors
@@ -1087,7 +1091,7 @@ export async function studentConfirmEventPayment(data) {
  }
 
 //  =============================
-// fetch notification==
+//  notification apis==
 // ================================
 export async function getUserNotification(userId) {
   try {
@@ -1097,6 +1101,34 @@ export async function getUserNotification(userId) {
 
     const result = await response.json();
     console.log(result);
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function markNotificationAsRead({notificationId}) {
+  console.log(notificationId);
+  try {
+    const response = await fetch(
+      `https://student-plug.onrender.com/api/students/notifications/${notificationId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    const result = await response.json();
+    console.log(result);
+  
 
     return result;
   } catch (error) {

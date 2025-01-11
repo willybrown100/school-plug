@@ -68,7 +68,12 @@ export default function SugPerTrends({ item,onClick,open }) {
         });
        const onSubmit = function ({ text }) {
          console.log({ isAdmin: true, userId: sugId, text, postId });
-         isComment({ isAdmin: true, userId: sugId, text, postId });
+         isComment({
+           ...(postType === "admin" ? { isAdmin: true } : { isAdmin: false }),
+           userId: sugId,
+           text,
+           postId,
+         });
        };
         const { mutate: isDelete, isLoading: isDeleting } = useMutation({
           mutationFn: sugDeletePost,

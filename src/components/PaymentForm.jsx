@@ -301,7 +301,7 @@ console.log("Form submitted:", studentInfo);
                 id="regNo"
                 className="border border-gray-300 p-3 placeholder:capitalize rounded-lg w-full mb-4"
                 placeholder="Enter your registration number"
-                // value={regNo.slice()}
+                // value={regNo}
                 value={`${regNo.slice(0, 2).toUpperCase()}${regNo.slice(2)}`}
                 onChange={(e) => setRegNo(e.target.value)}
               />

@@ -77,10 +77,10 @@ export function getBankLogo(bankName) {
 }
 export function notificationType(title) {
   switch (title) {
-    case "Your post was liked!":
+    case "Your post was liked":
       return "/assets/like2.svg";
-    case "gtbank":
-      return "/logos/gtbank.png";
+    case "Your post has new comments":
+      return "/assets/message-text.svg";
     case "zenith bank":
       return "/logos/zenith-bank.png";
     case "uba":

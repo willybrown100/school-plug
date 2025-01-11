@@ -3,9 +3,11 @@ import useGetRegSchools from './useGetRegSchools';
 import {  useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { getParticularSchData } from '../services/contactApi';
 import useGetUser from './useGetUser';
+import useUser from './useUser';
 
 export default function useGetRegisteredSchools() {
     const queryClient = useQueryClient();
+    const {token}=useUser()
   const { data: authStudent } = useGetUser();
   const { studentInfo } = authStudent;
   const uni = studentInfo?.university;
@@ -34,7 +36,7 @@ const {
   isFetchingNextPage,
 } = useInfiniteQuery(
   ["schoolpost", schoolInfoId], // Query key
-  ({ pageParam = 1 }) => getParticularSchData(schoolInfoId, pageParam),
+  ({ pageParam = 1 }) => getParticularSchData(schoolInfoId, pageParam,token),
   {
     enabled: !!schoolInfoId,
     getNextPageParam: (lastPage) => {
@@ -52,7 +54,7 @@ const {
      if (nextPage) {
        await queryClient.prefetchQuery(
          ["schoolpost", schoolInfoId, nextPage], // Unique key for the next page
-         () => getParticularSchData(schoolInfoId, nextPage)
+         () => getParticularSchData(schoolInfoId, nextPage,token)
        );
      }
    }

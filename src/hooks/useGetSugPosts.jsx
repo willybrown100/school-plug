@@ -2,11 +2,13 @@ import { useInfiniteQuery, useQueryClient, } from "@tanstack/react-query";
 import useGetRegSchools from "./useGetRegSchools";
 import useGetSugUser from "./useGetSugUser";
 import { getSugPosts } from "../services/sugApis";
+import useSug from "./useSug";
 
 
 export default function useGetSugPosts() {
     const queryClient = useQueryClient()
  const { data: sugData } = useGetSugUser();
+ const {token} = useSug()
  const uni = sugData?.data?.university;
  const { school } = useGetRegSchools();
  const schools = school?.schools;
@@ -28,7 +30,7 @@ const {
   isFetchingNextPage,
 } = useInfiniteQuery(
   ["sugposts", schoolInfoId], // Query key
-  ({ pageParam = 1 }) => getSugPosts(schoolInfoId, pageParam),
+  ({ pageParam = 1 }) => getSugPosts(schoolInfoId, pageParam,token),
   {
     enabled: !!schoolInfoId,
     getNextPageParam: (lastPage) => {
@@ -46,7 +48,7 @@ const {
      if (nextPage) {
        await queryClient.prefetchQuery(
          ["schoolpost", schoolInfoId, nextPage], // Unique key for the next page
-         () => getSugPosts(schoolInfoId, nextPage)
+         () => getSugPosts(schoolInfoId, nextPage,token)
        );
      }
    }

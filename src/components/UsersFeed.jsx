@@ -98,6 +98,13 @@ useEffect(() => {
 
         <div className="w-full">
           <DefaultSchool data={data} />
+          <p className="text-center capitalize text-stone-600">
+            {posts.length === 0 && (
+              <span className=" font-semibold text-center">
+                no post yet,start by creating a post
+              </span>
+            )}
+          </p>
           <DesktopCreatingPostButton />
           <ul className="flex flex-col gap-y-2">
             {posts.map((item) => (

@@ -5,6 +5,7 @@ import { useSocket } from "../components/SocketProvider";
 import { useEffect } from "react";
 
 
+
 // export default function useFetchNotification() {
 //     const {setNotification}=useSocket()
 //     const {userId}=useUser()
@@ -41,9 +42,11 @@ import { useEffect } from "react";
 //   return { data, isLoading, refetchNotifications };
 // }
 export default function useFetchNotification() {
+
   const queryClient=useQueryClient()
   const { setNotification } = useSocket(); // Assuming setNotification is from context
   const { userId } = useUser();
+
 
   const { data = [],isLoading } = useQuery({
     queryFn: () => getUserNotification(userId),
