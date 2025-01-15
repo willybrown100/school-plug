@@ -12,18 +12,15 @@ const { data, isLoading } = useGetEventsStudents();
 
 const events = data?.events;
 
-
-
-    
   return (
     <article className="min-h-screen max-sm:pt-[7.5rem] md:pt-[9.8rem] lg:pt-[5.4rem]  pb-[8rem]">
       <div className="md:w-[90vw] mx-auto flex justify-center lg:grid-cols-[16rem,25rem,20rem] xl:grid-cols-[16rem,1fr,auto] md:grid grid-cols-[16rem,28rem]  gap-x-3">
         <UserDetails />
         <div className="w-full">
-         <SchoolInfoEvents/>
+          <SchoolInfoEvents />
 
           {isLoading ? (
-            <div className='flex justify-center'>
+            <div className="flex justify-center">
               <BlueMiniLoader />
             </div>
           ) : (
@@ -33,6 +30,8 @@ const events = data?.events;
               ))}
             </ul>
           )}
+
+          {!events?.length&&<h4 className='capitalize text-center text-stone-600 text-md'>no events yet</h4>}
         </div>
 
         <Bills />

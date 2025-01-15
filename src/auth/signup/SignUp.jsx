@@ -389,7 +389,7 @@ function StudentInfo({ userId }) {
         <input
           type="text"
           value={faculty}
-          placeholder="faculty"
+          placeholder="faculty (input only faculty name)"
           id="course"
           className="w-full  md:p-2 placeholder:capitalize border border-stone-700 p-2 rounded-md"
           onChange={(e) => setFaculty(e.target.value)}
@@ -399,7 +399,7 @@ function StudentInfo({ userId }) {
         <input
           type="text"
           value={department}
-          placeholder="department"
+          placeholder="department (input only department name)"
           id="department"
           className="w-full placeholder:capitalize md:p-2 border border-stone-700 p-2 rounded-md"
           onChange={(e) => setDepartment(e.target.value)}

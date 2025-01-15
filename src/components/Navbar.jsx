@@ -441,7 +441,10 @@ console.log(uniqueLength)
                   />
                 </div>
               </form>
-              <OpenModal notification={uniqueLength} />
+              <OpenModal
+                uniqueLength={uniqueLength}
+                notification={notification}
+              />
             </div>
           </div>
         </article>
@@ -450,7 +453,7 @@ console.log(uniqueLength)
   );
 }
 
-function OpenModal({ notification }) {
+function OpenModal({ notification, uniqueLength }) {
   return (
     <Modals>
       <Modals.Open opens="notificationModal">
@@ -465,7 +468,7 @@ function OpenModal({ notification }) {
           {notification && (
             <div className="bg-red-500 right-4 rounded-full w-5 h-5 grid place-items-center absolute top-[0]">
               <span className="text-white text-xs leading-none">
-                {notification}
+                {uniqueLength}
               </span>
             </div>
           )}
