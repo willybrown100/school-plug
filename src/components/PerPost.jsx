@@ -470,7 +470,7 @@ export default function PerPost({ item, onClick, open }) {
             <img
               src={images[selectedImageIndex]}
               alt="Expanded view"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto  object-contain"
             />
             {images.length > 1 && (
               <button

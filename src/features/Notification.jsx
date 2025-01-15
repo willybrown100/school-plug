@@ -78,7 +78,7 @@ export default function Notification() {
             </ul>
           ) : (
             <ul className="flex flex-col pt-4 divide-y-2  divide-secondary600">
-              {uniqueNotifications?.map((item) => (
+              {notification?.map((item) => (
                 <PerNotification key={item.postId} item={item} />
               ))}
             </ul>

@@ -405,8 +405,8 @@ const handleLike = () => {
                     <div className="flex items-center gap-x-3">
                       <img
                         src={
-                          item.user?.profilePicture
-                            ? item.user.profilePicture
+                          item.user?.profilePhoto
+                            ? item.user.profilePhoto
                             : "/images/profile-circle.svg"
                         }
                         alt="img"
@@ -480,7 +480,7 @@ const handleLike = () => {
             <img
               src={images[selectedImageIndex]}
               alt="Expanded view"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto md:h-[95dvh] object-contain"
             />
             {images?.length > 1 && (
               <button
@@ -517,8 +517,8 @@ const handleLike = () => {
                   <div className="flex items-center gap-x-3">
                     <img
                       src={
-                        item.user?.profilePicture
-                          ? item.user.profilePicture
+                        item.user?.profilePhoto
+                          ? item.user.profilePhoto
                           : "/images/profile-circle.svg"
                       }
                       alt="img"

@@ -2,15 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getMessaging } from "firebase/messaging";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyA3B5OGIJMEWA5fi16kB0eXVPAqi5hVW0E",
-//   authDomain: "schoolplug-d0b57.firebaseapp.com",
-//   projectId: "schoolplug-d0b57",
-//   storageBucket: "schoolplug-d0b57.appspot.com",
-//   messagingSenderId: "1052194861525",
-//   appId: "1:1052194861525:web:f1b2deb305bb8d97de4d5c",
-//   measurementId: "G-D68X6RTJ6Y",
-// };
+
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,

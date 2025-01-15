@@ -145,7 +145,7 @@ console.log(selectedImage);
               <HiXMark />
             </button>
             <button
-              disabled={!textContent}
+              disabled={!textContent || isLoading}
               className={`${
                 !textContent ? "bg-secondary400" : "bg-secondary600"
               } mb-2 px-6 capitalize py-1 text-white rounded-full font-heading`}
