@@ -41,7 +41,7 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
   console.log( adminEvent);
   if(isLoading)return <PageLoader/>
   return (
-    <article className="p-3 bg-stone-50 pb-[12rem]">
+    <article className="p-3 mt-10 bg-stone-50 pb-[12rem]">
       <div className="flex gap-x-2 items-center mb-5">
         <button onClick={handleClick} className="bg-transparent">
           <img src="\assets\arrow-left.svg" alt="icon" />
@@ -50,9 +50,9 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
       </div>
 
       <div>
+        <h4>events i posted</h4>
         {adminEvent?.events?.length >= 1 && (
           <article className=" pb-2 z-[-1]">
-            <h4>events i posted</h4>
             <Swiper
               modules={[Pagination]}
               spaceBetween={6}
@@ -73,12 +73,15 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
                       )}
                     </p>
                     <img
-                      src={item.flyer[0]}
+                      src={
+                        item.flyer[0]
+                          ? item.flyer[0]
+                          : "/images/event dummy image.webp"
+                      }
                       alt={item.type}
                       className="w-full object-cover h-[10rem]"
                       loading="lazy"
                     />
-            
                   </div>
                 </SwiperSlide>
               ))}

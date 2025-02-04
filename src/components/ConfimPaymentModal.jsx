@@ -2,30 +2,20 @@
 import React, { useRef } from "react";
 import {  useNavigate } from "react-router-dom";
 import useGetCardDetails from "../hooks/useGetCardDetails";
-import { getBankLogo } from "../utils/dateFormat";
 import Button from "../ui/Button";
-import useGetUser from "../hooks/useGetUser";
-import useGetCardToken from "../hooks/useGetCardToken";
+
 import BlueMiniLoader from "../ui/BlueMiniLoader";
-import { useMutation } from "@tanstack/react-query";
-import {   studentMakePayment1 } from "../services/contactApi";
-import MiniLoader from "../ui/MiniLoader";
-import toast from "react-hot-toast";
+
+import { formatNaira } from "../utils/dateFormat";
 
 
-export default function ConfimPaymentModal({ selectedAmount, feeType }) {
-  const { cardToken } = useGetCardToken();
+export default function ConfimPaymentModal({  feeType }) {
+
   const navigate = useNavigate();
-  const { data: datas } = useGetUser();
-  const email = datas?.user?.email;
-  const fee = feeType?.toUpperCase().replace(/FEE$/, "");
+
+
  
-  const paymentData = {
-    amount: selectedAmount,
-    feeType: fee,
-    email,
-    cardToken,
-  };
+
 
 
   
@@ -34,25 +24,16 @@ export default function ConfimPaymentModal({ selectedAmount, feeType }) {
   const handleClose = function (e) {
     console.log(e, modalRef.current);
   };
-  const { mutate, isLoading: isPaying } = useMutation({
-    mutationFn: studentMakePayment1,
-    onSuccess: () => {
-      navigate("/home/receipt/");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+
   const { data, isLoading } = useGetCardDetails();
 
 
 
 
   const student = data?.student;
-  const card = data?.card;
+
   const handleClick = function () {
-    mutate(paymentData);
-    console.log(paymentData);
+  navigate("/home/acctdetails")
   };
   return (
     <article
@@ -103,37 +84,28 @@ export default function ConfimPaymentModal({ selectedAmount, feeType }) {
                   </p>
                 </div>
                 <div className=" flex justify-between  items-center">
-                  <h4 className="mb-0 font-semibold">debit card</h4>
-                  <button className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center ">
-                    <img src="\assets\edit2.svg" alt="edit" />
-                    edit info
-                  </button>
+                  <h4 className="mb-0 font-semibold">
+                    Paying via bank transfer
+                  </h4>
                 </div>
                 <div className="flex items-center gap-x-1 justify-between p-2 border border-stone-300 rounded-lg my-6">
-                  <input type="radio" checked readOnly />
-                  <img
-                    src={getBankLogo(card?.bankName)}
-                    alt=""
-                    loading="lazy"
-                    className="w-20"
-                  />
-                  <span className="font-semibold capitalize">
-                    {card?.bankName}
-                  </span>
-                  <span className="capitalize">{card?.cardNumber}</span>
+                  <div>
+                    <p className="mb-0">Payment amount:</p>
+                    <p className="mb-0 text-secondary600 text-sm">
+                      included service fee of N100
+                    </p>
+                  </div>
+                  <h3 className="font-semibold">
+                    {formatNaira(student?.paymentDetails?.paymentAmount)}
+                  </h3>
                 </div>
                 <Button onClick={handleClick} className="w-full">
-                  {isPaying ? (
-                    <div className="flex justify-center">
-                      <MiniLoader />
-                    </div>
-                  ) : (
-                    "Yes they are, Make payment"
-                  )}
+                 
+                    Yes they are, Make payment
+                 
                 </Button>
               </>
             )}
-            
           </>
         )}
       </div>

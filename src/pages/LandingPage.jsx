@@ -1,30 +1,21 @@
 import React, { useState } from 'react'
 
 import SideBar from "../components/SideBar"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import LandingPageFooter from "../components/LandingPageFooter"
 // import { Link } from 'react-router-dom'
 
 // import PageLoad from '../ui/PageLoad';
 
 export default function LandingPage() {
+  const navigate =useNavigate()
   const [open,setOpen]=useState()
   const handleClick = function(){
 setOpen((prev)=>!prev)
   }
+  const handleClick2 = () => navigate("/signup");
   return (
     <article className=" ">
-      {/* <div className="flex flex-col items-center gap-4">
-        <Link to="/"></Link>
-        <Link to="/signup"> signup</Link>
-        <Link to="/signin">signin</Link>
-        <Link to="/forgotpassword">forgotpassword</Link>
-        <Link to="/sugsignup">sugsignup</Link>
-        <Link to="/profilePic">userdummyImage</Link>
-        <Link to="/sughome">sugdashboard</Link>
-        <PageLoad/>
-        <Link to="/home/homePage">internal page</Link>
-      </div> */}
       <header className="mb-8  landingpage-header ">
         <div className="p-3 ">
           <nav className="px-6 py-2 bg-[#FAFAFA80] rounded-full md:w-[600px] md:mx-auto">
@@ -62,7 +53,7 @@ setOpen((prev)=>!prev)
         </div>
         {/* <div className=''> */}
         <div className="lg:flex lg:justify-between gap-x-2 items-center p-6 ">
-          <div className="mt-4 max-lg:flex max-lg:flex-col max-lg:justify-center items-center">
+          <div className="mt-4 max-lg:flex max-lg:flex-col  max-lg:justify-center items-center">
             <p className="bg-[#FAFAFA80]  px-2 py-1 text-secondary700 font-medium inline  border rounded-full border-stone-50">
               Within school activities
             </p>
@@ -88,17 +79,23 @@ setOpen((prev)=>!prev)
               within their school, make their SUG bill, Faculty and Department
               bills super fast and easy. You can also view school events.
             </p>
-            <Link
-              to="/signup"
-              className="bg-secondary600 hover:bg-secondary500 duration-300 transition-all hover:text-white flex gap-x-2 justify-center items-center w-[250px] p-3 font-medium rounded-md text-center text-white "
-            >
-              Get started
-              <img
-                src="\assets\arrowRightwhite.svg"
-                alt="arrow"
-                className="md:block hidden bg-[#FAFAFA80] p-1 rounded-full"
-              />
-            </Link>
+       
+  
+
+
+<Link
+  to="/signup"
+  className="bg-secondary600 hover:bg-secondary500 duration-300 transition-all hover:text-white flex gap-x-2 justify-center items-center w-[250px] p-3 font-medium rounded-md text-center text-white"
+  style={{ animation: 'bounce 3s linear infinite' }}
+>
+  Get started
+  <img
+    src="\assets\arrowRightwhite.svg"
+    alt="arrow"
+    className="md:block hidden bg-[#FAFAFA80] p-1 rounded-full"
+  />
+</Link>
+
           </div>
 
           <div className="mt-3 relative ">
@@ -122,7 +119,6 @@ setOpen((prev)=>!prev)
         </div>
         {/* </div> */}
       </header>
-
       <section className="p-6  md:grid flex md:w-[650px] lg:w-[1200px] m-auto flex-col gap-y-6 md:grid-cols-2 lg:grid-cols-4  md:gap-x-4 md:gap-y-10">
         <div className="bg-[#E6E4FF] py-8 rounded-md  bg-custom-gradient">
           <img src="\images\enjoycampus.png" alt="img" className="m-auto " />
@@ -136,48 +132,47 @@ setOpen((prev)=>!prev)
           </div>
         </div>
         <div className="bg-[#E6E4FF] py-8 rounded-md  bg-custom-gradient">
-          <img src="\images\enjoycampus.png" alt="img" className="m-auto " />
-          <div>
+          <img src="\assets\image1.svg" alt="img" className="m-auto " />
+          {/* <div>
             <h4 className="text-center mt-4 font-semibold capitalize">
               Make school bills super fast
             </h4>
             <p className="text-center text-stone-600">
               save time standing in bank que
             </p>
-          </div>
+          </div> */}
         </div>
         <div className="bg-[#E6E4FF] py-8 rounded-md  bg-custom-gradient">
-          <img src="\images\enjoycampus.png" alt="img" className="m-auto " />
-          <div>
+          <img src="\assets\image2.svg" alt="img" className="m-auto " />
+          {/* <div>
             <h4 className="text-center mt-4 font-semibold capitalize">
               Get events updtaes
             </h4>
             <p className="text-center text-stone-600">Don’t miss any update</p>
-          </div>
+          </div> */}
         </div>
         <div className="bg-[#E6E4FF] py-8 rounded-md  bg-custom-gradient">
-          <img src="\images\enjoycampus.png" alt="img" className="m-auto " />
-          <div>
+          <img src="\assets\image3.svg" alt="img" className="m-auto " />
+          {/* <div>
             <h4 className="text-center mt-4 font-semibold capitalize">
               School bill management
             </h4>
             <p className="text-center text-stone-600">
               Manage students bill, less stress
             </p>
-          </div>
+          </div> */}
         </div>
       </section>
       <img
         src="\assets\div.divider.svg"
         alt="img"
-        className="w-full px-3 py-4 md:hidden"
+        className="w-full px-3 py-4  md:hidden"
       />
       <img
         src="\images\div.divider 2.png"
         alt="img"
-        className="w-full md:px-14 py-4 md:block hidden"
+        className="w-full md:px-14 py-6  md:block hidden"
       />
-
       <section className="p-3">
         <div className="bg-[#F3F0FF] bg p-3 rounded-lg md:w-[600px] m-auto">
           <img src="\images\babi.png" alt="img" className="m-auto" />
@@ -190,7 +185,7 @@ setOpen((prev)=>!prev)
           </p>
           <div className="flex justify-center">
             <button
-              onClick={handleClick}
+              onClick={handleClick2}
               className="bg-secondary600 text-center text-white rounded-md p-2 font-semibold"
             >
               Get started now
@@ -201,11 +196,19 @@ setOpen((prev)=>!prev)
       <img
         src="\assets\div.divider.svg"
         alt="img"
-        className="w-full px-3 py-4 md:hidden"
+        className="w-full px-3 pb-32 py-4 md:hidden"
       />
+      <img
+        src="\images\div.divider 2.png"
+        alt="img"
+        className="w-full md:px-14 pt-6 pb-28  md:block hidden"
+      />
+      
       <LandingPageFooter />
     </article>
   );
 }
+
+
 
 

@@ -4,7 +4,7 @@ import grayCheckIcon from "../../public/assets/gray.svg";
 // import grayCheckIcon from '../assets/gray.svg';
 import greenCheckIcon from "../../public/assets/green.svg";
 // import greenCheckIcon from '../assets/green.svg';
-import { useLocation, Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useLocation, Link, } from "react-router-dom"; // Import useNavigate
 import { HiArrowLeft } from "react-icons/hi";
 
 import Modals from "./Modals";
@@ -17,12 +17,13 @@ import toast from "react-hot-toast";
 import { formatText } from "../utils/dateFormat";
 import useUser from "../hooks/useUser";
 import useGetRegSchools from "../hooks/useGetRegSchools";
+import ConfimPaymentModal from "./ConfimPaymentModal";
 
 const levels = ["Select Level", "Year 1", "Year 2", "Year 3", "Year 4"]; // Include default option
 
 const PaymentForm = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {data}=useGetUser()
 const {userId} = useUser();
  const email=data?.user?.email
@@ -57,6 +58,7 @@ console.log(eventId)
   const [lastName, setLastName] = useState("");
   const [department, setDepartment] = useState("");
   const [regNo, setRegNo] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(levels[0]); // Default to "Choose Level"
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Button disabled by default
 
@@ -79,14 +81,14 @@ console.log(eventId)
       )
     );
   }, [firstName, lastName, department, regNo, selectedLevel]);
- const queryString = encodeURIComponent(JSON.stringify({...selectedFee,amount}));
- const queryStrings = encodeURIComponent(JSON.stringify({selectedFee}));
- console.log(queryString)
+//  const queryString = encodeURIComponent(JSON.stringify({...selectedFee,amount}));
+//  const queryStrings = encodeURIComponent(JSON.stringify({selectedFee}));
+
   const { mutate, isLoading } = useMutation({
     mutationFn: studentPaymentDetails,
     onSuccess: () => {
-      navigate(`/home/card-form?option=${queryString}`);
-     
+      // navigate(`/home/card-form?option=${queryString}`);
+     setOpenModal(true)
     },
     onError: (error) => {
       toast.error(error.message);
@@ -95,12 +97,13 @@ console.log(eventId)
   const { mutate:ticketPurchase, isLoading:isPurchasing } = useMutation({
     mutationFn: studentTicketPurchase,
     onSuccess: () => {
-      navigate(`/home/card-form?option=${queryStrings}`);
+      // navigate(`/home/card-form?option=${queryStrings}`);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
+  console.log(selectedFee)
 
   // Form submission handler
   const handleSubmit = (event) => {
@@ -113,11 +116,11 @@ console.log(eventId)
       userId,
       academicLevel: selectedLevel,
       email,
+      feeAmount:amount,
       schoolInfoId,
-      feeType: selectedFee?.selectedValue,
+      feeType: selectedFee?.selectedValue.toUpperCase(),
 
     };
-
     const studentInfo = {
       firstName,
       lastName,
@@ -129,14 +132,13 @@ console.log(eventId)
       eventId,
     };
 if (selectedFee?.selectedValue){
+  console.log("Form submitted:", formData);
  mutate(formData);
 }else if (selectedFee?.event ==="event"){
 ticketPurchase(studentInfo);
 console.log("Form submitted:", studentInfo);
 }
   };
-
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -179,7 +181,7 @@ console.log("Form submitted:", studentInfo);
               <div className="flex items-center border px-3 p-3 mt-2 w-full rounded-lg outline outline-1 outline-blue-500">
                 <img
                   src={selectedFee.image}
-                  alt={formatText(selectedFee.selectedValue)}
+                  alt={formatText(selectedFee?.selectedValue)}
                   className="inline mr-4  "
                 />
                 <div className="flex flex-col mr-3">
@@ -300,7 +302,7 @@ console.log("Form submitted:", studentInfo);
                 type="text"
                 id="regNo"
                 className="border border-gray-300 p-3 placeholder:capitalize rounded-lg w-full mb-4"
-                placeholder="Enter your registration number"
+                placeholder="Enter your reg number (pls type do not paste)"
                 // value={regNo}
                 value={`${regNo.slice(0, 2).toUpperCase()}${regNo.slice(2)}`}
                 onChange={(e) => setRegNo(e.target.value)}
@@ -411,6 +413,8 @@ console.log("Form submitted:", studentInfo);
           </div>
         </div>
       </div>
+      {openModal && <ConfimPaymentModal feeType={selectedFee?.selectedValue} />}
+
       <div className="bg-secondary600 hidden p-4 lg:flex absolute bottom-0 right-0 left-0 justify-center  ">
         <p className="text-white capitalize mb-0 font-heading font-semibold">
           all copyright reserved @schoolplug

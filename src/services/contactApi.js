@@ -164,7 +164,7 @@ export async function getAuthUser(token) {
     );
 
     const result = await response.json();
-
+console.log(result)
     return result;
   } catch (error) {
     console.log(error);
@@ -508,6 +508,11 @@ export const schoolInfo = async ({
       {
         method: "POST",
         body: formData,
+        // headers: {
+        //  " client_id": 250,
+        //  " Ocp-Apim-Subscription-Key":"242bf12cc8674b359d3747b38adfba11",
+    
+        // },
       }
     );
 
@@ -585,10 +590,10 @@ export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const signedInUser = result.user;
-    console.log("User signed in:", signedInUser);
+    console.log( signedInUser);
 
     // Get the current user's ID token
-    const idToken = await signedInUser.getIdToken(/* forceRefresh */ true);
+    const idToken = await signedInUser.getIdToken( true);
     const data = {
       agreedToTerms: true,
       idToken,
@@ -772,7 +777,7 @@ export async function getCardDetails(email) {
   console.log(email);
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/payment/card-details?email=${email}`
+      `https://student-plug.onrender.com/api/payment/account-info?email=${email}`
     );
 
  const result = await response.json();

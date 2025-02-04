@@ -20,7 +20,7 @@ import Events from "./features/Events";
 
 import PaymentForm from "./components/PaymentForm";
 import CreatePost from "./features/CreatePost";
-import CardForm from "./components/CardForm";
+// import CardForm from "./components/CardForm";
 import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
 import UsersFeed from "./components/UsersFeed";
@@ -61,6 +61,8 @@ import PageLoader from "./components/PageLoader";
 import EventPaymentReceipt from "./features/EventPaymentReceipt";
 import { SocketProvider } from "./components/SocketProvider";
 import SugProtectedRoute from "./components/SugProtectedRoute";
+
+import PaymentAcctDetails from "./features/PaymentAcctDetails";
 // import SocketProvider from "./components/SocketProvider";
 
 
@@ -78,11 +80,6 @@ const queryClient = new QueryClient({
 
 
 export default function App() {
-
-
-
-
-
   return (
     <SocketProvider>
       <DateProvider>
@@ -166,10 +163,10 @@ export default function App() {
                   </Route>
                   <Route path="events" element={<Events />} />
                   <Route path="events/:id" element={<SudentEventDetails />} />
-
                   <Route path="material" element={<Materials />} />
                   <Route path="notifications" element={<Notification />} />
                   <Route path="trends" element={<Trends />} />
+                
                   <Route path="bills" element={<PayBills />} />
                   <Route path="receipt" element={<PaymentReceipt />} />
                   <Route
@@ -177,7 +174,7 @@ export default function App() {
                     element={<EventPaymentReceipt />}
                   />
                   <Route path="payment-form" element={<PaymentForm />} />
-                  <Route path="card-form" element={<CardForm />} />
+                  <Route path="acctdetails" element={<PaymentAcctDetails />} />
                 </Route>
 
                 <Route

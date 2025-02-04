@@ -21,7 +21,7 @@ export default function SugPerEvent({ item }) {
   return (
     <li className="bg-white rounded-lg p-2">
       <div className="flex gap-x-4 items-center">
-        <img src={uniProfilePicture} alt="img" className="w-16" />
+        <img src={uniProfilePicture} alt="img" className="w-16 rounded-full" />
         <div className="flex flex-col ">
           <h5 className="mb-0 font-semibold capitalize">{postedByBody === "sug" ? "sug body" : ""}</h5>
           <h5 className="mb-0 text-stone-700 text-sm font-light flex gap-x-2">

@@ -65,7 +65,7 @@ const trend = data?.trendingPosts
            trend?.map((item) => <TrendPerPost item={item} key={item.postId} />)
          )}
 
-         {!trend.length && <p className='capitalize text-lg text-stone-600 text-center'>no trending post yet</p>}
+         {!trend?.length && <p className='capitalize text-lg text-stone-600 text-center'>no trending post yet</p>}
        </div>
 
        <Bills />

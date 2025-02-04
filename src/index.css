@@ -465,3 +465,21 @@ transform: translateX(20px);
 .landingpage-header{
  background: linear-gradient(180deg, #e6ffff 0%, #d6dcff 50%, #ffffff 100%);
 }
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

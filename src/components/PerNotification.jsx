@@ -33,6 +33,9 @@ const queryClient = useQueryClient()
       queryClient.invalidateQueries({
         queryKey: ["notification", notificationId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["sugnotification", notificationId],
+      });
       setReadNotification(true);
      },
      onError:(error)=>{
