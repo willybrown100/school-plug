@@ -333,9 +333,8 @@ console.log(uniqueLength)
   return (
     <>
       <nav
-        className={` ${
-          pathname === "/home/notifications" ? "hidden md:block" : "block"
-        } bg-white  p-2 z-[1] fixed top-0 left-0 w-full`}
+        className={`bg-white p-2 z-[1] fixed top-0 left-0 w-full 
+    ${pathname === "/home/notifications" ? "hidden md:block" : "block"} ${pathname === "/home/acctdetails" ? "hidden md:block" : ""}`}
       >
         <article
           className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}

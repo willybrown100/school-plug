@@ -12,7 +12,7 @@ export default function PageLoader() {
         />
       </div>
 
-      {/* </div> */}
+  
     </div>
   );
 }

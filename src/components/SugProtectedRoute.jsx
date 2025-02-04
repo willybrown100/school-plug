@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 // import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSug from "../hooks/useSug";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "./SocketProvider";
 // import Loader from "./Loader";
 
 export default function SugProtectedRoute({ children }) {
+  const [user,setUser]=useState(null)
   const { userId, token } = useSug();
   const navigate = useNavigate();
  const {  setNewPost} = useSocket();
@@ -45,14 +46,19 @@ useEffect(() => {
 
 
   useEffect(() => {
-    async function getAuthSug(userId) {
+    async function getAuthSug(userId, token) {
       try {
         // setLoad(true);
         const response = await fetch(
-          `https://student-plug.onrender.com/api/school/getSug/${userId}`
+          `https://student-plug.onrender.com/api/school/getSug/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const result = await response.json();
-
+setUser(result)
         console.log(result);
         return result;
       } catch (error) {
@@ -62,13 +68,19 @@ useEffect(() => {
         // setLoad(false);
       }
     }
-    getAuthSug(userId);
-  }, [userId]);
+    getAuthSug(userId,token);
+  }, [userId,token]);
 
   useEffect(() => {
     if (!session) navigate("/sugsignin");
   }, [session]);
 
+  
+  if (user?.message === "Token has expired") {
+    localStorage.removeItem("sugDetails");
+    navigate("/sugsignin");
+    return null;
+  }
  
   if (session) {
     return children;

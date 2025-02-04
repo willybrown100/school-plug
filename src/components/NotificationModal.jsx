@@ -22,7 +22,7 @@ export default function NotificationModal() {
         const {notification}=useSocket()
         console.log(notification,isLoading);
   return (
-    <div className='fixed top-[5.5rem] w-[20rem] right-6 rounded-md h-[33rem] bg-white p-2 '>
+    <div className='fixed top-[5.5rem] w-[20rem] hidden lg:block right-6 rounded-md h-[33rem] bg-white p-2 '>
 
        <div className=' p-1 rounded-xl '>
                 <div className="flex items-center gap-x-3">

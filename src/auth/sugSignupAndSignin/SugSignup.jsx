@@ -272,7 +272,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
           </select>
           <input
             type="text"
-            placeholder="state "
+            placeholder="state (pls input only state name)"
             value={state}
             required
             onChange={(e) => setState(e.target.value)}
@@ -295,6 +295,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
               />
               <button
                 type="button"
+                disabled={isLoading}
                 onClick={handleClick}
                 className="border-2 text-secondary600 capitalize font-semibold font-heading border-secondary600 p-2 rounded-md w-full"
               >
@@ -582,3 +583,9 @@ export const ConfirmPasswordField = ({
     </div>
   </div>
 );
+
+
+
+
+
+

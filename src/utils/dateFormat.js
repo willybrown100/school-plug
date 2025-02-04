@@ -43,7 +43,14 @@ export const optionSplit = function (option) {
   return splitString; // Outputs: "faculty Fee
 };
 
-
+export function readFileAsBlob(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file); // Reads file fully into memory
+  });
+}
 
 export function formatNaira(amount) {
   // Convert the number to a fixed decimal string
@@ -59,22 +66,6 @@ export function formatNaira(amount) {
   return `₦${formatted.join(".")}`;
 }
 
-export function getBankLogo(bankName) {
-  switch (bankName?.toLowerCase()) {
-    case "access bank":
-      return "/logos/access-bank.png";
-    case "gtbank":
-      return "/logos/gtbank.png";
-    case "zenith bank":
-      return "/logos/zenith-bank.png";
-    case "uba":
-      return "/logos/uba.png";
-    case "first bank":
-      return "/images/First-Bank.png";
-    default:
-      return "/logos/default-bank.png"; // Default logo for unknown banks
-  }
-}
 export function notificationType(title) {
   switch (title) {
     case "Your post was liked":
