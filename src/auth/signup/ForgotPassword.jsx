@@ -23,10 +23,8 @@ const ForgetPassword = () => {
   const [step, setStep] = useState(Number(initialStep));
 
   // const userId = localStorage.getItem("userId");
-  let userId = localStorage.getItem("userId");
+let userId = localStorage.getItem("userId")?.replace(/["]+/g, "");
 
-  // Check if it contains extra quotes and clean it up
-  userId = userId.replace(/["]+/g, "");
 
   console.log(step, password, confirmPassword);
 
