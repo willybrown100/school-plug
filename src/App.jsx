@@ -63,6 +63,7 @@ import { SocketProvider } from "./components/SocketProvider";
 import SugProtectedRoute from "./components/SugProtectedRoute";
 
 import PaymentAcctDetails from "./features/PaymentAcctDetails";
+import EventPaymentAcctDetails from "./features/EventPaymentAcctDetails";
 // import SocketProvider from "./components/SocketProvider";
 
 
@@ -166,7 +167,7 @@ export default function App() {
                   <Route path="material" element={<Materials />} />
                   <Route path="notifications" element={<Notification />} />
                   <Route path="trends" element={<Trends />} />
-                
+
                   <Route path="bills" element={<PayBills />} />
                   <Route path="receipt" element={<PaymentReceipt />} />
                   <Route
@@ -175,6 +176,10 @@ export default function App() {
                   />
                   <Route path="payment-form" element={<PaymentForm />} />
                   <Route path="acctdetails" element={<PaymentAcctDetails />} />
+                  <Route
+                    path="eventacctdetails"
+                    element={<EventPaymentAcctDetails />}
+                  />
                 </Route>
 
                 <Route

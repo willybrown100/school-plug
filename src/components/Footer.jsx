@@ -460,46 +460,48 @@ const pathn = pathname.split("/").at(2);
   };
   return (
     <>
-    {pathname !==  "/home/acctdetails" &&<div className=" ">
-        <div
-          className={` p-2 fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
-            isVisible ? "translate-y-0" : "translate-y-full"
-          } bg-white shadow-md md:hidden `}
-        >
-          <ul className="flex justify-between items-center gap-x-2">
-            {links.map((item, i) => (
-              <NavLinks item={item} key={i} />
-            ))}
-          </ul>
-
-          {/* Post button with the highest z-index */}
-          {isOpen ? (
-            <p></p>
-          ) : (
-            <>
-              {(pathname === "/home/homePage/feed" ||
-                pathname === "/home/trends") && (
-                <button
-                  onClick={handleClick}
-                  className={`bg-secondary600 ${
-                    isVisible ? "scale-100" : "scale-0"
-                  } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
-                >
-                  <GoPlus className="text-3xl text-white" />
-                </button>
-              )}
-            </>
-          )}
-        </div>
-
-        {isOpen && (
-          <div className="relative" onClick={handleClose}>
+      {pathname !== "/home/acctdetails" &&
+        pathname !== "/home/eventacctdetails" && (
+          <div className=" ">
             <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
-              style={{ height: "100vh", width: "100vw" }}
+              className={` p-2 fixed bottom-0 w-full transform transition-transform duration-300 ease-in-out ${
+                isVisible ? "translate-y-0" : "translate-y-full"
+              } bg-white shadow-md md:hidden `}
             >
-              <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
-                {/* <div className="flex items-center gap-x-2">
+              <ul className="flex justify-between items-center gap-x-2">
+                {links.map((item, i) => (
+                  <NavLinks item={item} key={i} />
+                ))}
+              </ul>
+
+              {/* Post button with the highest z-index */}
+              {isOpen ? (
+                <p></p>
+              ) : (
+                <>
+                  {(pathname === "/home/homePage/feed" ||
+                    pathname === "/home/trends") && (
+                    <button
+                      onClick={handleClick}
+                      className={`bg-secondary600 ${
+                        isVisible ? "scale-100" : "scale-0"
+                      } rounded-full transition-all duration-300 p-3 absolute top-[-5rem] right-[7%] z-[9999]`}
+                    >
+                      <GoPlus className="text-3xl text-white" />
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+
+            {isOpen && (
+              <div className="relative" onClick={handleClose}>
+                <div
+                  className="fixed inset-0 bg-black bg-opacity-50 z-[2] pointer-events-auto"
+                  style={{ height: "100vh", width: "100vw" }}
+                >
+                  <div className="flex flex-col  gap-y-4 absolute right-[7%] bottom-[7rem] items-center ">
+                    {/* <div className="flex items-center gap-x-2">
                 <span className="text-white font-heading capitalize">
                   events
                 </span>
@@ -507,22 +509,23 @@ const pathn = pathname.split("/").at(2);
                   <img src="\images\calendar.svg" alt="img" />
                 </button>
               </div> */}
-                <div className="flex items-center gap-x-2">
-                  <span className="text-white font-heading capitalize">
-                    post
-                  </span>
-                  <Link
-                    to="/post"
-                    className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
-                  >
-                    <GoPlus className={`text-3xl text-white`} />
-                  </Link>
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-white font-heading capitalize">
+                        post
+                      </span>
+                      <Link
+                        to="/post"
+                        className=" bg-secondary600 p-3  transition-all duration-300  rounded-full "
+                      >
+                        <GoPlus className={`text-3xl text-white`} />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
-      </div>}
     </>
   );
 }

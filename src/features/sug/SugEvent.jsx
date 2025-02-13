@@ -50,9 +50,9 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
       </div>
 
       <div>
-        <h4>events i posted</h4>
         {adminEvent?.events?.length >= 1 && (
           <article className=" pb-2 z-[-1]">
+            <h4>events i posted</h4>
             <Swiper
               modules={[Pagination]}
               spaceBetween={6}

@@ -939,11 +939,11 @@ export async function studentTicketCardDetails(data) {
 }
 
 
-export async function getEventCardDetails(email) {
+export async function getEventCardDetails(email,eventId) {
 
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/schoolEvent/fetch-details/${email}`
+      `https://student-plug.onrender.com/api/schoolEvent/get-eventPaidDetails?email=${email}&eventId=${eventId}`
     );
 
     const result = await response.json();

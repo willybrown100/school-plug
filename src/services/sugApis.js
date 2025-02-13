@@ -1,4 +1,4 @@
-import { readFileAsBlob } from "../utils/dateFormat";
+import {compressPDF,  } from "../utils/dateFormat";
 
 export async function sugSignUp(data) {
   console.log(data);
@@ -386,17 +386,14 @@ export async function schoolFacultyandReg({
   schoolInfoId,
   selectedFaculties,
 }) {
-  console.log({ facultyName, file, schoolInfoId, selectedFaculties });
-
   if (!file) {
     throw new Error("No file selected.");
   }
 
   try {
-    // Load the file as a Blob (fully into memory)
-    const fileData = await readFileAsBlob(file);
-    console.log("File fully loaded:", fileData); // Just to confirm it's loaded
-
+    
+   
+ const compressedFile = await compressPDF(file);
     // Create FormData
     const formData = new FormData();
 
@@ -414,7 +411,7 @@ export async function schoolFacultyandReg({
       formData.append("selectedFaculties", selectedFaculties);
     }
 
-    formData.append("file", file);
+    formData.append("file", compressedFile);
     formData.append("schoolInfoId", schoolInfoId);
 
     // Upload to backend

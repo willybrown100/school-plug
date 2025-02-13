@@ -18,6 +18,7 @@ import { formatText } from "../utils/dateFormat";
 import useUser from "../hooks/useUser";
 import useGetRegSchools from "../hooks/useGetRegSchools";
 import ConfimPaymentModal from "./ConfimPaymentModal";
+import ConfirmEventPaymentModal from "./ConfirmEventPaymentModal";
 
 const levels = ["Select Level", "Year 1", "Year 2", "Year 3", "Year 4"]; // Include default option
 
@@ -43,7 +44,10 @@ const [amount,setAmount]=useState("")
 const [selectedFee, setSelectedFee] = useState({});
 console.log(selectedFee)
 const eventId = selectedFee?.eventId ?  selectedFee?.eventId :"";
-console.log(eventId)
+const price = selectedFee?.price ?  selectedFee?.price :"";
+const fType = selectedFee?.selectedValue
+  ? selectedFee?.selectedValue.toUpperCase()
+  : "";
   useEffect(() => {
     // Parse the query string whenever the location changes
     const params = new URLSearchParams(location.search);
@@ -59,6 +63,7 @@ console.log(eventId)
   const [department, setDepartment] = useState("");
   const [regNo, setRegNo] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [openEventModal, setOpenEventModal] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(levels[0]); // Default to "Choose Level"
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Button disabled by default
 
@@ -97,13 +102,13 @@ console.log(eventId)
   const { mutate:ticketPurchase, isLoading:isPurchasing } = useMutation({
     mutationFn: studentTicketPurchase,
     onSuccess: () => {
-      // navigate(`/home/card-form?option=${queryStrings}`);
+      setOpenEventModal(true)
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-  console.log(selectedFee)
+  console.log(selectedFee.price)
 
   // Form submission handler
   const handleSubmit = (event) => {
@@ -116,10 +121,9 @@ console.log(eventId)
       userId,
       academicLevel: selectedLevel,
       email,
-      feeAmount:amount,
+      feeAmount: amount,
       schoolInfoId,
-      feeType: selectedFee?.selectedValue.toUpperCase(),
-
+      feeType: fType,
     };
     const studentInfo = {
       firstName,
@@ -128,6 +132,9 @@ console.log(eventId)
       regNo,
       email,
       userId,
+      feeType:"event",
+      schoolInfoId,
+      feeAmount:price,
       academicLevel: selectedLevel,
       eventId,
     };
@@ -144,11 +151,11 @@ console.log("Form submitted:", studentInfo);
       onSubmit={handleSubmit}
       className="max-md:bg-white  p-4 rounded-lg pt-[8rem] min-h-screen  w-full max-sm:pt-[7.5rem] md:pt-[10.8rem] lg:pt-[5.4rem] shadow-md mx-auto  pb-[5rem]"
     >
-      <img
+      {/* <img
         src="\assets\progressbarsvg.svg"
         alt="img"
         className="mb-6 hidden md:block w-[90vw] m-auto lg:hidden md:px-2"
-      />
+      /> */}
       <div
         className={` max-w-[1250px]   md:w-[90vw]   ${
           selectedFee?.event === "event"
@@ -156,14 +163,16 @@ console.log("Form submitted:", studentInfo);
             : "md:grid grid-cols-[auto,1fr] "
         } gap-x-4 md:px-2 m-auto`}
       >
-        <h3 className="mb-[2rem] font-semibold mt-[0.6rem] md:hidden flex items-center">
-          <Link to="/home/bills">
-            <HiArrowLeft className="inline mr-2 text-black" />
+        <h3 className="mb-[2rem] lg:hidden font-semibold mt-[0.6rem]  flex items-center">
+          <Link to="/home/bills" className="mb-0">
+            <HiArrowLeft className="inline mr-2 text-black mb-0" />
           </Link>
           <span>
-            {selectedFee?.event === "event"
-              ? "Event ticket purchase"
-              : "pay bills"}
+            {selectedFee?.event === "event" ? (
+              <p className="md:text-secondary600 mb-0">Event ticket purchase</p>
+            ) : (
+              "pay bills"
+            )}
           </span>
         </h3>
         <img
@@ -303,8 +312,8 @@ console.log("Form submitted:", studentInfo);
                 id="regNo"
                 className="border border-gray-300 p-3 placeholder:capitalize rounded-lg w-full mb-4"
                 placeholder="Enter your reg number (pls type do not paste)"
-                // value={regNo}
-                value={`${regNo.slice(0, 2).toUpperCase()}${regNo.slice(2)}`}
+                value={regNo}
+                // value={`${regNo.slice(0, 2).toUpperCase()}${regNo.slice(2)}`}
                 onChange={(e) => setRegNo(e.target.value)}
               />
             </div>
@@ -414,6 +423,9 @@ console.log("Form submitted:", studentInfo);
         </div>
       </div>
       {openModal && <ConfimPaymentModal feeType={selectedFee?.selectedValue} />}
+      {openEventModal && selectedFee?.price && (
+        <ConfirmEventPaymentModal selectedFee={selectedFee} />
+      )}
 
       <div className="bg-secondary600 hidden p-4 lg:flex absolute bottom-0 right-0 left-0 justify-center  ">
         <p className="text-white capitalize mb-0 font-heading font-semibold">

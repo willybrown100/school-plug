@@ -20,7 +20,7 @@ console.log(selectedFile)
          const file = event.target.files[0]; // Get the first selected file
          if (file) {
            console.log("Selected file:", file);
-           setSelectedFile(file); // Save file to state for further processing
+           setSelectedFile(file); // Saved file to state for further processing
            setFileName(file.name)
          }
          close();
