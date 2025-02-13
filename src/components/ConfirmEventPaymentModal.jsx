@@ -1,68 +1,44 @@
 /* eslint-disable react/prop-types */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import React, { useRef } from "react";
-import { getEventCardDetails, studentConfirmEventPayment } from "../services/contactApi";
-import useGetUser from "../hooks/useGetUser";
+
 import BlueMiniLoader from "../ui/BlueMiniLoader";
-import { getBankLogo } from "../utils/dateFormat";
+
 import Button from "../ui/Button";
-import MiniLoader from "../ui/MiniLoader";
-import useGetEventCardToken from "../hooks/useGetEventCardToken";
-import toast from "react-hot-toast";
-// import { useNavigate } from "react-router-dom";
+import { formatNaira } from "../utils/dateFormat";
+
+
+import { useNavigate } from "react-router-dom";
+import useGetEventPaymentDetails from "../hooks/useGetEventPaymentDetails";
 
 export default function ConfirmEventPaymentModal({ selectedFee }) {
-  const queryClient = useQueryClient()
-  // const navigate = useNavigate()
-    const { data: datas } = useGetUser();
-    const email = datas?.user?.email;
-     const { cardToken } = useGetEventCardToken();
-     console.log(cardToken)
-  const selectedFeez = selectedFee?.selectedFee;
-  console.log(selectedFeez?.eventId)
-  const { data: dataz, isLoading: isComing } = useQuery({
-    queryFn: () => getEventCardDetails(email),
-    queryKey: ["eventCardDetails"],
-    enabled: !!email && !!selectedFeez,
-  });
+  
+  const navigate = useNavigate()
+  const eventId=selectedFee?.eventId
+ const { dataz, isComing } = useGetEventPaymentDetails(eventId);
    const modalRef = useRef(null);
-
+const {
+  firstName,
+  lastName,
+  academicLevel,
+  department,
+  regNo,
+  paymentDetails,
+} = dataz?.student || {};
+console.log(dataz?.student)
    const handleClose = function (e) {
      console.log(e, modalRef.current);
    };
-  const {
-    firstName,
-    lastName,
-    regNo,
-    academicLevel,
-    department,
-    cardMasked,
-    bankName,
-  } = dataz?.data || {};
 
-  console.log(isComing)
 
- const { mutate, isLoading: isPaying } = useMutation({
-   mutationFn: studentConfirmEventPayment,
-   onSuccess: () => {
-    queryClient.invalidateQueries("verifyPayment");
-   },
+  console.log(paymentDetails?.paymentAmount);
 
-   onError: (error) => {
-     toast.error(error.message);
-   },
- });
+ 
+  const handleClick = function () {
+    navigate("/home/eventacctdetails");
+  };
 
-  const handleSubmit = function(){
-    const data = {
-      email,
-      amount: selectedFeez?.price,
-      authorization_code: cardToken,
-      eventId: selectedFeez?.eventId,
-    };
-    console.log(data);
-mutate(data);
-  }
+
 
 
   return (
@@ -70,7 +46,7 @@ mutate(data);
       onClick={handleClose}
       className="fixed p-3 bg-black bg-opacity-50 z-30 inset-0 backdrop-blur-sm grid place-items-center"
     >
-      <div className="bg-white p-3 rounded-lg" ref={modalRef}>
+      <div className="bg-white px-5 py-8 rounded-lg" ref={modalRef}>
         <h4 className="text-[#F0AA14] font-semibold">Confirm payment</h4>
         <p className="text-sm text-stone-500">
           Please make sure the information provided are correct, otherwise we
@@ -111,31 +87,23 @@ mutate(data);
                   </p>
                 </div>
                 <div className=" flex justify-between  items-center">
-                  <h4 className="mb-0 font-semibold">debit card</h4>
-                  <button disabled  className="hover:text-stone-100 flex gap-x-2 bg-secondary600 p-1 rounded-md text-white capitalize items-center ">
-                    <img src="\assets\edit2.svg" alt="edit" />
-                    edit info
-                  </button>
+                  <h4 className="mb-0 font-semibold">
+                    Paying via bank transfer
+                  </h4>
                 </div>
                 <div className="flex items-center gap-x-1 justify-between p-2 border border-stone-300 rounded-lg my-6">
-                  <input type="radio" checked readOnly />
-                  <img
-                    src={getBankLogo(bankName)}
-                    alt=""
-                    loading="lazy"
-                    className="w-20"
-                  />
-                  <span className="font-semibold capitalize">{bankName}</span>
-                  <span className="capitalize">{cardMasked}</span>
+                  <div className="flex flex-col gap-y-">
+                    <span className="font-semibold capitalize">
+                      Payment amount:
+                    </span>
+                    <span className="capitalize text-secondary600">
+                      included service fee of N100
+                    </span>
+                  </div>
+                  <p className="mb-0">{formatNaira(paymentDetails?.paymentAmount)}</p>
                 </div>
-                <Button onClick={handleSubmit} className="w-full">
-                  {isPaying ? (
-                    <div className="flex justify-center">
-                      <MiniLoader />
-                    </div>
-                  ) : (
-                    "Yes they are, Make payment"
-                  )}
+                <Button onClick={handleClick} className="w-full">
+                  yes they are, make payment
                 </Button>
               </>
             )}

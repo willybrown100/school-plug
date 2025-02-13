@@ -27,7 +27,6 @@ import {
 export default function SugSignup() {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const initialStep = searchParams.get("steps") || 1;
   const [steps, setSteps] = useState(Number(initialStep));
@@ -386,7 +385,6 @@ function SchoolFaculty() {
 
   const handleSubmit = function (e) {
     e.preventDefault();
-
     console.log({
       schoolInfoId: id,
       facultyName,

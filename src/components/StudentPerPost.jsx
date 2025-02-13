@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, {   useState } from "react";
 import { useForm } from "react-hook-form";
 import {   studentComment, studentLikePost } from "../services/contactApi";
 import useUser from "../hooks/useUser";
@@ -29,7 +29,7 @@ export default function StudentPerPost({ item }) {
     user,
 
     isLike,
-     likes,
+    likes,
     userId,
     postType,
     university,
@@ -40,12 +40,10 @@ export default function StudentPerPost({ item }) {
   // const name = data?.user?.name;
   const { userId: studentId } = useUser();
   const postId = _id;
-
+  
   const [Alllikes, setAllLikes] = useState(likes.length);
-  const [hasLiked, setHasLiked] = useState(
-isLike
-);
-  const { register, handleSubmit, reset, getValues, setValue} = useForm();
+  const [hasLiked, setHasLiked] = useState(isLike);
+  const { register, handleSubmit, reset, getValues, setValue } = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -54,17 +52,14 @@ isLike
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  // const toggleText = () => setIsExpanded((prev) => !prev);
-  const openImageModal = (index) => setSelectedImageIndex(index);
   
-  // const socket=useWebSocket()
-// const { sendMessage,  } = useSocket();
+  const openImageModal = (index) => setSelectedImageIndex(index);
 
+ 
 
-  // Toggle between full and truncated text
- const handleToggle = () => {
-   setIsExpanded((prev) => !prev);
- };
+  const handleToggle = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   const truncatedText = text.length > 50 ? text.slice(0, 50) + "..." : text;
 
@@ -88,16 +83,16 @@ isLike
     }
   }
 
-    const handleEmojiClick = (emojiData) => {
-      const emoji = emojiData.emoji; // Extract emoji
-      const currentText = getValues("comments"); // Get the current input value
-      setValue("comments", currentText + emoji); // Append emoji to input value
-    };
-      const handleEmojiClick2 = (emojiData) => {
-        const emoji = emojiData.emoji; // Extract emoji
-        const currentText = getValues("text"); // Get the current input value
-        setValue("text", currentText + emoji); 
-      };
+  const handleEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji; // Extract emoji
+    const currentText = getValues("comments"); // Get the current input value
+    setValue("comments", currentText + emoji); // Append emoji to input value
+  };
+  const handleEmojiClick2 = (emojiData) => {
+    const emoji = emojiData.emoji; // Extract emoji
+    const currentText = getValues("text"); // Get the current input value
+    setValue("text", currentText + emoji);
+  };
 
   const closeImageModal = () => setSelectedImageIndex(null);
 
@@ -123,94 +118,85 @@ isLike
   //   onError: (error) => {
   //     toast.error(error.message);
   //     setHasLiked((prev) => {
-  //       setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
+  //       setAllLikes((likes) => (prev ? likes + 1 : likes - 1));
   //       return !prev;
   //     });
   //   },
   // });
 
+  const { mutate, isLoading: isLiking } = useMutation({
+    mutationFn: studentLikePost,
+    onMutate: async () => {
+      // Cancel any outgoing queries for the post to avoid data overwrite
+      await queryClient.cancelQueries(["schoolpost", postId]);
 
+      // Get the previous like state and ensure the post data exists
+      const previousPostData = queryClient.getQueryData(["schoolpost", postId]);
 
+      if (!previousPostData) return; // Return early if there's no post data
 
-const { mutate, isLoading: isLiking } = useMutation({
-  mutationFn: studentLikePost,
-  onMutate: async () => {
-    // Cancel any outgoing queries for the post to avoid data overwrite
-    await queryClient.cancelQueries(["schoolpost", postId]);
+      // Optimistically update the like count and status
+      queryClient.setQueryData(["schoolpost", postId], (oldData) => ({
+        ...oldData,
+        likeCount: hasLiked ? oldData.likeCount - 1 : oldData.likeCount + 1,
+      }));
 
-    // Get the previous like state and ensure the post data exists
-    const previousPostData = queryClient.getQueryData(["schoolpost", postId]);
+      setHasLiked((prev) => !prev); // Toggle the like status
+      setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
 
-    if (!previousPostData) return; // Return early if there's no post data
+      // Return the previous state in case of rollback
+      return { previousPostData };
+    },
+    onError: (error, likeData, context) => {
+      // Revert the changes using the previous state
+      queryClient.setQueryData(
+        ["schoolpost", postId],
+        context.previousPostData
+      );
 
-    // Optimistically update the like count and status
-    queryClient.setQueryData(["schoolpost", postId], (oldData) => ({
-      ...oldData,
-      likeCount: hasLiked ? oldData.likeCount - 1 : oldData.likeCount + 1,
-    }));
+      // Reset UI state
+      setHasLiked((prev) => !prev); // Revert like status
+      setAllLikes((prev) => (hasLiked ? prev + 1 : prev - 1)); // Revert all likes count
 
+      // Show error notification
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      // Invalidate the specific post query to refetch the updated data
+      queryClient.invalidateQueries(["schoolpost", postId]);
+    },
+  });
+
+  const handleLike = () => {
+    const likeData = {
+      postId: _id,
+      userId: studentId,
+      ...(postType === "admin" && { isAdminPost: true }),
+    };
+
+    // Optimistic update
     setHasLiked((prev) => !prev); // Toggle the like status
     setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
 
-    // Return the previous state in case of rollback
-    return { previousPostData };
-  },
-  onError: (error, likeData, context) => {
-    // Revert the changes using the previous state
-    queryClient.setQueryData(["schoolpost", postId], context.previousPostData);
+    // Send the API request
+    mutate(likeData);
 
-    // Reset UI state
-    setHasLiked((prev) => !prev); // Revert like status
-    setAllLikes((prev) => (hasLiked ? prev + 1 : prev - 1)); // Revert all likes count
-
-    // Show error notification
-    toast.error(error.message);
-  },
-  onSuccess: () => {
-    // Invalidate the specific post query to refetch the updated data
-    queryClient.invalidateQueries(["schoolpost", postId]);
- 
-  },
-});
-
-
-const handleLike = () => {
-  const likeData = {
-    postId: _id,
-    userId: studentId,
-    ...(postType === "admin" && { isAdminPost: true }),
+    // socket.send(JSON.stringify({ ...likeData }));
+    // sendMessage(likeData);
   };
-                       
-  // Optimistic update
-  setHasLiked((prev) => !prev); // Toggle the like status
-  setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Update the like count optimistically
 
-  // Send the API request
-  mutate(likeData);
+  // const handleLike = () => {
+  //   const likeData = {
+  //     postId: _id,
+  //     userId: studentId,
+  //     ...(postType === "admin" && { isAdminPost: true }),
+  //   };
 
-
-
-  // socket.send(JSON.stringify({ ...likeData }));
-  // sendMessage(likeData);
-};
-
-
-
-// const handleLike = () => {
-//   const likeData = {
-//     postId: _id,
-//     userId: studentId,
-//     ...(postType === "admin" && { isAdminPost: true }),
-//   };
-
-//   setHasLiked((prev) => !prev);
-//   setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
-// mutate(likeData);
-//   sendMessage(likeData);
-// };
-
-
-
+  //   setHasLiked((prev) => !prev);
+  //   setAllLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
+  // mutate(likeData);
+  //   sendMessage(likeData);
+  // };
 
 
 
@@ -219,6 +205,7 @@ const handleLike = () => {
     getStudentComments();
     setCommentModalVisible(true);
     setActiveTab(index);
+    // inputRef.current.focus();
   };
   const handleCloseCommentModal = () => setCommentModalVisible(false);
 
@@ -439,6 +426,7 @@ const handleLike = () => {
                 className="w-8 h-8 rounded-full"
               />
               <input
+
                 type="text"
                 {...register("text")}
                 placeholder="Add Your Comment Here"
@@ -547,6 +535,7 @@ const handleLike = () => {
               className="w-8 h-8 rounded-full"
             />
             <input
+            
               type="text"
               {...register("comments")}
               placeholder="Add Your Comment Here"

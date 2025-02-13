@@ -12,12 +12,6 @@ import { formatNaira } from "../utils/dateFormat";
 export default function ConfimPaymentModal({  feeType }) {
 
   const navigate = useNavigate();
-
-
- 
-
-
-
   
   const modalRef = useRef(null);
 
@@ -27,14 +21,12 @@ export default function ConfimPaymentModal({  feeType }) {
 
   const { data, isLoading } = useGetCardDetails();
 
-
-
-
   const student = data?.student;
 
   const handleClick = function () {
   navigate("/home/acctdetails")
   };
+
   return (
     <article
       onClick={handleClose}

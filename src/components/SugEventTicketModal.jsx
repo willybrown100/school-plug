@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Button from "../ui/Button";
 import { ModalContext } from "./Modals";
 import MiniLoader from "../ui/MiniLoader";
 
 export default function SugEventTicketModal({ setPrice, creatingPaidEvent }) {
+  const inputRef = useRef(null)
   const { close } = useContext(ModalContext);
   const modalRef = useRef(null);
   const handleClose = function (e) {
@@ -13,6 +14,9 @@ export default function SugEventTicketModal({ setPrice, creatingPaidEvent }) {
       close();
     }
   };
+  useEffect(()=>{
+inputRef?.current.focus()
+  },[])
   return (
     <div
       className="fixed bg-black bg-opacity-50 z-50  backdrop-blur-sm inset-0 p-6"
@@ -32,6 +36,7 @@ export default function SugEventTicketModal({ setPrice, creatingPaidEvent }) {
           </p>
 
           <input
+            ref={inputRef}
             type="text"
             placeholder="enter price"
             onChange={(e) => setPrice(e.target.value)}
