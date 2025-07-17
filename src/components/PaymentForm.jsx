@@ -62,6 +62,7 @@ const fType = selectedFee?.selectedValue
   const [lastName, setLastName] = useState("");
   const [department, setDepartment] = useState("");
   const [regNo, setRegNo] = useState("");
+  const [acctNumber, setAcctNumber] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openEventModal, setOpenEventModal] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(levels[0]); // Default to "Choose Level"
@@ -114,16 +115,17 @@ const fType = selectedFee?.selectedValue
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = {
-      firstName,
-      lastName,
+      firstName:firstName.trim(),
+      lastName:lastName.trim(),
       department,
-      regNo,
+      regNo:regNo.trim(),
       userId,
       academicLevel: selectedLevel,
       email,
       feeAmount: amount,
       schoolInfoId,
       feeType: fType,
+      senderAccountNumber:acctNumber
     };
     const studentInfo = {
       firstName,
@@ -138,6 +140,7 @@ const fType = selectedFee?.selectedValue
       academicLevel: selectedLevel,
       eventId,
     };
+    localStorage.setItem("acctNumber",acctNumber)
 if (selectedFee?.selectedValue){
   console.log("Form submitted:", formData);
  mutate(formData);
@@ -227,7 +230,7 @@ console.log("Form submitted:", studentInfo);
           <h2 className="text-[16px] lg:block hidden mb-2 capitalize text-secondary600 font-semibold">
             {selectedFee?.event === "event" && "Event ticket purschase"}
           </h2>
-          <h2 className="text-[16px] mb-6 capitalize font-medium">
+          <h2 className="text-[16px] mb-6 capitalize font-medium ">
             Student Information
           </h2>
           <div className="lg:grid md:mb-4 lg:grid-cols-2 lg:gap-x-5 bg-white p-2 rounded-md">
@@ -238,7 +241,7 @@ console.log("Form submitted:", studentInfo);
                   alt="Checkmark"
                   className="w-6 h-6"
                 />
-                <label htmlFor="firstName" className="font-bold text-[16px]">
+                <label htmlFor="firstName" className="font-bold text-[16px] text-[#333333]">
                   1. First name
                 </label>
               </div>
@@ -259,7 +262,7 @@ console.log("Form submitted:", studentInfo);
                   alt="Checkmark"
                   className="w-6 h-6"
                 />
-                <label htmlFor="lastName" className="font-bold text-[16px]">
+                <label htmlFor="lastName" className="font-bold text-[16px] text-[#333333]">
                   2. Last name
                 </label>
               </div>
@@ -282,7 +285,7 @@ console.log("Form submitted:", studentInfo);
                   alt="Checkmark"
                   className="w-6 h-6"
                 />
-                <label htmlFor="department" className="font-bold text-[16px]">
+                <label htmlFor="department" className="font-bold text-[16px] text-[#333333]">
                   3. Department
                 </label>
               </div>
@@ -327,7 +330,7 @@ console.log("Form submitted:", studentInfo);
                   alt="Checkmark"
                   className="w-6 h-6"
                 />
-                <label htmlFor="level" className="font-bold text-[16px]">
+                <label htmlFor="level" className="font-bold text-[16px] text-[#333333]">
                   5. Academic Level
                 </label>
               </div>
@@ -344,6 +347,38 @@ console.log("Form submitted:", studentInfo);
                 ))}
               </select>
             </div>
+            <div>
+              <h3 className="text-[#333333] font-semibold">Payee Information</h3>
+              <p className="text-[#6A6A6A]">Make sure it is the same account number at which you are paying from.</p>
+            </div>
+            {/* acct number input */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <img
+                  src={isDepartmentFilled ? greenCheckIcon : grayCheckIcon}
+                  alt="Checkmark"
+                  className="w-6 h-6"
+                />
+                <label htmlFor="accountNumber" className="font-bold text-[16px] text-[#333333]">
+                  Payee Account Number
+                </label>
+              </div>
+              <input
+                type="acctNumber"
+                id="acctNumber"
+                className="border border-gray-300 p-3 rounded-lg w-full mb-4"
+                placeholder="Enter the account nubmer"
+                value={acctNumber}
+                onChange={(e) => setAcctNumber(e.target.value)}
+              />
+            </div>
+        
+             <p className="text-[#2D2D2D]"><span className="text-[#2B70DB] font-medium">Note:</span>This collection is only used to verify students payment, and hence not shared to any third party neither stored with us.</p>
+     
+           
+        
+
+
             <div className="lg:flex hidden mb-3 justify-end items-end">
               <button
                 type="submit"

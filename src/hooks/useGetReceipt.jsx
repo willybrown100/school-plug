@@ -1,16 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import useGetUser from "./useGetUser";
 import { getReceipt } from "../services/contactApi";
 
 
 export default function useGetReceipt() {
- const { data: datas } = useGetUser();
- const email = datas?.user?.email;
- console.log(email);
+
+
+ const refNo =localStorage.getItem("latestTransaction")
+ console.log(refNo)
+const ref = refNo ? JSON.parse(refNo) : null;
+ console.log("ref number",ref?.reference)
+
  const { data, isLoading } = useQuery({
-   queryFn: () => getReceipt(email),
+   queryFn: () => getReceipt(ref?.reference),
    queryKey: ["receipt"],
-   enabled: !!email,
+
  });
  return { data, isLoading }; 
 }

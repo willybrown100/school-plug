@@ -14,7 +14,7 @@ export default function UserProfile() {
   const [showImg, setShowImg] = useState(true);
   const handleSkip = function () {
     if (token) {
-      navigate("/home");
+      navigate("/home/homePage");
     }
   };
   return (

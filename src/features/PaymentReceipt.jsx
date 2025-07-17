@@ -7,12 +7,11 @@ import BlueMiniLoader from '../ui/BlueMiniLoader';
 
 export default function PaymentReceipt() {
   const {data,isLoading}=useGetReceipt()
-  const { firstName, lastName, regNo, department, academicLevel } =
-    data?.data?.student || {};
-    const { createdAt, amount, reference } = data?.data?.transactions?.at(0) || {};
 
-
-
+  const { fullName, lastName, regNo, department,amount, academicLevel ,reference,time
+} =
+    data || {};
+console.log(data)
     const downloadReceipt = () => {
       const doc = new jsPDF();
 
@@ -22,14 +21,16 @@ export default function PaymentReceipt() {
 
       // Add user info
       doc.setFontSize(12);
-      doc.text(`Payment Made By: ${firstName} ${lastName}`, 20, 40);
+      doc.text(`Payment Made By: ${fullName} ${lastName}`, 20, 40);
       doc.text(`Reg No: ${regNo}`, 20, 50);
       doc.text(`Department: ${department}`, 20, 60);
       doc.text(`Academic Year: ${academicLevel}`, 20, 70);
 
       // Add payment details
       doc.text(`Amount Paid: ${formatNaira(amount)}`, 20, 90);
-      doc.text(`Payment Date: ${formatDates(createdAt)}`, 20, 100);
+      doc.text(`Payment Date: ${formatDates(
+time
+)}`, 20, 100);
       doc.text(`Reference: ${reference}`, 20, 110);
 
       // Save the PDF
@@ -72,7 +73,7 @@ export default function PaymentReceipt() {
                     Payment made by
                   </h4>
                   <h4 className="mb-0">
-                    {firstName} {lastName}
+                    {fullName} 
                   </h4>
                 </div>
                 <div className="flex flex-col ">
@@ -93,7 +94,7 @@ export default function PaymentReceipt() {
 
               <div className="flex border-t border-stone-300 py-2 justify-between items-center gap-x-2">
                 <p className="mb-0 text-secondary600 text-sm capitalize font-semibold">
-                  {formatDates(createdAt)}
+                  {time}
                 </p>
                 <p className="mb-0 text-secondary600 text-sm capitalize font-semibold">
                   ref:{reference}
