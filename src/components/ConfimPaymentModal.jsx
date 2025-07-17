@@ -21,7 +21,7 @@ export default function ConfimPaymentModal({  feeType }) {
 
   const { data, isLoading } = useGetCardDetails();
 
-  const student = data?.student;
+  const student = data?.data?.student;
 
   const handleClick = function () {
   navigate("/home/acctdetails")
@@ -88,7 +88,7 @@ export default function ConfimPaymentModal({  feeType }) {
                     </p>
                   </div>
                   <h3 className="font-semibold">
-                    {formatNaira(student?.paymentDetails?.paymentAmount)}
+                    {formatNaira(student?.feeAmount+100)}
                   </h3>
                 </div>
                 <Button onClick={handleClick} className="w-full">

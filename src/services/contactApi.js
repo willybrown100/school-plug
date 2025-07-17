@@ -777,11 +777,25 @@ export async function getCardDetails(email) {
   console.log(email);
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/payment/account-info?email=${email}`
+      `https://student-plug.onrender.com/api/payment/payments-details/${email}`
+      // `https://student-plug.onrender.com/api/payment/account-info?email=${email}`
     );
 
  const result = await response.json();
+console.log("from api",result )
+  if (result) {
+  const transactions = result?.data?.transactions;
 
+  const latestTransaction = transactions?.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  })[0];
+  localStorage.setItem("latestTransaction", JSON.stringify(latestTransaction));
+console.log("transaction" ,transactions)
+  // Store it properly
+
+}
+
+ 
     console.log(result); 
     return result;
   } catch (error) {
@@ -789,11 +803,11 @@ export async function getCardDetails(email) {
     throw error;
   }
 }
-export async function getReceipt(email) {
-  console.log(email);
+export async function getReceipt(referenceNum) {
+  console.log(referenceNum);
   try {
     const response = await fetch(
-      `https://student-plug.onrender.com/api/payment/payments-details/${email}`
+      `https://student-plug.onrender.com/api/payment/payment-receipt/${referenceNum}`
     );
 
  const result = await response.json();
