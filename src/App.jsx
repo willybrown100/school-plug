@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React, { lazy, Suspense,  } from "react";
+import React, { lazy, Suspense,   } from "react";
 
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes,  } from "react-router-dom";
 
 import SignIn from "./auth/signup/SignIn";
 import ForgotPassword from "../src/auth/signup/ForgotPassword";
@@ -81,6 +81,7 @@ const queryClient = new QueryClient({
 
 
 export default function App() {
+
   return (
     <SocketProvider>
       <DateProvider>

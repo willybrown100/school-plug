@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, {  useLayoutEffect, useState } from 'react'
 
 import SideBar from "../components/SideBar"
 import { Link, useNavigate } from 'react-router-dom'
 import LandingPageFooter from "../components/LandingPageFooter"
+import useUser from '../hooks/useUser'
 
 
 export default function LandingPage() {
@@ -11,6 +12,13 @@ export default function LandingPage() {
   const handleClick = function(){
 setOpen((prev)=>!prev)
   }
+
+  const { token: userToken } = useUser();
+    useLayoutEffect(()=>{
+ if( userToken){
+  navigate("/home/homePage/feed")
+ }
+    },[userToken,navigate])
   const handleClick2 = () => navigate("/signup");
   return (
     <article className=" ">
