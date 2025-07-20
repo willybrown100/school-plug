@@ -113,7 +113,7 @@ const handleConfirm =  function(){
           </div>
         )}
 
-        {isRefetching && (
+        {isLoading && (
           <article className="fixed p-3 bg-black bg-opacity-50 z-30  backdrop-blur-sm max-sm:hidden md:block inset-0 grid place-items-center">
             <div className="bg-white py-[4.5rem] px-40 rounded-lg">
               <h2 className="text-secondary600 mb-16 text-[1.9rem] text-center font-semibold">

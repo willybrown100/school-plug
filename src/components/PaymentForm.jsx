@@ -125,7 +125,7 @@ const fType = selectedFee?.selectedValue
       feeAmount: amount,
       schoolInfoId,
       feeType: fType,
-      senderAccountNumber:acctNumber
+      senderAccountNumber:acctNumber.trim()
     };
     const studentInfo = {
       firstName,

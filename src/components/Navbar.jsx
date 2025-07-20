@@ -342,7 +342,7 @@ console.log(uniqueLength)
           className={`${className} max-lg:flex max-xl:flex-col max-lg:gap-y-2`}
         >
           <div className="flex justify-between gap-x-6 items-center">
-            <Link to="/">
+            <Link to="/home/homePage/feed">
               <img src="/assets/schLogo.svg" alt="img" className="md:hidden" />
             </Link>
             <img
