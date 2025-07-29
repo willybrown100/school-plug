@@ -783,17 +783,7 @@ export async function getCardDetails(email) {
 
  const result = await response.json();
 console.log("from api",result )
-  if (result) {
-  const transactions = result?.data?.transactions;
 
-  const latestTransaction = transactions?.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  })[0];
-  localStorage.setItem("latestTransaction", JSON.stringify(latestTransaction));
-console.log("transaction" ,transactions)
-  // Store it properly
-
-}
 
  
     console.log(result); 

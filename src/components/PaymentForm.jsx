@@ -67,14 +67,31 @@ const fType = selectedFee?.selectedValue
   const [openEventModal, setOpenEventModal] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(levels[0]); // Default to "Choose Level"
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Button disabled by default
-
+ const [error, setError] = useState("");
   // Check if inputs are filled
   const isFirstNameFilled = firstName.length > 0;
+  const isAcctNumber = acctNumber  ;
   const isLastNameFilled = lastName.length > 0;
   const isDepartmentFilled = department.length > 0;
   const isRegNoFilled = regNo.length > 0;
-  const isLevelSelected = selectedLevel !== "Choose Level"; // Check if a valid level is selected
+  const isLevelSelected = selectedLevel !== "Select Level"; // Check if a valid level is selected
+const handleChange = (e) => {
+    const value = e.target.value;
 
+    // Only allow numeric input
+    if (!/^\d*$/.test(value)) return;
+
+    setAcctNumber(value);
+
+    // Basic validation
+    if (value.length > 10) {
+      setError("Account number cannot be more than 10 digits.");
+    } else if (value.length < 10) {
+      setError("Account number must be 10 digits.");
+    } else {
+      setError(""); // Valid
+    }
+  };
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -83,10 +100,11 @@ const fType = selectedFee?.selectedValue
         isLastNameFilled &&
         isDepartmentFilled &&
         isRegNoFilled &&
-        isLevelSelected
+        isLevelSelected &&
+        isAcctNumber
       )
     );
-  }, [firstName, lastName, department, regNo, selectedLevel]);
+  }, [firstName, lastName, department, regNo, selectedLevel,isAcctNumber]);
 //  const queryString = encodeURIComponent(JSON.stringify({...selectedFee,amount}));
 //  const queryStrings = encodeURIComponent(JSON.stringify({selectedFee}));
 
@@ -138,6 +156,8 @@ const fType = selectedFee?.selectedValue
       schoolInfoId,
       feeAmount:price,
       academicLevel: selectedLevel,
+      senderAccountNumber:acctNumber.trim(),
+
       eventId,
     };
     localStorage.setItem("acctNumber",acctNumber)
@@ -363,14 +383,18 @@ console.log("Form submitted:", studentInfo);
                   Payee Account Number
                 </label>
               </div>
-              <input
-                type="acctNumber"
-                id="acctNumber"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-4"
-                placeholder="Enter the account nubmer"
-                value={acctNumber}
-                onChange={(e) => setAcctNumber(e.target.value)}
-              />
+             <div>
+      <input
+        type="text"
+        id="acctNumber"
+        className="border border-gray-300 p-3 rounded-lg w-full mb-1"
+        placeholder="Enter the account number"
+        value={acctNumber}
+        onChange={handleChange}
+        maxLength={10}
+      />
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+    </div>
             </div>
         
              <p className="text-[#2D2D2D]"><span className="text-[#2B70DB] font-medium">Note:</span>This collection is only used to verify students payment, and hence not shared to any third party neither stored with us.</p>

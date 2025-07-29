@@ -5,15 +5,15 @@ import { getReceipt } from "../services/contactApi";
 export default function useGetReceipt() {
 
 
- const refNo =localStorage.getItem("latestTransaction")
+ const refNo =localStorage.getItem("prevRefNumber")
  console.log(refNo)
-const ref = refNo ? JSON.parse(refNo) : null;
- console.log("ref number",ref?.reference)
+
+
 
  const { data, isLoading } = useQuery({
-   queryFn: () => getReceipt(ref?.reference),
+   queryFn: () => getReceipt(refNo),
    queryKey: ["receipt"],
-
+ refetchOnWindowFocus: false,
  });
  return { data, isLoading }; 
 }

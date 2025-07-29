@@ -10,7 +10,8 @@ export default function useGetCardDetails() {
 const { data,isLoading,refetch,isRefetching } = useQuery({
   queryFn: ()=>getCardDetails(email),
   queryKey:["cardDetails"],
-  enabled:!!email
+  enabled:!!email,
+   refetchOnWindowFocus: false,
 });
 return { data, isLoading,refetch,isRefetching }; 
 }
