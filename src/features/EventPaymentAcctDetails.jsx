@@ -35,7 +35,8 @@ export default function EventPaymentAcctDetails() {
 
     const handleConfirm = async () => {
     const result = await refetch();
-    const student = result.data?.student;
+    const student = result.data?.student?.paymentDetails
+;
 console.log("res",student)
     if (!student) {
       toast.error("Error: student data missing");
@@ -66,7 +67,7 @@ console.log("res",student)
     }
 
     toast.success("Transaction successful");
-    navigate("/home/receipt")
+    navigate("/home/eventreceipt")
   };
      
   return (

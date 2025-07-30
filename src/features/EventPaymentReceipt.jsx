@@ -76,7 +76,7 @@ import Button from '../ui/Button';
 
 
 export default function EventPaymentReceipt() {
-  const reference = localStorage.getItem("payment_reference");
+  const reference=localStorage.getItem("prevRefNumber")
 
   const { data: paymentStatus, error, isLoading } = useQuery(
     ["verifyPayment", reference],
@@ -85,7 +85,8 @@ export default function EventPaymentReceipt() {
         throw new Error("Payment reference not found. Unable to verify payment.");
       }
       const response = await fetch(
-        `https://student-plug.onrender.com/api/schoolEvent/verify/${reference}`
+  //  https://student-plug.onrender.com/api/schoolEvent/receipt/09FG250729212858030P5B266
+        `https://student-plug.onrender.com/api/schoolEvent/receipt/${reference}`
       );
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -99,20 +100,23 @@ export default function EventPaymentReceipt() {
       cacheTime: 300000,   // Keep data in cache for 5 minutes
     }
   );
+    console.log(paymentStatus)
 
 
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
 const {
-  amountPaid,
-  lastName,
-  firstName,
+  amount,
+ fullName,
+
   regNo,
   department,
   academicLevel,
-  paymentDate,
 
-  transactionId,
-} = paymentStatus?.data || {};
+reference:ref,
+date,
+
+ 
+} = paymentStatus || {};
 
 
     const downloadReceipt = () => {
@@ -124,14 +128,14 @@ const {
 
       // Add user info
       doc.setFontSize(12);
-      doc.text(`Payment Made By: ${firstName} ${lastName}`, 20, 40);
+      doc.text(`Payment Made By: ${fullName} `, 20, 40);
       doc.text(`Reg No: ${regNo}`, 20, 50);
       doc.text(`Department: ${department}`, 20, 60);
       doc.text(`Academic Year: ${academicLevel}`, 20, 70);
 
       // Add payment details
-      doc.text(`Amount Paid: ${formatNaira(amountPaid)}`, 20, 90);
-      doc.text(`Payment Date: ${formatDates(paymentDate)}`, 20, 100);
+      doc.text(`Amount Paid: ${formatNaira(amount)}`, 20, 90);
+      doc.text(`Payment Date: ${formatDates(date)}`, 20, 100);
       doc.text(`Reference: ${reference}`, 20, 110);
 
       // Save the PDF
@@ -157,7 +161,7 @@ const {
           <img src="\images\popcorn.png" alt="img" />
           <p className="mb-0 text-[#07B64A]">Payment success</p>
           <h4 className="mb-0 font-semibold text-[#07B64A]">
-            {formatNaira(amountPaid)}
+            {formatNaira(amount)}
           </h4>
         </div>
 
@@ -166,7 +170,7 @@ const {
           <div className="flex flex-col ">
             <h4 className="text-[#07B64A] mb-0 text-sm">Payment made by</h4>
             <h4 className="mb-0">
-              {firstName} {lastName}
+              {fullName}
             </h4>
           </div>
           <div className="flex flex-col ">
@@ -185,10 +189,10 @@ const {
 
         <div className="flex border-t border-stone-300 py-2 justify-between items-center gap-x-2">
           <p className="mb-0 text-secondary600 text-sm capitalize font-semibold">
-            {formatDates(paymentDate)}
+            {formatDates(date)}
           </p>
           <p className="mb-0 text-secondary600 text-sm capitalize font-semibold">
-            ref:{transactionId}
+            ref:{ref}
           </p>
         </div>
       </div>
