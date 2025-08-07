@@ -15,3 +15,9 @@ export default function useGetEventPaymentDetails(eventId) {
      });
   return { dataz ,isComing,refetch,isRefetching};
 }
+
+
+
+
+
+

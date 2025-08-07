@@ -482,6 +482,8 @@ export const schoolInfo = async ({
   state,
   aboutUniversity,
   uniProfilePicture,
+  phoneNumber,
+  email,
 }) => {
   try {
     console.log({
@@ -497,6 +499,8 @@ export const schoolInfo = async ({
     formData.append("aboutUniversity", aboutUniversity);
     formData.append("state", state);
     formData.append("userId", userId);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("email", email);
 
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);

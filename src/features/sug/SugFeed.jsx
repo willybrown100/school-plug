@@ -96,7 +96,7 @@ console.log(trends)
       return <div className="text-red-500">Error: {error.message}</div>;
 
   return (
-    <section className="pt-[6.2rem] bg-stone-100 min-h-[100dvh] py-[25rem]">
+    <section className="pt-[6.2rem] bg-stone-100 min-h-[100dvh] py-[25rem] pb-[29rem]">
       {newPost && (
         <button
           onClick={handleScrollToTop}
@@ -196,101 +196,6 @@ console.log(trends)
       ></div>
       <div style={{ height: "10rem" }}></div>
     </section>
-    // <section className="pt-[6.2rem] bg-stone-100 min-h-screen pb-[15rem] flex flex-col">
-    //   {trends?.length >= 1 && (
-    //     <article className="px-4 pb-2 z-[-1]">
-    //       <div className="flex justify-between ">
-    //         <h4 className="font-semibold">Trending Posts</h4>
-    //         <Link
-    //           to="/sughome/sugtrends"
-    //           className="flex items-center text-secondary600 gap-x-2 mb-0 capitalize"
-    //         >
-    //           See All{" "}
-    //           <FaArrowRightLong className="text-secondary600 cursor-pointer text-sm" />
-    //         </Link>
-    //       </div>
-    //       <Swiper
-    //         modules={[Pagination]}
-    //         spaceBetween={6}
-    //         slidesPerView={trends.length >= 3 ? 2.1 : trends.length}
-    //         navigation={false}
-    //         pagination={false}
-    //       >
-    //         {trends.map((item) => (
-    //           <SwiperSlide key={item._id}>
-    //             <div className="border bg-white border-stone-300 p-1 overflow-hidden rounded-md h-[42vh] grid grid-rows-[auto,auto,1fr,auto]">
-    //               <p className="mb-0 text-stone-700">Post:</p>
-    //               <p className="break-words max-full text-sm ">
-    //                 {isExpanded ? item.text : item.text.slice(0, 18)}
-    //                 {item.text.length > 18 && (
-    //                   <span
-    //                     onClick={toggleText}
-    //                     className="text-stone-600 cursor-pointer ml-1"
-    //                   >
-    //                     {isExpanded ? " Less" : "..."}
-    //                   </span>
-    //                 )}
-    //               </p>
-    //               <img
-    //                 src={item.images[0]}
-    //                 alt={item.type}
-    //                 className="w-full h-full"
-    //                 loading="lazy"
-    //               />
-    //               <div className="flex justify-between mt-2">
-    //                 <div className="flex gap-x-1 items-center">
-    //                   <img src="\assets\like2.svg" />
-    //                   <p className="mb-0 text-sm">{item.likesCount}</p>
-    //                 </div>
-    //                 <div className="flex gap-x-1 items-center">
-    //                   <img src="\assets\message-3.svg" />
-    //                   <p className="mb-0 text-sm">{item.commentsCount}</p>
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </SwiperSlide>
-    //         ))}
-    //       </Swiper>
-    //     </article>
-    //   )}
-    //     {posts?.length === 0 && (
-    //     <div className="flex justify-center items-center min-h-[calc(100vh-4.rem)">
-    //       <h4 className="capitalize text-stone-700">
-    //         Nothind here yet, start by creating a post
-    //       </h4>
-    //     </div>
-    //   )}
-    //   <ul className="flex flex-col gap-y-2 items-center">
-    //     {posts?.map((item) => {
-    //       const postId = item?._id;
-    //       if (!postId) return null;
-
-    //       return (
-    //         <PerPost
-    //           item={item}
-    //           key={postId}
-    //           open={open === postId}
-    //           onClick={() =>
-    //             setOpen((prev) => (prev === postId ? null : postId))
-    //           }
-    //         />
-    //       );
-    //     })}
-    //   </ul>
-    //   {isFetchingNextPage && (
-    //     <div className="flex justify-center items-center mt-4">
-    //       <BlueMiniLoader />
-    //     </div>
-    //   )}
-    //   <div
-    //     ref={loadMoreRef}
-    //     style={{
-    //       height: "1px",
-    //       background: "transparent",
-    //     }}
-    //   ></div>
-    //   {/* Spacer to ensure footer visibility */}
-    //   <div style={{ height: "10rem" }}></div>
-    // </section>
+ 
   );
 }
