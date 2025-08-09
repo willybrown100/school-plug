@@ -275,7 +275,10 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             <option value="Lagos state university">Lagos state university</option>
             <option value="OAU">OAU</option>
             <option value="UNIZIK">UNIZIK</option>
-            <option value="UNIZIK">UNIZIK</option>
+            <option value="UNIBEN">UNIBEN</option>
+            <option value="UNIJ">UNIJ</option>
+            <option value="UNInice">UNInice</option>
+            <option value="UNIbrown">UNIbrown</option>
           </select>
           <input
             type="text"

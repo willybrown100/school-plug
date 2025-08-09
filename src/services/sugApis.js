@@ -1,4 +1,4 @@
-import {compressPDF,  } from "../utils/dateFormat";
+// import {compressPDF,  } from "../utils/dateFormat";
 
 export async function sugSignUp(data) {
   console.log(data);
@@ -308,77 +308,7 @@ export async function getSugPosts(schoolInfoId,page=1,token) {
 }
 
 
-// export async function schoolFacultyandReg({
-//   facultyName,
-//   file,
-//   schoolInfoId,
-//   selectedFaculties,
-// }) {
-//   console.log({ facultyName, file, schoolInfoId, selectedFaculties });
-//   const formData = new FormData();
 
-//   if (Array.isArray(facultyName)) {
-//     facultyName.forEach((name) => {
-//       formData.append("facultyName[]", name);
-//     });
-//   } else {
-//     formData.append("facultyName", facultyName);
-//   }
-
-//   if (Array.isArray(selectedFaculties)) {
-//     selectedFaculties.forEach((facultyId) => {
-//       formData.append("selectedFaculties[]", facultyId); // Note the [] to handle as array
-//     });
-//   } else {
-//     formData.append("selectedFaculties", selectedFaculties);
-//   }
-
-//   formData.append("file", file);
-  
-//   formData.append("schoolInfoId", schoolInfoId);
-
-//   try {
-
-
-    
-//     const response = await fetch(
-//       "https://student-plug.onrender.com/api/school/faculty/reg-upload",
-//       {
-//         method: "POST",
-//         body: formData,
-//       }
-//     );
-
-//     const contentType = response.headers.get("content-type");
-
-//     if (!response.ok) {
-//       let errorMessage;
-
-//       if (contentType && contentType.includes("application/json")) {
-//         const errorJson = await response.json();
-//         errorMessage = errorJson.message;
-//       } else {
-//         const errorText = await response.text();
-//         errorMessage = errorText;
-//       }
-
-//       throw new Error(errorMessage || "Something went wrong with the upload.");
-//     }
-
-//     if (contentType && contentType.includes("application/json")) {
-//       const result = await response.json();
-//       console.log(result);
-//       return result;
-//     } else {
-//       const result = await response.text();
-//       console.log(result);
-//       return result;
-//     }
-//   } catch (error) {
-//     console.error("Error:", error.message);
-//     throw error;
-//   }
-// }
 
 export async function schoolFacultyandReg({
   facultyName,
@@ -388,12 +318,13 @@ export async function schoolFacultyandReg({
 }) {
   if (!file) {
     throw new Error("No file selected.");
+   
   }
 
   try {
     
    
- const compressedFile = await compressPDF(file);
+//  const compressedFile = await compressPDF(file);
     // Create FormData
     const formData = new FormData();
 
@@ -411,7 +342,7 @@ export async function schoolFacultyandReg({
       formData.append("selectedFaculties", selectedFaculties);
     }
 
-    formData.append("file", compressedFile);
+    formData.append("file", file);
     formData.append("schoolInfoId", schoolInfoId);
 
     // Upload to backend
@@ -441,6 +372,73 @@ export async function schoolFacultyandReg({
     throw error;
   }
 }
+// export async function schoolFacultyandReg({
+//   facultyName,
+//   file,
+//   schoolInfoId,
+//   selectedFaculties,
+// }) {
+//   if (!file) {
+//     throw new Error("No file selected.");
+//   }
+
+//   try {
+//     console.log('Original file:', {
+//       name: file.name,
+//       size: file.size,
+//       type: file.type
+//     });
+
+//     // Create FormData with ORIGINAL file (no compression)
+//     const formData = new FormData();
+    
+//     if (Array.isArray(facultyName)) {
+//       facultyName.forEach((name) => formData.append("facultyName[]", name));
+//     } else {
+//       formData.append("facultyName", facultyName);
+//     }
+    
+//     if (Array.isArray(selectedFaculties)) {
+//       selectedFaculties.forEach((facultyId) =>
+//         formData.append("selectedFaculties[]", facultyId)
+//       );
+//     } else {
+//       formData.append("selectedFaculties", selectedFaculties);
+//     }
+    
+//     // Use original file instead of compressed
+//     formData.append("file", file); // <-- CHANGED: No compression
+//     formData.append("schoolInfoId", schoolInfoId);
+
+//     // Upload to backend
+//     const response = await fetch(
+//       "https://student-plug.onrender.com/api/school/faculty/reg-upload",
+//       {
+//         method: "POST",
+//         body: formData,
+//       }
+//     );
+
+//     const contentType = response.headers.get("content-type");
+    
+//     if (!response.ok) {
+//       let errorMessage =
+//         contentType && contentType.includes("application/json")
+//           ? (await response.json()).message
+//           : await response.text();
+//       throw new Error(errorMessage || "Something went wrong with the upload.");
+//     }
+
+//     return contentType && contentType.includes("application/json")
+//       ? await response.json()
+//       : await response.text();
+      
+//   } catch (error) {
+//     console.error("Error:", error.message);
+//     throw error;
+//   }
+// }
+
 
 export async function getFaculties() {
   try {
