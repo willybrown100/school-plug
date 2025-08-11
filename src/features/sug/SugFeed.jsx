@@ -163,7 +163,7 @@ console.log(trends)
       )}
       {posts?.length === 0 && (
         <div className="flex justify-center items-center min-h-[calc(100vh-4.5rem)">
-          <h4 className="capitalize text-stone-700">
+          <h4 className="capitalize text-stone-700 pb-[10rem]">
             Nothind here yet, start by creating a post
           </h4>
         </div>
@@ -171,7 +171,7 @@ console.log(trends)
       <ul className="flex flex-col gap-y-2 items-center ">
         {posts?.map((item) => {
           const postId = item?._id;
-          if (!postId) return null; // Skip the item if there's no ID
+          if (!postId) return null; 
 
           return (
             <PerPost
@@ -195,6 +195,7 @@ console.log(trends)
         style={{ height: "1px", background: "transparent" }}
       ></div>
       <div style={{ height: "10rem" }}></div>
+      <div className='pb-36'></div>
     </section>
  
   );
