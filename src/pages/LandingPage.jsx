@@ -119,9 +119,15 @@ setOpen((prev)=>!prev)
             <img
               src="\images\landingpageimgMd.png"
               alt="img"
-              className="hidden md:block m-auto z-40"
+              className="hidden md:block lg:hidden m-auto z-40"
+            />
+            <img
+              src="\images\landinglg.png"
+              alt="img"
+              className="hidden  lg:block m-auto z-40 w-full"
             />
           </div>
+
         </div>
       </header>
       <section className="p-6  md:grid flex md:w-[650px] lg:w-[1200px] m-auto flex-col gap-y-6 md:grid-cols-2 lg:grid-cols-4  md:gap-x-4 md:gap-y-10">
@@ -154,10 +160,15 @@ setOpen((prev)=>!prev)
       <img
         src="\images\div.divider 2.png"
         alt="img"
-        className="w-full md:px-14 py-6  md:block hidden"
+        className="w-full md:px-14 py-6  md:block hidden lg:hidden"
       />
-      <section className="p-3">
-        <div className="bg-[#F3F0FF] bg p-3 rounded-lg md:w-[600px] m-auto">
+       <img
+        src="\assets\div.divider3.svg"
+        alt="img"
+        className="w-[60%] m-auto md:px-14 pt-6 pb-28   hidden lg:block"
+      />
+      <section className="p-3 ">
+        <div className="bg-[#F3F0FF] bg p-3 rounded-xl md:w-[600px] lg:w-[800px] m-auto py-10">
           <img src="\images\babi.png" alt="img" className="m-auto" />
           <h2 className="text-secondary700 font-medium text-center">
             You’ve come this far because you were directed
@@ -176,6 +187,7 @@ setOpen((prev)=>!prev)
           </div>
         </div>
       </section>
+
       <img
         src="\assets\div.divider.svg"
         alt="img"
@@ -184,7 +196,12 @@ setOpen((prev)=>!prev)
       <img
         src="\images\div.divider 2.png"
         alt="img"
-        className="w-full md:px-14 pt-6 pb-28  md:block hidden"
+        className="w-full md:px-14 pt-6 pb-28  md:block hidden lg:hidden"
+      />
+      <img
+        src="\assets\div.divider3.svg"
+        alt="img"
+        className="w-[60%] md:px-14 pt-6 pb-28 m-auto  hidden lg:block"
       />
 
       <LandingPageFooter />
