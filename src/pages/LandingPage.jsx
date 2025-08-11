@@ -1,7 +1,7 @@
 import React, {  useLayoutEffect, useState } from 'react'
 
 import SideBar from "../components/SideBar"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, redirect, useNavigate } from 'react-router-dom'
 import LandingPageFooter from "../components/LandingPageFooter"
 import useUser from '../hooks/useUser'
 
@@ -14,9 +14,10 @@ setOpen((prev)=>!prev)
   }
 
   const { token: userToken } = useUser();
+  console.log(userToken)
     useLayoutEffect(()=>{
  if( userToken){
-  navigate("/home/homePage/feed")
+  redirect("/home/homePage/feed")
  }
     },[userToken,navigate])
   const handleClick2 = () => navigate("/signup");

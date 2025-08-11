@@ -160,12 +160,13 @@ useEffect(() => {
         const response = await fetch(
           "https://student-plug.onrender.com/api/auth/getuser",
           {
-            headers: { Authorization: ` Bearer ${token} ` },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
         const result = await response.json();
 
-        if (result?.message === "Invalid Token") {
+        if (result?.message === "Token has expired") {
+          console.log(result)
           localStorage.removeItem("userDetails");
           navigate("/signin");
         } else {
@@ -173,10 +174,12 @@ useEffect(() => {
         }
       } catch (error) {
         console.error("Error fetching user:", error);
+        throw error
       }
     };
+ 
 
-    if (userToken) fetchUser(userToken);
+    fetchUser(userToken);
   }, [userToken, navigate]);
 
   if (user?.message === "Invalid Token") {
