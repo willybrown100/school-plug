@@ -268,7 +268,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             className=" border border-stone-700 p-2 rounded-md"
             onChange={(e) => setUniversity(e.target.value)}
           >
-            <option className="capitalize" value="Yaba Tech">
+            {/* <option className="capitalize" value="Yaba Tech">
               Yaba Tech
             </option>
             <option value="Unilag">Unilag</option>
@@ -279,7 +279,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             <option value="UNIJ">UNIJ</option>
             <option value="UNInice">UNInice</option>
             <option value="UNIbrown">UNIbrown</option>
-            <option value="UNIbrown">willyschool</option>
+            <option value="UNIbrown">willyschool</option> */}
           </select>
           <input
             type="text"
