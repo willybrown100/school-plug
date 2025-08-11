@@ -18,6 +18,10 @@ _id,
   isPaid,
   price,
 } = item;
+const eventId =_id
+const handleClick = function(){
+localStorage.setItem("eventId",eventId)
+}
 
 const selectedContent = { price, event: "event", eventId: _id };
        const queryString = encodeURIComponent(JSON.stringify(selectedContent));
@@ -76,7 +80,7 @@ const selectedContent = { price, event: "event", eventId: _id };
             evt fee ({formatNaira(price)})
           </button>
           <Link
-            to={`/home/payment-form?option=${queryString} `}
+            to={`/home/payment-form?option=${queryString} `} onClick={handleClick}
             className="border capitalize text-center font-semibold text-secondary600 border-secondary600 px-3 bg-transparent rounded-md py-3"
           >
             buy ticket

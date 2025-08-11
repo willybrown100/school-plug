@@ -65,6 +65,7 @@ export default function SugSignup() {
     };
     mutate(user);
     console.log(user);
+    localStorage.setItem("sugNumberandEmail",JSON.stringify(user))
   };
 
   useEffect(() => {
@@ -189,9 +190,11 @@ function SchoolInfo({ searchParams, setSearchParams }) {
   const [aboutUniversity, setAboutUniversity] = useState("");
   const [uniProfilePicture, setUniProfilePicture] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const { authUserData, userId } = useSug();
-  console.log(userId, authUserData);
-  // console.log(uniProfilePhoto, userId);
+  const {  userId } = useSug();
+  const sugNumber = localStorage.getItem("sugNumberandEmail")
+ const sugNumandEmail = JSON.parse(sugNumber)
+
+  console.log(sugNumandEmail);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: schoolInfo,
@@ -230,15 +233,16 @@ function SchoolInfo({ searchParams, setSearchParams }) {
   };
   const handleSubmit = function (e) {
     e.preventDefault();
-    const schInfo = {
-      userId,
-      university,
-      state,
-      aboutUniversity,
-      uniProfilePicture,
-    };
-    console.log(schInfo);
-    mutate({ userId, university, state, aboutUniversity, uniProfilePicture });
+    // const schInfo = {
+    //   userId,
+    //   university,
+    //   state,
+    //   aboutUniversity,
+    //   uniProfilePicture,
+    //   phoneNumber:Number(sugNumber)
+    // };
+    console.log("datas",{ userId, university, state, aboutUniversity, uniProfilePicture,phoneNumber:sugNumandEmail.phoneNumber.trim(),email:sugNumandEmail.email});
+    mutate({ userId, university, state, aboutUniversity, uniProfilePicture,phoneNumber:sugNumandEmail.phoneNumber.trim(),email:sugNumandEmail.email });
   };
   return (
     <div className="p-3">
@@ -268,6 +272,13 @@ function SchoolInfo({ searchParams, setSearchParams }) {
               Yaba Tech
             </option>
             <option value="Unilag">Unilag</option>
+            <option value="Lagos state university">Lagos state university</option>
+            <option value="OAU">OAU</option>
+            <option value="UNIZIK">UNIZIK</option>
+            <option value="UNIBEN">UNIBEN</option>
+            <option value="UNIJ">UNIJ</option>
+            <option value="UNInice">UNInice</option>
+            <option value="UNIbrown">UNIbrown</option>
           </select>
           <input
             type="text"

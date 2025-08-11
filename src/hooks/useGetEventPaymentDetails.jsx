@@ -4,13 +4,20 @@ import { useQuery } from '@tanstack/react-query';
 import { getEventCardDetails } from '../services/contactApi';
 
 export default function useGetEventPaymentDetails(eventId) {
-  console.log(eventId)
+
     const { data: datas } = useGetUser();
     const email = datas?.user?.email;
-     const { data: dataz, isLoading: isComing } = useQuery({
+     const { data: dataz, isLoading: isComing,refetch,isRefetching } = useQuery({
        queryFn: () => getEventCardDetails(email, eventId),
        queryKey: ["eventCardDetails"],
-       enabled: !!email || eventId,
+       enabled: !!email || !!eventId,
+        refetchOnWindowFocus: false,
      });
-  return { dataz ,isComing};
+  return { dataz ,isComing,refetch,isRefetching};
 }
+
+
+
+
+
+

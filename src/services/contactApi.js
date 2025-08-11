@@ -482,6 +482,8 @@ export const schoolInfo = async ({
   state,
   aboutUniversity,
   uniProfilePicture,
+  phoneNumber,
+  email,
 }) => {
   try {
     console.log({
@@ -497,6 +499,8 @@ export const schoolInfo = async ({
     formData.append("aboutUniversity", aboutUniversity);
     formData.append("state", state);
     formData.append("userId", userId);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("email", email);
 
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
@@ -783,17 +787,7 @@ export async function getCardDetails(email) {
 
  const result = await response.json();
 console.log("from api",result )
-  if (result) {
-  const transactions = result?.data?.transactions;
 
-  const latestTransaction = transactions?.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  })[0];
-  localStorage.setItem("latestTransaction", JSON.stringify(latestTransaction));
-console.log("transaction" ,transactions)
-  // Store it properly
-
-}
 
  
     console.log(result); 

@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { formatNaira } from '../utils/dateFormat';
 import Button from '../ui/Button';
 import useGetCardDetails from '../hooks/useGetCardDetails';
-import MiniLoader from "../ui/MiniLoader";
 import BlueMiniLoader from '../ui/BlueMiniLoader';
+import toast from 'react-hot-toast';
 
 
 export default function PaymentAcctDetails() {
       const [copied, setCopied] = useState(false);
+      // const [prevReferenceNumber,setPrevReferenceNumber]=useState(()=>localStorage.getItem("prevRefNumber"))
   const { data, isLoading,refetch ,isRefetching} = useGetCardDetails();
     const acct = data?.data?.student?.OtherVirtualAccount
 ;
-  const { paymentAmount } = data?.student?.paymentDetails || {};
+  const { feeAmount } = data?.data?.student || {};
 console.log(data?.student)
     const navigate =useNavigate()
     const handleClick = function () {
@@ -20,11 +21,59 @@ console.log(data?.student)
     //   navigate("/home/payment-form");
     };
 
-const handleConfirm =  function(){
+// const handleConfirm = async function(){
   
-    refetch()
-  
-}
+//     const data= await refetch()
+//   console.log("refetch daya",data.data.student)
+// const studentObj = data?.data?.student;
+// if (studentObj && ('reference' in studentObj)) {
+//   // the key 'reference' exists (possibly undefined)
+//   localStorage.setItem("prevRefNumber",studentObj.reference
+//   )
+//   // setPrevReferenceNumber(studentObj.reference)
+//   toast.success("transaction sucessful")
+// }
+
+
+// }
+
+  const handleConfirm = async () => {
+    const result = await refetch();
+    const student = result.data?.data?.student;
+
+    if (!student) {
+      toast.error("Error: student data missing");
+      return;
+    }
+
+    if (!("reference" in student)) {
+      toast.error("Error: transaction not successful");
+      return;
+    }
+
+    const newRef = student.reference;
+    if (newRef === undefined || newRef === null) {
+      toast.error("Error: reference is invalid");
+      return;
+    }
+
+    const prevRef = localStorage.getItem("prevRefNumber");
+    if (prevRef !== null && prevRef === String(newRef)) {
+      toast.error("Error: duplicate reference, transaction already processed");
+      return;
+    }
+
+    try {
+      localStorage.setItem("prevRefNumber", String(newRef));
+    } catch (err) {
+      console.error("localStorage error:", err);
+    }
+
+    toast.success("Transaction successful");
+    navigate("/home/receipt")
+  };
+
+
       const handleCopy = () => {
         // Use the Clipboard API to copy the text to the clipboard
         navigator.clipboard
@@ -88,11 +137,11 @@ const handleConfirm =  function(){
           <div className="flex justify-between items-center py-5">
             <p className="text-stone-600 text-[1rem] mb-0"> Total Fee:</p>
             <h3 className="flex font-semibold relative text-stone-800 items-center gap-x-2 mb-0">
-              {isLoading ? <BlueMiniLoader /> : formatNaira(paymentAmount)}
+              {isLoading ? <BlueMiniLoader /> : formatNaira(feeAmount)}
             </h3>
           </div>
         </div>
-        <Button className="my-6 py-3 w-full" onClick={handleConfirm}>{isRefetching?<MiniLoader/>:"Confirm transaction"}</Button>
+        <Button className="my-6 py-3 w-full" onClick={handleConfirm}>Confirm transaction</Button>
 
         {isRefetching && (
           <div className="fixed  bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
@@ -113,7 +162,7 @@ const handleConfirm =  function(){
           </div>
         )}
 
-        {isLoading && (
+        {isRefetching && (
           <article className="fixed p-3 bg-black bg-opacity-50 z-30  backdrop-blur-sm max-sm:hidden md:block inset-0 grid place-items-center">
             <div className="bg-white py-[4.5rem] px-40 rounded-lg">
               <h2 className="text-secondary600 mb-16 text-[1.9rem] text-center font-semibold">
