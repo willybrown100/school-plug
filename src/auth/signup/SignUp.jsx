@@ -385,8 +385,8 @@ function StudentInfo({ userId }) {
             Yaba Tech
           </option>
           <option value="Unilag">Unilag</option>
-          <option value="Unilag">Lasu</option>
-          <option value="Unilag">Unilorin</option>
+          <option value="Lasu">Lasu</option>
+          <option value="Unilorin">Unilorin</option>
         </select>
         <input
           type="text"
