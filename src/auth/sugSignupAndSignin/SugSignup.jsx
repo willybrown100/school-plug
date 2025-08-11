@@ -279,6 +279,7 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             <option value="UNIJ">UNIJ</option>
             <option value="UNInice">UNInice</option>
             <option value="UNIbrown">UNIbrown</option>
+            <option value="UNIbrown">willyschool</option>
           </select>
           <input
             type="text"
