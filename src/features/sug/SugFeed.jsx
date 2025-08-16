@@ -164,7 +164,7 @@ console.log(trends)
       {posts?.length === 0 && (
         <div className="flex justify-center items-center min-h-[calc(100vh-4.5rem)">
           <h4 className="capitalize text-stone-700 pb-[10rem]">
-            Nothind here yet, start by creating a post
+            Nothing here yet, start by creating a post
           </h4>
         </div>
       )}
