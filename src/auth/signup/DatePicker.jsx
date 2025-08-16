@@ -81,12 +81,13 @@ const CustomDatePicker = ({ placeholder }) => {
   return (
     <>
       <DatePicker
+    
         value={selectedDate ? formatDate(selectedDate) : null}
         placeholderText={placeholder}
         onChange={handleDateChange}
         required
         // {icon}
-        className=" w-full outline-none bg-transparent overflow-scroll placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
+        className=" w-full flex-1 outline-none  bg-transparent overflow-scroll placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
         renderCustomHeader={({ date, changeMonth, changeYear }) => (
           <CustomHeader
             date={date}

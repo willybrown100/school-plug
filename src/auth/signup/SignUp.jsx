@@ -390,6 +390,7 @@ function StudentInfo({ userId }) {
             Yaba Tech
           </option>
           <option value="Unilag">Unilag</option>
+          <option value="oyo uni">oyo uni</option>
           <option value="UNIbrown">UNIbrown</option>
           <option value="Lasu">Lasu</option>
           <option value="Unilorin">Unilorin</option>
@@ -439,12 +440,15 @@ function StudentInfo({ userId }) {
           onChange={(e) => setLevel(e.target.value)}
           className="w-full placeholder:capitalize md:p-2 border border-stone-700 p-2 rounded-md"
         />
-        <div className="grid grid-cols-1 relative  rounded-md border-stone-700 w-full border">
+        <div className="grid grid-cols-1 relative   rounded-md border-stone-700 w-full border">
           <div className="flex items-center gap-x-1">
             <HiOutlineCalendar className="ml-2 text-lg text-stone-600" />
+            <div className="flex-grow-1">
+
             <CustomDatePicker placeholder={`year of admission`} />
+            </div>
           </div>
-          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
+          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold"/>
         </div>
 
         <div className="grid grid-cols-1 relative  rounded-md border-stone-700 border">
