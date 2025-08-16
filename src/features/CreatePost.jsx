@@ -10,7 +10,7 @@ import { studentCreatePost } from '../services/contactApi';
 import MiniLoader from "../ui/MiniLoader"
 import toast from 'react-hot-toast';
 import useGetUser from '../hooks/useGetUser';
-
+import ProfileCircle from "/public/images/profile-circle.svg"; 
 
 
 export default function CreatePost() {
@@ -157,11 +157,11 @@ console.log(selectedImage);
           <div className="overflow-y-scroll overflow-x-hidden scroll">
             <div className="flex gap-x-2 mt-2">
               <div className="rounded-full w-[4.9rem] h-[4rem] overflow-hidden">
-                <img
+               {user?.profilePhoto? <img
                   src={img}
-                  alt="img"
+                  alt="image"
                   className="object-cover w-full h-full self-start"
-                />
+                />:<ProfileCircle/>}
               </div>
               <textarea
                 ref={inputRef}

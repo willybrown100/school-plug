@@ -14,7 +14,7 @@ setOpen((prev)=>!prev)
   }
 
   const { token: userToken } = useUser();
-  console.log(userToken)
+  console.log("usertokn",userToken)
     useLayoutEffect(()=>{
  if( userToken){
   redirect("/home/homePage/feed")

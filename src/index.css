@@ -462,8 +462,14 @@ transform: translateX(20px);
 
 
 
-.landingpage-header{
+/* .landingpage-header{
  background: linear-gradient(180deg, #e6ffff 0%, #d6dcff 50%, #ffffff 100%);
+} */
+.landingpage-header {
+  background-image: url('/images/Hero section.png');
+  background-size: cover; /* makes it fill the area */
+  background-position: center; /* centers it */
+  background-repeat: no-repeat; /* prevents tiling */
 }
 
 @keyframes bounce {
