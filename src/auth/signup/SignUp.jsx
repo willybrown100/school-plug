@@ -377,27 +377,50 @@ function StudentInfo({ userId }) {
       <form className="flex flex-col p-3 gap-y-4" onSubmit={handleSubmit}>
         <select
           required
-          value={university}
+    
+               value={university}
           className=" border border-stone-700 p-2 rounded-md"
-          onChange={(e) => setUniversity(e.target.value)}
+            onChange={(e) => setUniversity(e.target.value)}
+         
         >
+                <option value="" disabled >
+    Select school
+  </option>
           <option className="capitalize" value="Yaba Tech">
             Yaba Tech
           </option>
           <option value="Unilag">Unilag</option>
+          <option value="UNIbrown">UNIbrown</option>
           <option value="Lasu">Lasu</option>
           <option value="Unilorin">Unilorin</option>
         </select>
-        <input
-          type="text"
-          value={faculty}
-          placeholder="faculty (input only faculty name)"
-          id="course"
-          className="w-full  md:p-2 placeholder:capitalize border border-stone-700 p-2 rounded-md"
-          onChange={(e) => setFaculty(e.target.value)}
+       
+ <select
           required
-        />
+           value={faculty}
+          className=" border border-stone-700 p-2 rounded-md"
+          onChange={(e) => setFaculty(e.target.value)}
+        >
+          <option value="" disabled >
+    Select faculty
+  </option>
+         <option value="Arts">Arts</option>
+<option value="Science">Science</option>
+<option value="Social Sciences">Social Sciences</option>
+<option value="Education">Education</option>
+<option value="Engineering">Engineering</option>
+<option value="Law">Law</option>
+<option value="Medicine">Medicine</option>
+<option value="Pharmacy">Pharmacy</option>
+<option value="Agriculture">Agriculture</option>
+<option value="Environmental Sciences">Environmental Sciences</option>
+<option value="Management Sciences">Management Sciences</option>
+<option value="Dentistry">Dentistry</option>
+<option value="Basic Medical Sciences">Basic Medical Sciences</option>
+<option value="Veterinary Medicine">Veterinary Medicine</option>
+<option value="Communication / Media Studies">Communication / Media Studies</option>
 
+        </select>
         <input
           type="text"
           value={department}

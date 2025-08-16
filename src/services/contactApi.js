@@ -224,6 +224,7 @@ export async function getParticularSchData(schoolInfoId, page = 1,token) {
 
 export async function EducationalSignUp(data) {
   console.log("edu",data);
+  if(!data)return
   try {
     const response = await fetch(
       "https://student-plug.onrender.com/api/auth/studentinfo",
