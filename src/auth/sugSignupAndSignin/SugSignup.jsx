@@ -499,7 +499,7 @@ function OpenModal() {
         <button
           type="button"
           onClick={handleClick}
-          className="mb-0 capitalize bg-transparent pl-2 font-heading font-medium"
+          className="mb-4  capitalize bg-transparent pl-2 font-heading font-medium"
         >
           {fileName
             ? `${fileName}   (Click to import) `

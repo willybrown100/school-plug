@@ -393,6 +393,7 @@ function StudentInfo({ userId }) {
           <option value="UNIbrown">UNIbrown</option>
           <option value="Lasu">Lasu</option>
           <option value="Unilorin">Unilorin</option>
+          <option value="UNIBEN">UNIBEN</option>
         </select>
        
  <select
