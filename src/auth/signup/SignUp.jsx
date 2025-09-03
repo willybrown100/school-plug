@@ -13,7 +13,6 @@ import {
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
-
 import CustomDatePicker, { CustomDatePicker2 } from "./DatePicker";
 import Button from "../../ui/Button";
 import signUp, {
@@ -107,8 +106,9 @@ export default function SignUp() {
         {showSignup && (
           <div className="flex flex-col gap-2">
             <Link to="/" className="flex justify-center">
-              <img src="\images\shool-pluglogo.png" alt="img" />
+              <img src="/images/schoolplug.svg" alt="img" />
             </Link>
+       
             <h3 className="capitalize font-fontHeading mb-0 text-center font-semibold">
               Nice to have you, Sign up
             </h3>
@@ -440,20 +440,19 @@ function StudentInfo({ userId }) {
           onChange={(e) => setLevel(e.target.value)}
           className="w-full placeholder:capitalize md:p-2 border border-stone-700 p-2 rounded-md"
         />
-        <div className="grid grid-cols-1 relative   rounded-md border-stone-700 w-full border">
-          <div className="flex items-center gap-x-1">
-            <HiOutlineCalendar className="ml-2 text-lg text-stone-600" />
-            <div className="flex-grow-1">
+ 
 
-            <CustomDatePicker placeholder={`year of admission`} />
-            </div>
+        <div className="grid grid-cols-[auto,1fr,auto] items-center relative  rounded-md border-stone-700 border">
+            <HiOutlineCalendar className=" text-lg text-stone-600 ml-2" />
+          <div className=" grid items-center gap-x-1">
+            <CustomDatePicker placeholder="year of Admission" />
           </div>
-          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold"/>
+          <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />
         </div>
 
-        <div className="grid grid-cols-1 relative  rounded-md border-stone-700 border">
-          <div className="flex items-center gap-x-1">
+        <div className="grid grid-cols-[auto,1fr,auto] items-center relative  rounded-md border-stone-700 border">
             <HiOutlineCalendar className=" text-lg text-stone-600 ml-2" />
+          <div className=" grid items-center gap-x-1">
             <CustomDatePicker2 placeholder="year of graduation" />
           </div>
           <HiChevronDown className="absolute right-2 top-3 text-lg font-semibold" />

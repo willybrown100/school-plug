@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, {   useState } from "react";
+import React, {    useState } from "react";
 import { useForm } from "react-hook-form";
 import {   studentComment, studentLikePost } from "../services/contactApi";
 import useUser from "../hooks/useUser";
@@ -55,7 +55,7 @@ export default function StudentPerPost({ item }) {
   
   const openImageModal = (index) => setSelectedImageIndex(index);
 
- 
+  
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
@@ -447,9 +447,16 @@ export default function StudentPerPost({ item }) {
               </button>
             </div>
             {showEmojiPicker && (
-              <div className="absolute right-3 top-2 z-40 max-h-[20rem] overflow-y-auto">
+              
+              <>
+                      <div
+      className="fixed inset-0 bg-transparent bg-opacity-40 z-40"
+      onClick={() => setShowEmojiPicker(false)}
+      />
+                <div className="absolute right-3 top-2 z-40 max-h-[20rem] overflow-y-auto" >
                 <EmojiPicker onEmojiClick={handleEmojiClick2} />
               </div>
+              </>
             )}
           </form>
         </div>
@@ -556,9 +563,15 @@ export default function StudentPerPost({ item }) {
             </button>
           </form>
           {showEmojiPicker && (
+            <>
+             <div
+      className="fixed inset-0 bg-transparent bg-opacity-40 z-40"
+      onClick={() => setShowEmojiPicker(false)}
+      />
             <div className="absolute right-3 top-2 z-40">
               <EmojiPicker onEmojiClick={handleEmojiClick} />
             </div>
+      </>
           )}
         </div>
       )}

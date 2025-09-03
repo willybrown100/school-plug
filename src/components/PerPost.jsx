@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import useGetSugUser from "../hooks/useGetSugUser";
 
 import { useState } from "react";
@@ -53,6 +53,8 @@ export default function PerPost({ item, onClick, open }) {
  const handleToggle = () => {
    setIsExpanded((prev) => !prev);
  };
+  const pickerRef = useRef(null);
+
 
 
     const handleEmojiClick2 = (emojiData) => {
@@ -130,6 +132,24 @@ export default function PerPost({ item, onClick, open }) {
       return `${years} year${years !== 1 ? "s" : ""} ago`;
     }
   };
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(e.target )
+      ) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    if (showEmojiPicker) {
+      window.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [showEmojiPicker]);
   const { mutate, isLoading: isLiking } = useMutation({
     mutationFn: sugLikPost,
     onSuccess: () => {
@@ -140,7 +160,7 @@ export default function PerPost({ item, onClick, open }) {
     onError: (error) => {
       toast.error(error.message);
           setHasLiked((prev) => {
-            setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); // Revert likes count
+            setAllLikes((likes) => (prev ? likes + 1 : likes - 1)); 
             return !prev;
           });
     },
@@ -447,9 +467,16 @@ export default function PerPost({ item, onClick, open }) {
                 {isCommenting ? <MiniLoader /> : <span>&uarr;</span>}
               </button>
               {showEmojiPicker && (
-                <div className="absolute right-3 top-2 z-40">
+               <>
+                              <div
+      className="fixed inset-0 bg-transparent bg-opacity-40 z-40"
+      onClick={() => setShowEmojiPicker(false)}
+      />
+                <div className="absolute right-3 top-2 z-40" ref={pickerRef}>
                   <EmojiPicker onEmojiClick={handleEmojiClick2} />
                 </div>
+               </>
+           
               )}
             </form>
           </div>

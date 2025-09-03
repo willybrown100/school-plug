@@ -87,7 +87,7 @@ const CustomDatePicker = ({ placeholder }) => {
         onChange={handleDateChange}
         required
         // {icon}
-        className=" w-full flex-1 outline-none  bg-transparent overflow-scroll placeholder:capitalize placeholder:pl-6 relative  p-[7px]  rounded-md"
+   className=" w-full bg-transparent outline-none placeholder:capitalize placeholder:pl-6 relative p-[7px]  "
         renderCustomHeader={({ date, changeMonth, changeYear }) => (
           <CustomHeader
             date={date}

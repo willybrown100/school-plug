@@ -43,22 +43,6 @@ export default function PostModal() {
       },
     });
 
-  // const handleImageChange = (event) => {
-  //   const file = Array.from(event.target.files);
-  //     // const file = event.target.files[0];
-  //   if (file.length) {
-  //     setselectedImage((prevImg) => [...prevImg, file]);
-
-  //     file.forEach((file) => {
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => {
-  //         setImagePreview((prevImages) => [...prevImages, reader.result]); 
-  //       };
-  //       reader.readAsDataURL(file);
-  //     });
-  //   }
-
-  // };
 
    const handleImageChange = (event) => {
      const file = event.target.files[0];
@@ -125,7 +109,7 @@ export default function PostModal() {
           <div className="flex justify-between items-center">
             <div className="flex gap-x-2 items-center">
               <img
-                src={img ? img : ""}
+                src={img ? img : "/images/profile-circle.svg"}
                 alt={user?.name}
                 className="w-[3rem] h-[3rem] rounded-full object-cover"
               />
@@ -149,7 +133,7 @@ export default function PostModal() {
               placeholder="what's happening"
               onChange={(e) => setTextContent(e.target.value)}
               value={textContent}
-              className="placeholder:capitalize p-2 h-[19rem] w-full border  border-stone-400 rounded-lg mt-3 focus:outline-none"
+              className="placeholder:capitalize p-2 h-[12rem] w-full border  border-stone-400 rounded-lg mt-3 focus:outline-none"
             />
             <div>
               {imagePreview && (
@@ -159,7 +143,7 @@ export default function PostModal() {
                       <img
                         src={image}
                         alt={`Selected ${i}`}
-                        className="h-[11rem] w-[7rem] object-cover rounded-lg"
+                        className="h-[8rem] w-[7rem] object-cover rounded-lg"
                         key={i}
                       />
                       <button
