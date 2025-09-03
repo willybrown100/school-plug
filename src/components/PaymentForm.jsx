@@ -164,12 +164,15 @@ const handleChange = (e) => {
 if (selectedFee?.selectedValue){
   console.log("Form submitted:", formData);
  mutate(formData);
-}else if (selectedFee?.event ==="event"){
+}else if (selectedFee?.event === "event"){
 ticketPurchase(studentInfo);
 console.log("Form submitted:", studentInfo);
 }
   };
   return (
+    <section className="relative h-[100dvh]">
+
+
     <form
       onSubmit={handleSubmit}
       className="max-md:bg-white  p-4 rounded-lg pt-[8rem] min-h-screen  w-full max-sm:pt-[7.5rem] md:pt-[10.8rem] lg:pt-[5.4rem] shadow-md mx-auto  pb-[5rem]"
@@ -492,6 +495,7 @@ console.log("Form submitted:", studentInfo);
         </p>
       </div>
     </form>
+        </section>
   );
 };
 

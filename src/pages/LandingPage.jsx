@@ -108,12 +108,12 @@ setOpen((prev)=>!prev)
 
           <div className="mt-3 relative ">
             <img
-              src="\images\landingpageeimgsmall.png"
+              src="/images/schoolmobile.svg"
               alt="img"
-              className=" absolute md:top-[-4.5rem]  lg:top-[4.5rem]  md:left-3 lg:left-[-2rem] md:h-full z-20"
+              className=" absolute md:top-[-4.5rem] top-[-2.2rem] left-[-4rem] lg:top-[4.5rem]  md:left-3 lg:left-[-5rem] md:h-full z-20"
             />
             <img
-              src="\images\landinpageimg.png"
+              src="/images/dashboard.svg"
               alt="img"
               className=" w-full md:hidden z-40"
             />
@@ -123,7 +123,7 @@ setOpen((prev)=>!prev)
               className="hidden md:block lg:hidden m-auto z-40"
             />
             <img
-              src="\images\landinglg.png"
+              src="/images/Dashboard (1) 1 (1).svg"
               alt="img"
               className="hidden  lg:block m-auto z-40 w-full"
             />
@@ -131,7 +131,7 @@ setOpen((prev)=>!prev)
 
         </div>
       </header>
-      <section className="p-6  md:grid flex md:w-[650px] lg:w-[1200px] m-auto flex-col gap-y-6 md:grid-cols-2 lg:grid-cols-4  md:gap-x-4 md:gap-y-10">
+      <section className="p-6 pt-12 md:grid flex md:w-[650px] lg:w-[1200px] m-auto flex-col gap-y-6 md:grid-cols-2 lg:grid-cols-4  md:gap-x-4 md:gap-y-10">
         <div className="bg-[#E6E4FF] py-8 rounded-md  bg-custom-gradient">
           <img src="\images\enjoycampus.png" alt="img" className="m-auto " />
           <div>
