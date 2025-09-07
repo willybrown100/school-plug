@@ -1,6 +1,7 @@
 import { signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { auth, provider } from "../services/firebase-config";
 
+
 export default async function signUp(data) {
   try {
     const response = await fetch(
@@ -13,12 +14,18 @@ export default async function signUp(data) {
         body: JSON.stringify(data),
       }
     );
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message);
-    }
-
+    
     const result = await response.json();
+    
+    if (!response.ok) {
+      // const error = await response.json();
+      throw (result);
+    }
+    
+    if(result.isRegistered===false){
+
+    // searchParams.set("value", "false")
+    }
     if (result) {
       localStorage.setItem("userDetails", JSON.stringify(result));
     }
@@ -27,6 +34,7 @@ export default async function signUp(data) {
     return result;
   } catch (error) {
     console.error(error);
+ 
     throw error;
   }
 }

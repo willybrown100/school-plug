@@ -21,21 +21,7 @@ console.log(data?.student)
     //   navigate("/home/payment-form");
     };
 
-// const handleConfirm = async function(){
-  
-//     const data= await refetch()
-//   console.log("refetch daya",data.data.student)
-// const studentObj = data?.data?.student;
-// if (studentObj && ('reference' in studentObj)) {
-//   // the key 'reference' exists (possibly undefined)
-//   localStorage.setItem("prevRefNumber",studentObj.reference
-//   )
-//   // setPrevReferenceNumber(studentObj.reference)
-//   toast.success("transaction sucessful")
-// }
 
-
-// }
 
   const handleConfirm = async () => {
     const result = await refetch();

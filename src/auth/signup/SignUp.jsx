@@ -53,18 +53,21 @@ export default function SignUp() {
     if (value !== password) {
       return "Passwords do not match";
     }
-    return true; // Validation passed
+    return true; 
   };
-  const { mutate, isLoading } = useMutation({
+  const { mutateAsync, isLoading } = useMutation({
     mutationFn: signUp,
-    onSuccess: () => {
-      searchParams.set("value", "false"); // Set as string for URL compatibility
+    onSuccess: (data) => {
+      console.log("response",data)
+      searchParams.set("value", "false"); 
       setSearchParams(searchParams);
       setShowSignup(false);
     },
-    onError: (error) => {
+ 
+    onError: () => {
+
       setShowSignup(true);
-      toast.error(error.message);
+ 
     },
   });
 
@@ -81,12 +84,31 @@ export default function SignUp() {
       toast.error(error.message);
     },
   });
+  // const onSubmit = (data, e) => {
+  //   e.preventDefault();
+  //   const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
+  //   mutate(user);
+  // };
+const onSubmit = async (data, e) => {
+  e.preventDefault();
+  const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
 
-  const onSubmit = (data, e) => {
-    e.preventDefault();
-    const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
-    mutate(user);
-  };
+  try {
+    const result = await mutateAsync(user);
+    console.log("✅ Success:", result);
+  
+  } catch (error) {
+    
+    console.log("❌ Error object:", error); 
+      if(error.isRegistered===false){
+      searchParams.set("value", "false"); 
+      setSearchParams(searchParams);
+      setShowSignup(false);
+    }else if(error.isRegistered===true){
+        toast.error(error.message);
+    }
+  }
+};
 
   useEffect(() => {
     // Only set the default value if `value` is not present in the URL
@@ -383,7 +405,7 @@ function StudentInfo({ userId }) {
             onChange={(e) => setUniversity(e.target.value)}
          
         >
-                <option value="" disabled >
+                <option value="Select school" disabled >
     Select school
   </option>
           <option className="capitalize" value="Yaba Tech">
