@@ -390,11 +390,17 @@ function StudentInfo({ userId }) {
             Yaba Tech
           </option>
           <option value="Unilag">Unilag</option>
-          <option value="oyo uni">oyo uni</option>
-          <option value="UNIbrown">UNIbrown</option>
+          <option value="UI">UI</option>
+          <option value="UNIPORT">UNIPORT</option>
           <option value="Lasu">Lasu</option>
-          <option value="Unilorin">Unilorin</option>
+          <option value="Unilorin">UNILORIN</option>
           <option value="UNIBEN">UNIBEN</option>
+          <option value="FUTO">FUTO</option>
+          <option value="UNN">UNN</option>
+          <option value="ABU">ABU</option>
+          <option value="UNIOSUN">UNIOSUN</option>
+          
+          <option value="DELSU">DELSU</option>
         </select>
        
  <select
