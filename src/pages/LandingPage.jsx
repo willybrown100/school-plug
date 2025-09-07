@@ -1,25 +1,36 @@
-import React, {  useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from "react";
 
-import SideBar from "../components/SideBar"
-import { Link, redirect, useNavigate } from 'react-router-dom'
-import LandingPageFooter from "../components/LandingPageFooter"
-import useUser from '../hooks/useUser'
-
+import SideBar from "../components/SideBar";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import LandingPageFooter from "../components/LandingPageFooter";
+import useUser from "../hooks/useUser";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
-  const navigate =useNavigate()
-  const [open,setOpen]=useState()
-  const handleClick = function(){
-setOpen((prev)=>!prev)
-  }
+  const navigate = useNavigate();
+  const [open, setOpen] = useState();
+  const handleClick = function () {
+    setOpen((prev) => !prev);
+  };
 
   const { token: userToken } = useUser();
-  console.log("usertokn",userToken)
-    useLayoutEffect(()=>{
- if( userToken){
-  redirect("/home/homePage/feed")
- }
-    },[userToken,navigate])
+  console.log("usertokn", userToken);
+  useLayoutEffect(() => {
+    if (userToken) {
+      redirect("/home/homePage/feed");
+    }
+  }, [userToken, navigate]);
+  const dollScaleVariant = {
+    pulse: {
+      scale: [1, 1.1, 1], // Starts at normal size (1), scales up to 110% (1.1), then back to normal size (1)
+      transition: {
+        duration: 1.3, // How long one pulse (in -> out) takes
+        ease: "easeInOut", // Smooth acceleration and
+        repeat: Infinity, // Repeat forever
+        repeatType: "loop",
+      },
+    },
+  };
   const handleClick2 = () => navigate("/signup");
   return (
     <article className=" ">
@@ -64,26 +75,25 @@ setOpen((prev)=>!prev)
 
         <div className="lg:flex lg:justify-between gap-x-2 items-center p-6 ">
           <div className="mt-4 max-lg:flex max-lg:flex-col  max-lg:justify-center items-center">
-            <div className='pb-7'>
-
-            <p className="bg-[#FAFAFA80] md:mb-10 px-2 py-1 text-secondary700 font-medium inline  border rounded-full border-stone-50">
-              Within school activities
-            </p>
+            <div className="pb-7">
+              <p className="bg-[#FAFAFA80] md:mb-10 px-2 py-1 text-secondary700 max-sm:text-[#174489] font-medium inline  border rounded-full border-stone-50">
+                Within school activities
+              </p>
             </div>
             <div>
-              <h1 className="max-lg:text-center font-semibold text-[#2B70DB] font- md:hidden">
+              <h1 className="max-lg:text-center font-semibold text-[#2B70DB] max-sm:text-[#174489] font- md:hidden">
                 Campus
               </h1>
-              <h1 className="max-lg:text-center text-[#2B70DB] font-semibold md:block hidden">
+              <h1 className="max-lg:text-center text-[#2B70DB] max-sm:text-[#174489] font-semibold md:block hidden">
                 Campus activities
               </h1>
-              <h1 className="text-[#2B70DB] max-lg:text-center font-semibold md:hidden">
+              <h1 className="text-[#2B70DB] max-lg:text-center max-sm:text-[#174489] font-semibold md:hidden">
                 activities much
               </h1>
-              <h1 className="text-[#2B70DB] max-lg:text-center font-semibold hidden md:block">
+              <h1 className="text-[#2B70DB] max-lg:text-center max-sm:text-[#174489] font-semibold hidden md:block">
                 much easier
               </h1>
-              <h1 className="text-[#2B70DB] max-lg:text-center font-semibold md:hidden">
+              <h1 className="text-[#2B70DB] max-lg:text-center max-sm:text-[#174489] font-semibold md:hidden">
                 easier
               </h1>
             </div>
@@ -110,12 +120,12 @@ setOpen((prev)=>!prev)
             <img
               src="/images/schoolmobile.svg"
               alt="img"
-              className=" absolute md:top-[-4.5rem] top-[-2.2rem] left-[-4rem] lg:top-[4.5rem]  md:left-3 lg:left-[-5rem] md:h-full z-20"
+              className=" absolute max-sm:h-[400px] md:top-[-4.5rem] top-[-2.2rem] left-[-4rem] lg:top-[4.5rem]  md:left-3 lg:left-[-5rem] md:h-full z-20"
             />
             <img
               src="/images/dashboard.svg"
               alt="img"
-              className=" w-full md:hidden z-40"
+              className=" w-full  md:hidden z-40"
             />
             <img
               src="\images\landingpageimgMd.png"
@@ -128,7 +138,6 @@ setOpen((prev)=>!prev)
               className="hidden  lg:block m-auto z-40 w-full"
             />
           </div>
-
         </div>
       </header>
       <section className="p-6 pt-12 md:grid flex md:w-[650px] lg:w-[1200px] m-auto flex-col gap-y-6 md:grid-cols-2 lg:grid-cols-4  md:gap-x-4 md:gap-y-10">
@@ -163,14 +172,20 @@ setOpen((prev)=>!prev)
         alt="img"
         className="w-full md:px-14 py-6  md:block hidden lg:hidden"
       />
-       <img
+      <img
         src="\assets\div.divider3.svg"
         alt="img"
         className="w-[60%] m-auto md:px-14 pt-6 pb-28   hidden lg:block"
       />
       <section className="p-3 ">
-        <div className="bg-[#F3F0FF] bg p-3 rounded-xl md:w-[600px] lg:w-[800px] m-auto py-10">
-          <img src="\images\babi.png" alt="img" className="m-auto" />
+        <div className="bg-[#F3F0FF] bg p-3 rounded-[2rem] md:w-[600px] lg:w-[800px] m-auto py-10">
+          <motion.img
+            src="/assets/doll.png.svg"
+            alt="img"
+            className="m-auto"
+            variants={dollScaleVariant}
+            animate="pulse"
+          />
           <h2 className="text-secondary700 font-medium text-center">
             You’ve come this far because you were directed
           </h2>
@@ -209,7 +224,3 @@ setOpen((prev)=>!prev)
     </article>
   );
 }
-
-
-
-
