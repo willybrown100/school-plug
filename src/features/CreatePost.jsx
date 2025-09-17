@@ -10,7 +10,6 @@ import { studentCreatePost } from '../services/contactApi';
 import MiniLoader from "../ui/MiniLoader"
 import toast from 'react-hot-toast';
 import useGetUser from '../hooks/useGetUser';
-import ProfileCircle from "/public/images/profile-circle.svg"; 
 
 
 export default function CreatePost() {
@@ -161,7 +160,11 @@ console.log(selectedImage);
                   src={img}
                   alt="image"
                   className="object-cover w-full h-full self-start"
-                />:<ProfileCircle/>}
+                />:<img
+                  src="images/profile-circle.svg"
+                  alt="image"
+                  className="object-cover w-full h-full self-start"
+                />}
               </div>
               <textarea
                 ref={inputRef}

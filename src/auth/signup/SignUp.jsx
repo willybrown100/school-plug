@@ -390,7 +390,7 @@ function StudentInfo({ userId }) {
     <div className="flex w-full flex-col gap-y-4">
       <div className="flex flex-col items-center gap-2">
         <Link to="/">
-          <img src="/images/shool-pluglogo.png" alt="img" />
+          <img src="/images/schoolplug.svg" alt="img" />
         </Link>
         <h3 className="font-fontHeading font-semibold text-center">
           student info
@@ -401,7 +401,7 @@ function StudentInfo({ userId }) {
           required
     
                value={university}
-          className=" border border-stone-700 p-2 rounded-md"
+          className=" border border-stone-700 h-10 p-2 rounded-md"
             onChange={(e) => setUniversity(e.target.value)}
          
         >
@@ -428,7 +428,7 @@ function StudentInfo({ userId }) {
  <select
           required
            value={faculty}
-          className=" border border-stone-700 p-2 rounded-md"
+          className=" border h-10  border-stone-700 p-2 rounded-md"
           onChange={(e) => setFaculty(e.target.value)}
         >
           <option value="" disabled >
