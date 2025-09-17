@@ -53,18 +53,21 @@ export default function SignUp() {
     if (value !== password) {
       return "Passwords do not match";
     }
-    return true; // Validation passed
+    return true; 
   };
-  const { mutate, isLoading } = useMutation({
+  const { mutateAsync, isLoading } = useMutation({
     mutationFn: signUp,
-    onSuccess: () => {
-      searchParams.set("value", "false"); // Set as string for URL compatibility
+    onSuccess: (data) => {
+      console.log("response",data)
+      searchParams.set("value", "false"); 
       setSearchParams(searchParams);
       setShowSignup(false);
     },
-    onError: (error) => {
+ 
+    onError: () => {
+
       setShowSignup(true);
-      toast.error(error.message);
+ 
     },
   });
 
@@ -81,12 +84,31 @@ export default function SignUp() {
       toast.error(error.message);
     },
   });
+  // const onSubmit = (data, e) => {
+  //   e.preventDefault();
+  //   const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
+  //   mutate(user);
+  // };
+const onSubmit = async (data, e) => {
+  e.preventDefault();
+  const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
 
-  const onSubmit = (data, e) => {
-    e.preventDefault();
-    const user = { ...data, agreedToTerms: data.agreedToTerms === "on" };
-    mutate(user);
-  };
+  try {
+    const result = await mutateAsync(user);
+    console.log("✅ Success:", result);
+  
+  } catch (error) {
+    
+    console.log("❌ Error object:", error); 
+      if(error.isRegistered===false){
+      searchParams.set("value", "false"); 
+      setSearchParams(searchParams);
+      setShowSignup(false);
+    }else if(error.isRegistered===true){
+        toast.error(error.message);
+    }
+  }
+};
 
   useEffect(() => {
     // Only set the default value if `value` is not present in the URL
@@ -368,7 +390,7 @@ function StudentInfo({ userId }) {
     <div className="flex w-full flex-col gap-y-4">
       <div className="flex flex-col items-center gap-2">
         <Link to="/">
-          <img src="/images/shool-pluglogo.png" alt="img" />
+          <img src="/images/schoolplug.svg" alt="img" />
         </Link>
         <h3 className="font-fontHeading font-semibold text-center">
           student info
@@ -379,11 +401,11 @@ function StudentInfo({ userId }) {
           required
     
                value={university}
-          className=" border border-stone-700 p-2 rounded-md"
+          className=" border border-stone-700 h-10 p-2 rounded-md"
             onChange={(e) => setUniversity(e.target.value)}
          
         >
-                <option value="" disabled >
+                <option value="Select school" disabled >
     Select school
   </option>
           <option className="capitalize" value="Yaba Tech">
@@ -406,7 +428,7 @@ function StudentInfo({ userId }) {
  <select
           required
            value={faculty}
-          className=" border border-stone-700 p-2 rounded-md"
+          className=" border h-10  border-stone-700 p-2 rounded-md"
           onChange={(e) => setFaculty(e.target.value)}
         >
           <option value="" disabled >

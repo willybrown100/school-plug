@@ -454,6 +454,7 @@ const pathn = pathname.split("/").at(2);
   const [isOpen, setOpen] = useState(false);
   const handleClick = function () {
     setOpen((isOpen) => !isOpen);
+    
   };
   const handleClose = function () {
     setOpen(false);
