@@ -13,7 +13,7 @@ export default function SchoolInfoEvents() {
             uniProfilePicture ? uniProfilePicture : "/images/profile-circle.svg"
           }
           alt="person"
-          className="rounded-full w-[5rem] h-[5rem]"
+          className="rounded-full object-cover h-14  w-14"
         />
         <div>
           <h4 className="uppercase mb-1">{university}</h4>

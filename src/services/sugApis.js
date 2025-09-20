@@ -161,7 +161,8 @@ export async function sugLikPost({ postId, userId,isAdminPost }) {
   console.log({ postId, userId });
   try {
     const response = await fetch(
-      ` https://student-plug.onrender.com/api/students/likepost/${postId}`,
+      ` https://student-plug.onrender.com/api/sugPost/${postId}/like`,
+      // ` https://student-plug.onrender.com/api/students/likepost/${postId}`,
       {
         method: "POST",
         headers: {

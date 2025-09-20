@@ -2,7 +2,6 @@
 import  {  useEffect,   useState } from "react";
 import useUser from "../hooks/useUser";
 // import { useSocket } from "./SocketProvider";
-import useFetchNotification from "../hooks/useFetchNotification";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "./SocketProvider";
 
@@ -14,8 +13,6 @@ export default function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const {  setNewPost} = useSocket();
-  const { isLoading } = useFetchNotification();
-  console.log(isLoading);
   const session = userToken;
   // const userId = useMemo(() => studentId, [studentId]);
   // const url = useMemo(() => "wss://student-plug.onrender.com", []);
@@ -166,7 +163,7 @@ useEffect(() => {
         const result = await response.json();
 
         if (result?.message === "Token has expired") {
-          console.log(result)
+          console.log("user from",result)
           localStorage.removeItem("userDetails");
           navigate("/signin");
         } else {

@@ -53,7 +53,7 @@ useEffect(() => {
   }
 }, [data, hasNextPage]);
 
-  console.log(isFetchingNextPage);
+ 
   useEffect(() => {
     const handleObserver = (entries) => {
       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
@@ -141,19 +141,7 @@ useEffect(() => {
 
 
 
-//   const handleScrollToTop = () => {
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   };
 
-//   return (
-//     <button 
-//       onClick={handleScrollToTop} 
-//       style={{ position: 'fixed', bottom: '20px', right: '20px' }}
-//     >
-//       Scroll to Top
-//     </button>
-//   );
-// };
 
 
 

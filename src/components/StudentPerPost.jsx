@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, {    useState } from "react";
 import { useForm } from "react-hook-form";
 import {   studentComment, studentLikePost } from "../services/contactApi";
@@ -27,7 +27,6 @@ export default function StudentPerPost({ item }) {
     department,
     _id,
     user,
-
     isLike,
     likes,
     userId,
@@ -40,19 +39,18 @@ export default function StudentPerPost({ item }) {
   // const name = data?.user?.name;
   const { userId: studentId } = useUser();
   const postId = _id;
-  
   const [Alllikes, setAllLikes] = useState(likes.length);
   const [hasLiked, setHasLiked] = useState(isLike);
   const { register, handleSubmit, reset, getValues, setValue } = useForm();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState();
+  // const [datas, setDatas] = useState([]);
+  // const [loading, setLoading] = useState();
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
-  
+  const commentText = getValues("text")
+  const commentText2 = getValues("comments")
   const openImageModal = (index) => setSelectedImageIndex(index);
 
   
@@ -62,9 +60,16 @@ export default function StudentPerPost({ item }) {
   };
 
   const truncatedText = text.length > 50 ? text.slice(0, 50) + "..." : text;
+const {data:getComments,isLoading:commentsLoading}=useQuery({
+  queryFn:getStudentComments,
+  queryKey:["studentComments"],
+  onSuccess:()=>{
+queryClient.invalidateQueries({queryKey:["studentComments"]})
+  }
+})
 
   async function getStudentComments() {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await fetch(
         `https://student-plug.onrender.com/api/add/posts/${postId}`
@@ -72,14 +77,12 @@ export default function StudentPerPost({ item }) {
 
       const result = await response.json();
 
-      console.log(result);
-      setDatas(result.comments);
+     
+      
       return result;
     } catch (error) {
       console.log(error);
       throw error;
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -202,7 +205,7 @@ export default function StudentPerPost({ item }) {
 
 
   const handleOpenCommentModal = function (index) {
-    getStudentComments();
+ 
     setCommentModalVisible(true);
     setActiveTab(index);
     // inputRef.current.focus();
@@ -212,7 +215,7 @@ export default function StudentPerPost({ item }) {
   const { mutate: comment, isLoading: isCommenting } = useMutation({
     mutationFn: studentComment,
     onSuccess: () => {
-      getStudentComments();
+     
       toast.success("comment sent");
       setShowEmojiPicker(false);
       reset();
@@ -233,8 +236,8 @@ export default function StudentPerPost({ item }) {
       userId: studentId,
       postId: _id,
     });
-    console.log({ text, isAdmin: false, userId: studentId, postId: _id });
   };
+
   const onSubmitLargeScreen = function ({ comments }) {
     comment({
       text: comments,
@@ -325,7 +328,7 @@ export default function StudentPerPost({ item }) {
       {/* Like, Comment, Share Buttons */}
       <div className="mt-4">
         <p className="mb-0 text-secondary600">{Alllikes} likes</p>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-around items-center">
           <button
             onClick={handleLike}
             className="flex bg-transparent items-center gap-x-1"
@@ -345,18 +348,18 @@ export default function StudentPerPost({ item }) {
             />
             <span>Comment</span>
           </button>
-          <button className="flex bg-transparent items-center gap-x-1">
+          {/* <button className="flex bg-transparent items-center gap-x-1">
             <img
               src="/assets/programming-arrows.svg"
               className="h-4 w-4"
               alt="share icon"
             />
             <span>Repost</span>
-          </button>
-          <button className="flex bg-transparent items-center gap-x-1">
+          </button> */}
+          {/* <button className="flex bg-transparent items-center gap-x-1">
             <img src="/assets/send-2.svg" className="h-4 w-4" alt="save icon" />
             <span>Share</span>
-          </button>
+          </button> */}
         </div>
       </div>
       {/* Comment Modal */}
@@ -377,17 +380,17 @@ export default function StudentPerPost({ item }) {
             </div>
 
             <ul className="mt-4 overflow-y-auto">
-              {!datas && (
+              {!getComments.comments && (
                 <div className="flex justify-center">
                   <p className="capitalize text-stone-700">no comment yet</p>
                 </div>
               )}
-              {loading ? (
+              {commentsLoading && (
                 <div className="flex justify-center">
                   <BlueMiniLoader />
                 </div>
-              ) : (
-                datas?.map((item) => (
+              ) }
+               { getComments.comments?.map((item) => (
                   <li key={item?._id} className="mb-4">
                     <div className="flex items-center gap-x-3">
                       <img
@@ -415,13 +418,13 @@ export default function StudentPerPost({ item }) {
                       </div>
                     </div>
                   </li>
-                ))
+               )
               )}
             </ul>
 
-            <div className="flex items-center gap-x-2 mt-2">
+            <div className="flex items-center border-t gap-x-2 mt-2">
               <img
-                src={data?.user?.profilePhoto}
+                src={data?.user?.profilePhoto??"/images/profile-circle.svg"}
                 alt="admin"
                 className="w-8 h-8 rounded-full"
               />
@@ -430,7 +433,7 @@ export default function StudentPerPost({ item }) {
                 type="text"
                 {...register("text")}
                 placeholder="Add Your Comment Here"
-                className="w-full bg-transparent outline-none placeholder:text-sm rounded-md"
+                className="w-full bg-transparent  outline-none placeholder:text-sm rounded-md"
               />
               <button
                 type="button"
@@ -440,7 +443,7 @@ export default function StudentPerPost({ item }) {
                 😊
               </button>
               <button
-                disabled={isCommenting}
+                disabled={isCommenting||!commentText}
                 className="bg-secondary600 px-3 p-[1px] rounded-xl text-white"
               >
                 &uarr;
@@ -497,17 +500,17 @@ export default function StudentPerPost({ item }) {
       {activeTab === postId && (
         <div className="mt-3 hidden md:block overflow-y-auto">
           <ul className="mt-4 overflow-y-auto">
-            {loading && (
+            {commentsLoading && (
               <div className="flex justify-center">
                 <BlueMiniLoader />
               </div>
             )}
-            {!datas?.length ? (
+            {!getComments.comments?.length ? (
               <div className="flex justify-center">
                 <p className="capitalize text-stone-700">no comment yet</p>
               </div>
             ) : (
-              datas?.map((item) => (
+              getComments?.comments?.map((item) => (
                 <li key={item?._id} className="mb-4">
                   <div className="flex items-center gap-x-3">
                     <img
@@ -537,7 +540,7 @@ export default function StudentPerPost({ item }) {
             onSubmit={handleSubmit(onSubmitLargeScreen)}
           >
             <img
-              src={data?.user?.profilePhoto}
+              src={data?.user?.profilePhoto??"/images/profile-circle.svg"}
               alt="img"
               className="w-8 h-8 rounded-full"
             />
@@ -545,8 +548,8 @@ export default function StudentPerPost({ item }) {
             
               type="text"
               {...register("comments")}
-              placeholder="Add Your Comment Here"
-              className="border w-full border-stone-600 p-1 placeholder:text-stone-600 placeholder:text-sm pl-2  rounded-2xl"
+              placeholder="Add Your Comment Hereee"
+              className="border-2 w-full border-stone-600 p-1  placeholder:text-stone-600 placeholder:text-sm pl-2  rounded-2xl"
             />
             <button
               type="button"
@@ -556,7 +559,7 @@ export default function StudentPerPost({ item }) {
               😊
             </button>
             <button
-              disabled={isCommenting}
+              disabled={isCommenting||!commentText2}
               className="bg-secondary600 px-3 p-[1px]  rounded-xl text-white"
             >
               &uarr;

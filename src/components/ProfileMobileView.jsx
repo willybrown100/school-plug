@@ -13,7 +13,7 @@ useEffect(() => {
   if (data?.message === "Token has expired") {
     navigate("/signin");
   }
-},[data.message]);
+},[data.message,navigate]);
   return (
     <div>
       {isLoading ? (
