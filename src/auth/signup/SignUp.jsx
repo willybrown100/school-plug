@@ -405,7 +405,7 @@ console.log(university)
             onChange={(e) => setUniversity(e.target.value)}
          
         >
-                <option value="Select school" disabled >
+                <option value="Select school" >
     Select school
   </option>
           <option className="capitalize" value="Yaba Tech">
@@ -420,7 +420,7 @@ console.log(university)
           <option value="UNIBEN">UNIBEN</option>
           <option value="FUTO">FUTO</option>
           <option value="UNN">UNN</option>
-          <option value="UNIbrown">UNIbrown</option>
+   
           <option value="ABU">ABU</option>
           <option value="UNIOSUN">UNIOSUN</option>
           

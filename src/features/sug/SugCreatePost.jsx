@@ -20,7 +20,7 @@ export default function SugCreatePost() {
   const { id } = useSchool();
   const [price, setPrice] = useState("");
 
-  console.log(userId,price);
+  console.log(userId, price);
   const { data } = useGetSugUser();
   const uniProfilePicture = data?.data?.uniProfilePicture;
 
@@ -98,7 +98,7 @@ export default function SugCreatePost() {
   const handleSubmit = function (e) {
     e.preventDefault();
 
-    if (selectedFee?.selectedValue ==="unpaidevent") {
+    if (selectedFee?.selectedValue === "unpaidevent") {
       createEvent({
         title: textContent,
         image: selectedImage,
@@ -111,7 +111,7 @@ export default function SugCreatePost() {
         image: selectedImage,
         title: textContent,
         schoolInfoId: id,
-        price:Number(price)
+        price: Number(price),
       });
     } else {
       mutate({
@@ -267,20 +267,17 @@ function OpenModal({ price, setPrice, textContent, creatingPaidEvent }) {
   return (
     <Modals>
       <Modals.Open opens="openPrice">
-  
-<div className="ml-auto">
-
-        <button
-          type="button"
-          disabled={!textContent}
-          className={`${
-            !textContent ? "bg-secondary400" : "bg-secondary600 "
-          }  mb-2 px-4 py-1 rounded-full text-white capitalize  `}
+        <div className="ml-auto">
+          <button
+            type="button"
+            disabled={!textContent}
+            className={`${
+              !textContent ? "bg-secondary400" : "bg-secondary600 "
+            }  mb-2 px-4 py-1 rounded-full text-white capitalize  `}
           >
-          publish
-        </button>
-            </div>
-       
+            publish
+          </button>
+        </div>
       </Modals.Open>
       <Modals.Window name="openPrice">
         <SugEventTicketModal

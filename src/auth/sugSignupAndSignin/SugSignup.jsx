@@ -46,7 +46,7 @@ export default function SugSignup() {
     handleSubmit,
     watch,
     register,
- 
+
     // reset,
   } = useForm();
 
@@ -65,7 +65,7 @@ export default function SugSignup() {
     };
     mutate(user);
     console.log(user);
-    localStorage.setItem("sugNumberandEmail",JSON.stringify(user))
+    localStorage.setItem("sugNumberandEmail", JSON.stringify(user));
   };
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function SugSignup() {
         <div className="p-3">
           <div className="flex flex-col gap-y-10 items-center">
             <Link to="/" className="flex justify-center">
-              <img src="\images\shool-pluglogo.png" alt="img" />
+              <img src="/images/schoolplug.svg" alt="img" />
             </Link>
             <h3 className="capitalize font-heading font-medium">
               create account
@@ -185,14 +185,14 @@ export default function SugSignup() {
 
 function SchoolInfo({ searchParams, setSearchParams }) {
   const imageRef = useRef();
-  const [university, setUniversity] = useState("Yaba Tech");
+  const [university, setUniversity] = useState("");
   const [state, setState] = useState("");
   const [aboutUniversity, setAboutUniversity] = useState("");
   const [uniProfilePicture, setUniProfilePicture] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const {  userId } = useSug();
-  const sugNumber = localStorage.getItem("sugNumberandEmail")
- const sugNumandEmail = JSON.parse(sugNumber)
+  const { userId } = useSug();
+  const sugNumber = localStorage.getItem("sugNumberandEmail");
+  const sugNumandEmail = JSON.parse(sugNumber);
 
   console.log(sugNumandEmail);
 
@@ -241,14 +241,30 @@ function SchoolInfo({ searchParams, setSearchParams }) {
     //   uniProfilePicture,
     //   phoneNumber:Number(sugNumber)
     // };
-    console.log("datas",{ userId, university, state, aboutUniversity, uniProfilePicture,phoneNumber:sugNumandEmail.phoneNumber.trim(),email:sugNumandEmail.email});
-    mutate({ userId, university, state, aboutUniversity, uniProfilePicture,phoneNumber:sugNumandEmail.phoneNumber.trim(),email:sugNumandEmail.email });
+    console.log("datas", {
+      userId,
+      university,
+      state,
+      aboutUniversity,
+      uniProfilePicture,
+      phoneNumber: sugNumandEmail.phoneNumber.trim(),
+      email: sugNumandEmail.email,
+    });
+    mutate({
+      userId,
+      university,
+      state,
+      aboutUniversity,
+      uniProfilePicture,
+      phoneNumber: sugNumandEmail.phoneNumber.trim(),
+      email: sugNumandEmail.email,
+    });
   };
   return (
     <div className="p-3">
       <div className="flex flex-col gap-y-10 items-center">
         <Link to="/" className="flex justify-center">
-          <img src="\images\shool-pluglogo.png" alt="img" />
+          <img src="/images/schoolplug.svg" alt="img" />
         </Link>
         <h3 className="capitalize font-heading font-medium">school info</h3>
       </div>
@@ -267,19 +283,26 @@ function SchoolInfo({ searchParams, setSearchParams }) {
             value={university}
             className=" border border-stone-700 p-2 rounded-md"
             onChange={(e) => setUniversity(e.target.value)}
+
           >
+            <option value="Select school" className="text-gray-400">Select school</option>
             <option className="capitalize" value="Yaba Tech">
               Yaba Tech
             </option>
             <option value="Unilag">Unilag</option>
-            <option value="Lagos state university">Lagos state university</option>
+            <option value="UI">UI</option>
+            <option value="UNIPORT">UNIPORT</option>
+            <option value="Lasu">Lasu</option>
+            <option value="Unilorin">UNILORIN</option>
             <option value="OAU">OAU</option>
-            <option value="UNIZIK">UNIZIK</option>
             <option value="UNIBEN">UNIBEN</option>
-            <option value="UNIJ">UNIJ</option>
-            <option value="UNInice">UNInice</option>
-            <option value="UNIbrown">UNIbrown</option>
-            <option value="UNIbrown">willyschool</option>
+            <option value="FUTO">FUTO</option>
+            <option value="UNN">UNN</option>
+
+            <option value="ABU">ABU</option>
+            <option value="UNIOSUN">UNIOSUN</option>
+
+            <option value="DELSU">DELSU</option>
           </select>
           <input
             type="text"
@@ -513,11 +536,9 @@ function OpenModal() {
   );
 }
 export const PasswordField = ({
-  
   isPending,
   placeholder,
   register,
- 
 
   open,
   ToggleOpen,
@@ -593,9 +614,3 @@ export const ConfirmPasswordField = ({
     </div>
   </div>
 );
-
-
-
-
-
-
