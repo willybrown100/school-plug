@@ -1,60 +1,54 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-
-
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SugEvents() {
-const [selectedFee, setSelectedFee] = useState("");
-const [active, setActive] = useState(null);
-     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-const [selectedContent, setSelectedContent] = useState("");
+  const [selectedFee, setSelectedFee] = useState("");
+  const [active, setActive] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [selectedContent, setSelectedContent] = useState("");
 
-const handleChange = function (e) {
-  const selectedValue = e.target.value;
+  const handleChange = function (e) {
+    const selectedValue = e.target.value;
 
- console.log(selectedValue)
- 
+    console.log(selectedValue);
+
     setSelectedFee(selectedValue);
 
-    setSelectedContent({ selectedValue});
+    setSelectedContent({ selectedValue });
 
+    setIsButtonDisabled(false);
+  };
+  console.log(selectedContent);
+  const queryString = encodeURIComponent(JSON.stringify(selectedContent));
+  const event = [
+    {
+      name: "Paid event",
+      Element: (
+        <input
+          type="radio"
+          onChange={handleChange}
+          value="paidevent"
+          checked={selectedFee === "paidevent"}
+        />
+      ),
+    },
+    {
+      name: "unpaid event",
+      Element: (
+        <input
+          type="radio"
+          onChange={handleChange}
+          value="unpaidevent"
+          checked={selectedFee === "unpaidevent"}
+        />
+      ),
+    },
+  ];
+  const navigate = useNavigate();
+  const handleClick1 = function () {
+    navigate(-1);
+  };
 
-
-  setIsButtonDisabled(false);
-};
-console.log(selectedContent)
-const queryString = encodeURIComponent(JSON.stringify(selectedContent));
-     const event = [
-       {
-         name: "Paid event",
-         Element: (
-           <input
-             type="radio"
-             onChange={handleChange}
-             value="paidevent"
-             checked={selectedFee === "paidevent"}
-           />
-         ),
-       },
-       {
-         name: "unpaid event",
-         Element: (
-           <input
-             type="radio"
-           
-             onChange={handleChange}
-             value="unpaidevent"
-             checked={selectedFee === "unpaidevent"}
-           />
-         ),
-       },
-     ];
-    const navigate = useNavigate()
-    const handleClick1 = function(){
-navigate(-1)
-    }
-
-    
   const handleClick = function (i) {
     setActive(i);
   };
