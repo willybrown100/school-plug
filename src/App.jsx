@@ -15,13 +15,13 @@ import AppLayout from "./components/AppLayout";
 import { DateProvider } from "./DateContext";
 import LandingPage from "./pages/LandingPage";
 import Materials from "./features/Materials";
-import Trends from "./features/Trends";
-import Events from "./features/Events";
+// import Trends from "./features/Trends";
+// import Events from "./features/Events";
 
 import PaymentForm from "./components/PaymentForm";
 import CreatePost from "./features/CreatePost";
 // import CardForm from "./components/CardForm";
-import PayBills from "./features/PayBills";
+// import PayBills from "./features/PayBills";
 import { Toaster } from "react-hot-toast";
 import UsersFeed from "./components/UsersFeed";
 import SugSignup from "./auth/sugSignupAndSignin/SugSignup";
@@ -69,6 +69,9 @@ import EventPaymentAcctDetails from "./features/EventPaymentAcctDetails";
 
 
 const HomePage = lazy(() => import("./features/HomePage"));
+const PayBills = lazy(() => import("./features/PayBills"));
+const Trends = lazy(() => import("./features/Trends"));
+const Events = lazy(() => import("./features/Events"));
 
 const queryClient = new QueryClient({
   defaultOptions: {

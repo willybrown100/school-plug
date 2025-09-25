@@ -161,7 +161,8 @@ export async function sugLikPost({ postId, userId,isAdminPost }) {
   console.log({ postId, userId });
   try {
     const response = await fetch(
-      ` https://student-plug.onrender.com/api/students/likepost/${postId}`,
+      ` https://student-plug.onrender.com/api/sugPost/${postId}/like`,
+      // ` https://student-plug.onrender.com/api/students/likepost/${postId}`,
       {
         method: "POST",
         headers: {
@@ -277,7 +278,7 @@ export async function getPaymentStatus(schoolInfoId,page) {
 
 
 export async function getSugPosts(schoolInfoId,page=1,token) {
-  console.log(schoolInfoId);
+  console.log("scool",schoolInfoId);
   try {
     const response = await fetch(
       `https://student-plug.onrender.com/api/school/${schoolInfoId}?page=${page}&limit=10`,
@@ -635,6 +636,7 @@ export async function getEvents(schoolInfoId) {
     throw error;
   }
 }
+
 export async function getParticularAdminEvents(adminId) {
   try {
     const response = await fetch(

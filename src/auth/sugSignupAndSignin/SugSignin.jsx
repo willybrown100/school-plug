@@ -38,14 +38,14 @@ export default function SugSignin() {
   };
   return (
     <div className="sugsignin">
-      <div className="p-3">
+      <div className="p-3 py-7">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className=" min-h-screen grid grid-rows-[auto,1fr,auto]"
         >
           <div className="flex flex-col gap-y-10 items-center">
             <Link to="/" className="flex justify-center">
-              <img src="\images\shool-pluglogo.png" alt="img" />
+              <img src="/images/schoolplug.svg" alt="img" />
             </Link>
             <h3 className="capitalize font-heading font-medium">
               sign in to continue

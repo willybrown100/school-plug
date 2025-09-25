@@ -42,7 +42,6 @@ const {userId} = useUser();
 const [amount,setAmount]=useState("")
   
 const [selectedFee, setSelectedFee] = useState({});
-console.log(selectedFee)
 const eventId = selectedFee?.eventId ?  selectedFee?.eventId :"";
 const price = selectedFee?.price ?  selectedFee?.price :"";
 const fType = selectedFee?.selectedValue

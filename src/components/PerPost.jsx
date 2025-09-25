@@ -84,7 +84,16 @@ export default function PerPost({ item, onClick, open }) {
       setLoading(false);
     }
   }
-
+// const {data:getComments,isLoading}=useQuery({
+//   queryFn:getAllComments,
+//   queryKey:["allComments"],
+//   onSuccess:()=>{
+//     queryClient.invalidateQueries({key:["allComments"]})
+//   },
+//   onError:(err)=>{
+// toast.error(err.message)
+//   }
+// })
   const closeImageModal = () => setSelectedImageIndex(null);
 
   const showNextImage = () =>
@@ -132,6 +141,7 @@ export default function PerPost({ item, onClick, open }) {
       return `${years} year${years !== 1 ? "s" : ""} ago`;
     }
   };
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (
@@ -442,7 +452,7 @@ export default function PerPost({ item, onClick, open }) {
             >
               <img
                 src={sugImg}
-                alt="aadmin"
+                alt="admin"
                 className="w-10 h-10 rounded-full"
               />
               <input

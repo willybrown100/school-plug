@@ -41,13 +41,13 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
   console.log( adminEvent);
   if(isLoading)return <PageLoader/>
   return (
-    <article className="p-3 mt-10 bg-stone-50 pb-[12rem]">
-      <div className="flex gap-x-2 items-center mb-5">
+    <article className="p-3 mt-[5.6rem]  bg-stone-50 pb-[12rem]">
+   { adminEvent?.events?.length >= 1&&  <div className="flex gap-x-2 items-center mb-5">
         <button onClick={handleClick} className="bg-transparent">
           <img src="\assets\arrow-left.svg" alt="icon" />
         </button>
         <p className="mb-0 font-semibold capitalize">events</p>
-      </div>
+      </div>}
 
       <div>
         {adminEvent?.events?.length >= 1 && (
@@ -89,7 +89,7 @@ const { data:adminEvent, } = useGetParticularAdminEvent();
           </article>
         )}
       </div>
-
+{!event&&<p className='text-center'> You have no event yet start by creating an event</p>}
       {isLoading ? (
         <div className="flex justify-center">
           <BlueMiniLoader />

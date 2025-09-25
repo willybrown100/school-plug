@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { HiArrowLeft } from "react-icons/hi";
-import img1 from "../../public/assets/bill.svg";
-import img2 from "../../public/assets/teacher.svg";
+import img1 from "/assets/bill.svg";
+import img2 from "/assets/teacher.svg";
 
-import img3 from '../../public/assets/book.svg';
+import img3 from '/assets/book.svg';
 
 import { Link} from 'react-router-dom';
 

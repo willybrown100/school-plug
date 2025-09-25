@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { HiXMark } from 'react-icons/hi2';
+import React, { useEffect, useRef, useState } from "react";
+import { HiXMark } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import useUser from '../hooks/useUser';
+import useUser from "../hooks/useUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { studentCreatePost } from '../services/contactApi';
-import MiniLoader from "../ui/MiniLoader"
-import toast from 'react-hot-toast';
-import useGetUser from '../hooks/useGetUser';
-
+import { studentCreatePost } from "../services/contactApi";
+import MiniLoader from "../ui/MiniLoader";
+import toast from "react-hot-toast";
+import useGetUser from "../hooks/useGetUser";
 
 export default function CreatePost() {
   const imageRef = useRef(null);
@@ -18,7 +17,6 @@ export default function CreatePost() {
   const [textContent, setTextContent] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [selectedImage, setselectedImage] = useState([]);
-console.log(selectedImage);
   const disable = imagePreview.length === 3;
   const queryClient = useQueryClient();
   const { userId } = useUser();
@@ -60,6 +58,11 @@ console.log(selectedImage);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
+    console.log("file",file)
+    if (file.type.startsWith('video/')){ 
+      toast.error("Video files are not supported. Please upload an image.")
+       return
+      }
     if (file) {
       setselectedImage((prevImg) => [...prevImg, file]);
 
@@ -128,7 +131,7 @@ console.log(selectedImage);
         navigate(-1);
       }
     } else {
-      navigate(-1); 
+      navigate(-1);
     }
   };
 
@@ -156,15 +159,19 @@ console.log(selectedImage);
           <div className="overflow-y-scroll overflow-x-hidden scroll">
             <div className="flex gap-x-2 mt-2">
               <div className="rounded-full w-[4.9rem] h-[4rem] overflow-hidden">
-               {user?.profilePhoto? <img
-                  src={img}
-                  alt="image"
-                  className="object-cover w-full h-full self-start"
-                />:<img
-                  src="images/profile-circle.svg"
-                  alt="image"
-                  className="object-cover w-full h-full self-start"
-                />}
+                {user?.profilePhoto ? (
+                  <img
+                    src={img}
+                    alt="image"
+                    className="object-cover w-full h-full self-start"
+                  />
+                ) : (
+                  <img
+                    src="images/profile-circle.svg"
+                    alt="image"
+                    className="object-cover w-full h-full self-start"
+                  />
+                )}
               </div>
               <textarea
                 ref={inputRef}
@@ -221,7 +228,7 @@ console.log(selectedImage);
           <input
             type="file"
             className="hidden"
-            accept="image"
+            // accept="image"
             ref={imageRef}
             onChange={handleImageChange}
           />
@@ -230,7 +237,3 @@ console.log(selectedImage);
     </div>
   );
 }
-
-
-
-
