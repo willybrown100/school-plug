@@ -10,11 +10,11 @@ import toast from 'react-hot-toast';
 export default function PaymentAcctDetails() {
       const [copied, setCopied] = useState(false);
       // const [prevReferenceNumber,setPrevReferenceNumber]=useState(()=>localStorage.getItem("prevRefNumber"))
-  const { data, isLoading,refetch ,isRefetching} = useGetCardDetails();
+  const { data, isLoading,refetch ,isFetching} = useGetCardDetails();
     const acct = data?.data?.student?.OtherVirtualAccount
 ;
   const { feeAmount } = data?.data?.student || {};
-console.log(data?.student)
+const actualAmount=feeAmount+100
     const navigate =useNavigate()
     const handleClick = function () {
       navigate(-1);
@@ -33,7 +33,7 @@ console.log(data?.student)
     }
 
     if (!("reference" in student)) {
-      toast.error("Error: transaction not successful");
+      toast.error("Error: transaction not successful yet");
       return;
     }
 
@@ -95,7 +95,7 @@ console.log(data?.student)
             {isLoading ? (
               <BlueMiniLoader />
             ) : (
-              <h3 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
+              <h4 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
                 {acct?.accountNumber}
                 <button onClick={handleCopy}>
                   <img src="\assets\copy.svg" alt="copy" />
@@ -105,31 +105,32 @@ console.log(data?.student)
                     copied
                   </p>
                 )}
-              </h3>
+              </h4>
             )}
           </div>
           <div className="flex justify-between items-center py-5">
             <p className="text-stone-600 text-[1rem] mb-0">Account Name:</p>
-            <h3 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
+            <h4 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
               {isLoading ? <BlueMiniLoader /> : acct?.accountName}
-            </h3>
+            </h4>
           </div>
           <div className="flex justify-between items-center py-5">
             <p className="text-stone-600 text-[1rem] mb-0">Bank Name:</p>
-            <h3 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
+            <h4 className="flex font-semibold text-stone-800 relative items-center gap-x-2 mb-0">
               {isLoading ? <BlueMiniLoader /> : acct?.bankName}
-            </h3>
+            </h4>
           </div>
           <div className="flex justify-between items-center py-5">
             <p className="text-stone-600 text-[1rem] mb-0"> Total Fee:</p>
-            <h3 className="flex font-semibold relative text-stone-800 items-center gap-x-2 mb-0">
-              {isLoading ? <BlueMiniLoader /> : formatNaira(feeAmount)}
-            </h3>
+            <h4 className="flex font-semibold relative text-stone-800 items-center gap-x-2 mb-0">
+              {isLoading ? <BlueMiniLoader /> : formatNaira(actualAmount)}
+            </h4>
           </div>
         </div>
+          <p className='mt-4'> <span className='text-secondary500'>Note:</span> please ensure you pay the exact amount shown on your screen. Paying a different amount may result in loss of funds or delayed confirmation. Always double-check before making payment.</p>
         <Button className="my-6 py-3 w-full" onClick={handleConfirm}>Confirm transaction</Button>
 
-        {isRefetching && (
+        {isFetching && (
           <div className="fixed  bottom-0 inset-0 bg-black md:hidden  bg-opacity-50 z-50">
             <div className="absolute bottom-0 bg-white rounded-tl-[1rem] rounded-tr-[1rem] w-full  h-[25dvh] p-4 grid grid-rows-[auto,1fr,auto] overflow-y-auto animate-slideUp">
               <h4 className="text-secondary600 text-lg text-center font-semibold">
@@ -148,7 +149,7 @@ console.log(data?.student)
           </div>
         )}
 
-        {isRefetching && (
+        {isFetching && (
           <article className="fixed p-3 bg-black bg-opacity-50 z-30  backdrop-blur-sm max-sm:hidden md:block inset-0 grid place-items-center">
             <div className="bg-white py-[4.5rem] px-40 rounded-lg">
               <h2 className="text-secondary600 mb-16 text-[1.9rem] text-center font-semibold">

@@ -359,7 +359,7 @@ function StudentInfo({ userId }) {
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [level, setLevel] = useState("");
-
+console.log(university)
   const { mutate: education, isLoading } = useMutation({
     mutationFn: EducationalSignUp,
     onSuccess: () => {
@@ -416,9 +416,11 @@ function StudentInfo({ userId }) {
           <option value="UNIPORT">UNIPORT</option>
           <option value="Lasu">Lasu</option>
           <option value="Unilorin">UNILORIN</option>
+          <option value="OAU">OAU</option>
           <option value="UNIBEN">UNIBEN</option>
           <option value="FUTO">FUTO</option>
           <option value="UNN">UNN</option>
+          <option value="UNIbrown">UNIbrown</option>
           <option value="ABU">ABU</option>
           <option value="UNIOSUN">UNIOSUN</option>
           
@@ -443,6 +445,7 @@ function StudentInfo({ userId }) {
 <option value="Medicine">Medicine</option>
 <option value="Pharmacy">Pharmacy</option>
 <option value="Agriculture">Agriculture</option>
+
 <option value="Environmental Sciences">Environmental Sciences</option>
 <option value="Management Sciences">Management Sciences</option>
 <option value="Dentistry">Dentistry</option>

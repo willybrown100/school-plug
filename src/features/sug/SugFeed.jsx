@@ -124,7 +124,7 @@ console.log(trends)
             navigation={false}
             pagination={false}
           >
-            {trends.map((item) => (
+            {trends?.map((item) => (
               <SwiperSlide key={item.postId}>
                 <div className="border bg-white border-stone-300 p-1 overflow-hidden rounded-md h-[42vh] grid grid-rows-[auto,auto,1fr,auto]">
                   <p className="mb-0 text-stone-700">post:</p>

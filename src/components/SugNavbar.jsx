@@ -85,11 +85,11 @@ const shouldHideNavbar = excludedRoutes.some((route) => {
             }`}
           >
             <div className="flex items-center justify-between gap-x-2">
-              <div className="flex gap-x-4 items-center">
+              <div className="flex gap-x-4 h-14 items-center">
                 <img
                   src={sugImg ? sugImg : "/images/profile-circle.svg"}
                   alt={fullName}
-                  className="rounded-full w-14 h-14"
+                  className="rounded-full w-14 h-full "
                 />
                 <div className="flex flex-col gap-y-1">
                   <p className="mb-0 capitalize font-heading">admin,</p>
